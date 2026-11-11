@@ -1,12 +1,147 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Política de Privacidade · Osso a Osso</title>
-<style>:root{color-scheme:dark}body{margin:0;background:#0d151e;color:#ebe5d8;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px max(16px,env(safe-area-inset-left,0px))}main{max-width:680px;margin:0 auto}h1{font-family:Georgia,serif;font-weight:400;font-size:34px}h2{font-size:18px;margin-top:28px}p{color:#c9c3b6}.warn{border:1px solid #f2a65a;color:#f2a65a;padding:10px 12px;border-radius:8px}a{color:#f2a65a}</style></head>
-<body><main><p><a href="index.html">← Voltar ao Osso a Osso</a></p><h1>Política de Privacidade</h1>
-<p class="warn">MODELO — troque os campos entre colchetes e peça para um advogado revisar antes de lançar.</p>
-<h2>1. Quem cuida dos seus dados</h2><p>[NOME DA EMPRESA OU SEU NOME], CNPJ/CPF [NÚMERO], é o controlador dos dados, nos termos da Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
-<h2>2. Dados que coletamos</h2><p>Nome, e-mail, senha (guardada de forma criptografada; nós não conseguimos lê-la) e seu progresso no jogo (níveis concluídos, velocidade, acertos e datas de revisão).</p>
-<h2>3. Para que usamos</h2><p>Para criar e manter sua conta, salvar seu progresso, lembrar você das revisões e melhorar o serviço.</p>
-<h2>4. Com quem compartilhamos</h2><p>Os dados ficam armazenados no Supabase (banco de dados e login) e o site é hospedado na Netlify. [Liste aqui outros serviços, como o de envio de e-mail e o de pagamento.] Não vendemos seus dados.</p>
-<h2>5. Seus direitos</h2><p>Você pode pedir acesso, correção ou exclusão dos seus dados a qualquer momento pelo e-mail [E-MAIL DE CONTATO].</p>
-<h2>6. Por quanto tempo guardamos</h2><p>Enquanto sua conta existir. Ao excluir a conta, apagamos seus dados em até [PRAZO] dias.</p>
-<h2>7. Contato</h2><p>[E-MAIL DE CONTATO]</p>
-<p style="margin-top:32px;color:#8d9bab">Última atualização: [DATA]</p></main></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Política de Privacidade · Osso a Osso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap">
+<style>
+:root{--film:#0b121a;--film-2:#121c27;--line:#253649;--bone:#efe9dc;--dim:#a3b0bf;--faint:#6b7c90;--amber:#f2a65a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--film);color:var(--bone)}
+body{font:16px/1.7 "Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 max(18px,env(safe-area-inset-left,0px)) 60px max(18px,env(safe-area-inset-right,0px))}
+header{max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:400 22px "Newsreader",Georgia,serif;color:var(--bone);text-decoration:none}
+.brand svg{width:16px;height:26px}
+header nav{display:flex;gap:18px;font-size:14px}
+header nav a{color:var(--dim);text-decoration:none}header nav a:hover,header nav a[aria-current]{color:var(--amber)}
+main{max-width:820px;margin:0 auto;padding-top:36px}
+.eyebrow{font:600 11px "JetBrains Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+h1{font:400 clamp(34px,6vw,52px)/1.05 "Newsreader",Georgia,serif;letter-spacing:-.02em;margin:10px 0 12px}
+.meta{color:var(--faint);font-size:14px;margin:0 0 26px}
+.resumo{border:1px solid var(--line);border-radius:14px;background:var(--film-2);padding:18px 20px;margin-bottom:30px}
+.resumo b{display:block;margin-bottom:6px}
+.resumo ul{margin:0;padding-left:20px;color:var(--dim)}
+.toc{columns:2;gap:24px;font-size:14px;margin:0 0 34px;padding:0;list-style:none}
+.toc a{color:var(--dim);text-decoration:none}.toc a:hover{color:var(--amber)}
+h2{font:400 26px/1.2 "Newsreader",Georgia,serif;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:20px}
+h3{font-size:16px;margin:20px 0 6px}
+p,li{color:var(--dim);max-width:68ch}
+strong{color:var(--bone);font-weight:600}
+a{color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--dim)}
+th{font:600 11px "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+td strong{white-space:nowrap}
+.contato{margin-top:40px;border:1px solid rgba(242,166,90,.4);border-radius:14px;padding:18px 20px;background:rgba(242,166,90,.06)}
+@media (max-width:600px){.toc{columns:1}header nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html"><svg viewBox="0 0 18 28" aria-hidden="true"><g fill="none" stroke="#f2a65a" stroke-width="1.6"><rect x="3" y="1" width="12" height="5" rx="2"/><rect x="2.5" y="8.5" width="13" height="6" rx="2"/><rect x="2" y="17" width="14" height="7" rx="2.4"/></g></svg>Osso a Osso</a>
+  <nav><a href="termos.html">Termos de Uso</a><a href="privacidade.html" aria-current="page">Privacidade</a><a href="app.html">Entrar</a></nav>
+</header>
+<main>
+<span class="eyebrow">Documento legal</span>
+<h1>Política de Privacidade</h1>
+<p class="meta">Última atualização: 11 de novembro de 2026</p>
+<div class="resumo"><b>Em resumo</b><ul>
+<li>Coletamos só o necessário: nome, e-mail, senha protegida e o seu progresso no jogo.</li>
+<li>Seus dados ficam guardados em servidores no Brasil (São Paulo). Cada aluno só enxerga os próprios dados.</li>
+<li>Não vendemos seus dados e não guardamos dados de cartão.</li>
+<li>Você pode pedir acesso, correção ou exclusão dos seus dados a qualquer momento.</li>
+</ul></div>
+<ul class="toc">
+<li><a href="#p1">1. Quem cuida dos seus dados</a></li><li><a href="#p2">2. Dados que coletamos</a></li><li><a href="#p3">3. Para que usamos e com qual base legal</a></li><li><a href="#p4">4. Com quem compartilhamos</a></li><li><a href="#p5">5. Onde os dados ficam</a></li><li><a href="#p6">6. Armazenamento no navegador</a></li><li><a href="#p7">7. Por quanto tempo guardamos</a></li><li><a href="#p8">8. Segurança</a></li><li><a href="#p9">9. Seus direitos</a></li><li><a href="#p10">10. Menores de idade</a></li><li><a href="#p11">11. Alterações desta Política</a></li>
+</ul>
+
+<h2 id="p1">1. Quem cuida dos seus dados</h2>
+<p>O controlador dos dados pessoais tratados no Osso a Osso é <strong>Andersson Jorge</strong>, pessoa física, nos termos da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018, “LGPD”). Para qualquer assunto sobre privacidade, inclusive para exercer seus direitos, o canal de contato é o e-mail <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a>.</p>
+
+<h2 id="p2">2. Dados que coletamos</h2>
+<div class="tw"><table>
+<thead><tr><th>Dado</th><th>Quando</th></tr></thead>
+<tbody>
+<tr><td><strong>Nome</strong> e <strong>e-mail</strong></td><td>Quando você cria a conta ou altera o nome no perfil.</td></tr>
+<tr><td><strong>Senha</strong></td><td>No cadastro e quando você troca a senha. Ela é guardada de forma criptografada: nem nós conseguimos lê-la.</td></tr>
+<tr><td><strong>Progresso de estudo</strong></td><td>Ao concluir um nível: qual nível e dificuldade, velocidade de digitação (PPM), porcentagem de acertos de primeira e a data sugerida de revisão.</td></tr>
+<tr><td><strong>Recompensas</strong></td><td>XP, patente, ofensiva de dias seguidos, recorde de ofensiva, último dia de estudo e conquistas.</td></tr>
+<tr><td><strong>Dados técnicos</strong></td><td>Ao acessar o site: endereço IP, data e hora, navegador e páginas acessadas, registrados automaticamente pelos nossos provedores de hospedagem e banco de dados.</td></tr>
+<tr><td><strong>Dados de pagamento</strong></td><td>Ao assinar o Pro, os dados do pagamento são informados diretamente à plataforma de pagamento. Nós recebemos apenas a confirmação, o plano, o valor e o status da assinatura, nunca o número do cartão.</td></tr>
+</tbody></table></div>
+<p>A demonstração da página inicial pode ser jogada sem cadastro e não envia suas respostas para o nosso banco de dados.</p>
+
+<h2 id="p3">3. Para que usamos e com qual base legal</h2>
+<div class="tw"><table>
+<thead><tr><th>Finalidade</th><th>Base legal (LGPD, art. 7º)</th></tr></thead>
+<tbody>
+<tr><td>Criar e manter sua conta, fazer login, salvar progresso, XP, ofensiva e conquistas, e mostrar quando revisar</td><td>Execução do contrato (inciso V)</td></tr>
+<tr><td>Enviar e-mails necessários: confirmação de cadastro, recuperação de senha, avisos sobre a assinatura e mudanças nos Termos</td><td>Execução do contrato (inciso V)</td></tr>
+<tr><td>Processar e gerenciar a assinatura do plano Pro</td><td>Execução do contrato (inciso V)</td></tr>
+<tr><td>Manter a segurança, prevenir fraudes e abusos e corrigir erros</td><td>Legítimo interesse (inciso IX)</td></tr>
+<tr><td>Entender, de forma agregada, como o serviço é usado para melhorá-lo</td><td>Legítimo interesse (inciso IX)</td></tr>
+<tr><td>Guardar registros de acesso e cumprir obrigações fiscais e legais</td><td>Cumprimento de obrigação legal (inciso II)</td></tr>
+<tr><td>Enviar novidades e conteúdos promocionais, se você aceitar</td><td>Consentimento (inciso I), que pode ser retirado a qualquer momento</td></tr>
+</tbody></table></div>
+<p>Não usamos seus dados para decisões automatizadas que afetem seus direitos e não vendemos nem alugamos seus dados pessoais.</p>
+
+<h2 id="p4">4. Com quem compartilhamos</h2>
+<p>Compartilhamos dados apenas com prestadores de serviço que operam a plataforma em nosso nome, e somente o necessário para cada função:</p>
+<ul>
+<li><strong>Supabase</strong>: banco de dados e sistema de login (contas, progresso e recompensas).</li>
+<li><strong>Vercel</strong>: hospedagem do site; recebe dados técnicos de acesso.</li>
+<li><strong>Serviço de envio de e-mails</strong>: envio dos e-mails de confirmação, recuperação de senha e avisos da conta.</li>
+<li><strong>Plataforma de pagamento</strong>: processamento das assinaturas do plano Pro.</li>
+<li><strong>Ferramentas de medição de anúncios e de visitas</strong>, se forem usadas: dados de navegação, como páginas visitadas e cadastros realizados, para medir campanhas. Esta Política será atualizada antes de qualquer uma delas ser ativada.</li>
+</ul>
+<p>Também podemos compartilhar dados quando uma lei ou ordem judicial exigir.</p>
+
+<h2 id="p5">5. Onde os dados ficam</h2>
+<p>O banco de dados com contas, progresso e recompensas fica em servidores na região de <strong>São Paulo, Brasil</strong>. Alguns prestadores, como a hospedagem do site e os serviços de e-mail e de pagamento, podem processar dados técnicos ou de contato em outros países, como os Estados Unidos. Nesses casos, a transferência internacional segue o artigo 33 da LGPD, com prestadores que adotam medidas de proteção compatíveis.</p>
+
+<h2 id="p6">6. Armazenamento no navegador</h2>
+<p>O Osso a Osso não usa cookies de publicidade. Usamos o armazenamento local do seu navegador (localStorage) para:</p>
+<ul>
+<li>manter você conectado à sua conta (sessão de login);</li>
+<li>lembrar preferências, como som ligado ou desligado, o último sistema e a dificuldade escolhidos.</li>
+</ul>
+<p>Você pode apagar esses dados nas configurações do navegador. Se fizer isso, precisará entrar de novo, mas seu progresso continua salvo na conta.</p>
+
+<h2 id="p7">7. Por quanto tempo guardamos</h2>
+<ul>
+<li><strong>Dados da conta, progresso e recompensas:</strong> enquanto sua conta existir. Quando você pede a exclusão, apagamos em até 30 dias. Cópias de segurança são substituídas automaticamente nos ciclos seguintes.</li>
+<li><strong>Registros técnicos de acesso:</strong> pelo prazo definido pelos nossos provedores e pelo exigido em lei, como o Marco Civil da Internet, quando aplicável.</li>
+<li><strong>Dados de pagamento e fiscais:</strong> pelo prazo exigido pela legislação fiscal e de consumo.</li>
+</ul>
+
+<h2 id="p8">8. Segurança</h2>
+<p>Adotamos medidas para proteger seus dados: conexão criptografada (HTTPS) em todo o site, senhas guardadas de forma criptografada, regras no banco de dados que fazem cada aluno acessar apenas os próprios registros e acesso administrativo restrito. Nenhum sistema é 100% invulnerável. Se ocorrer um incidente de segurança que possa trazer risco ou dano relevante a você, vamos avisar você e a Autoridade Nacional de Proteção de Dados (ANPD), como determina a LGPD.</p>
+
+<h2 id="p9">9. Seus direitos</h2>
+<p>Pelo artigo 18 da LGPD, você pode, a qualquer momento:</p>
+<ul>
+<li>confirmar se tratamos seus dados e ter acesso a eles;</li>
+<li>corrigir dados incompletos, inexatos ou desatualizados (o nome pode ser alterado direto no seu perfil);</li>
+<li>pedir a anonimização, o bloqueio ou a eliminação de dados desnecessários ou tratados em desconformidade com a lei;</li>
+<li>pedir a portabilidade dos seus dados;</li>
+<li>pedir a exclusão da sua conta e dos dados tratados com base no seu consentimento;</li>
+<li>saber com quem compartilhamos seus dados;</li>
+<li>retirar o consentimento, quando ele for a base do tratamento;</li>
+<li>apresentar reclamação à ANPD.</li>
+</ul>
+<p>Para exercer qualquer um desses direitos, escreva para <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a> a partir do e-mail da sua conta. Respondemos em até 15 dias.</p>
+
+<h2 id="p10">10. Menores de idade</h2>
+<p>O serviço é voltado a estudantes e profissionais da área da saúde. Não coletamos de propósito dados de menores de 18 anos sem a autorização dos pais ou responsáveis. Se você é responsável por um menor e acredita que ele criou uma conta sem autorização, entre em contato para que possamos excluí-la.</p>
+
+<h2 id="p11">11. Alterações desta Política</h2>
+<p>Esta Política pode ser atualizada, por exemplo, quando adicionarmos um novo prestador de serviço ou uma ferramenta de medição. A data da última atualização fica no topo da página. Se a mudança for relevante, avisaremos por e-mail ou dentro da plataforma.</p>
+
+<div class="contato"><strong>Fale com a gente sobre privacidade</strong><p style="margin:6px 0 0">Andersson Jorge · <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a></p></div>
+
+</main>
+</body>
+</html>

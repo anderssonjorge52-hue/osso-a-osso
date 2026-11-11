@@ -1,12 +1,127 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Termos de Uso · Osso a Osso</title>
-<style>:root{color-scheme:dark}body{margin:0;background:#0d151e;color:#ebe5d8;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px max(16px,env(safe-area-inset-left,0px))}main{max-width:680px;margin:0 auto}h1{font-family:Georgia,serif;font-weight:400;font-size:34px}h2{font-size:18px;margin-top:28px}p{color:#c9c3b6}.warn{border:1px solid #f2a65a;color:#f2a65a;padding:10px 12px;border-radius:8px}a{color:#f2a65a}</style></head>
-<body><main><p><a href="index.html">← Voltar ao Osso a Osso</a></p><h1>Termos de Uso</h1>
-<p class="warn">MODELO — troque os campos entre colchetes e peça para um advogado revisar antes de lançar.</p>
-<h2>1. O serviço</h2><p>O Osso a Osso é uma plataforma de estudo de anatomia em formato de jogo, oferecida por [NOME DA EMPRESA OU SEU NOME], CNPJ/CPF [NÚMERO].</p>
-<h2>2. Conta</h2><p>Para usar o serviço você cria uma conta com e-mail e senha. Você é responsável por manter sua senha em segredo e pelas atividades feitas na sua conta.</p>
-<h2>3. Uso permitido</h2><p>O conteúdo serve para estudo pessoal. Não é permitido copiar, revender ou distribuir o conteúdo sem autorização.</p>
-<h2>4. Conteúdo educativo</h2><p>O material tem fins educacionais e não substitui livros de referência, aulas ou orientação profissional.</p>
-<h2>5. Planos pagos</h2><p>[Descreva preços, forma de cobrança, renovação, cancelamento e reembolso, incluindo o direito de arrependimento de 7 dias do Código de Defesa do Consumidor para compras online.]</p>
-<h2>6. Encerramento</h2><p>Você pode excluir sua conta a qualquer momento pelo e-mail [E-MAIL DE CONTATO].</p>
-<h2>7. Contato</h2><p>[E-MAIL DE CONTATO]</p>
-<p style="margin-top:32px;color:#8d9bab">Última atualização: [DATA]</p></main></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Termos de Uso · Osso a Osso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap">
+<style>
+:root{--film:#0b121a;--film-2:#121c27;--line:#253649;--bone:#efe9dc;--dim:#a3b0bf;--faint:#6b7c90;--amber:#f2a65a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--film);color:var(--bone)}
+body{font:16px/1.7 "Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 max(18px,env(safe-area-inset-left,0px)) 60px max(18px,env(safe-area-inset-right,0px))}
+header{max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:400 22px "Newsreader",Georgia,serif;color:var(--bone);text-decoration:none}
+.brand svg{width:16px;height:26px}
+header nav{display:flex;gap:18px;font-size:14px}
+header nav a{color:var(--dim);text-decoration:none}header nav a:hover,header nav a[aria-current]{color:var(--amber)}
+main{max-width:820px;margin:0 auto;padding-top:36px}
+.eyebrow{font:600 11px "JetBrains Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+h1{font:400 clamp(34px,6vw,52px)/1.05 "Newsreader",Georgia,serif;letter-spacing:-.02em;margin:10px 0 12px}
+.meta{color:var(--faint);font-size:14px;margin:0 0 26px}
+.resumo{border:1px solid var(--line);border-radius:14px;background:var(--film-2);padding:18px 20px;margin-bottom:30px}
+.resumo b{display:block;margin-bottom:6px}
+.resumo ul{margin:0;padding-left:20px;color:var(--dim)}
+.toc{columns:2;gap:24px;font-size:14px;margin:0 0 34px;padding:0;list-style:none}
+.toc a{color:var(--dim);text-decoration:none}.toc a:hover{color:var(--amber)}
+h2{font:400 26px/1.2 "Newsreader",Georgia,serif;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--line);scroll-margin-top:20px}
+h3{font-size:16px;margin:20px 0 6px}
+p,li{color:var(--dim);max-width:68ch}
+strong{color:var(--bone);font-weight:600}
+a{color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--dim)}
+th{font:600 11px "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+td strong{white-space:nowrap}
+.contato{margin-top:40px;border:1px solid rgba(242,166,90,.4);border-radius:14px;padding:18px 20px;background:rgba(242,166,90,.06)}
+@media (max-width:600px){.toc{columns:1}header nav{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html"><svg viewBox="0 0 18 28" aria-hidden="true"><g fill="none" stroke="#f2a65a" stroke-width="1.6"><rect x="3" y="1" width="12" height="5" rx="2"/><rect x="2.5" y="8.5" width="13" height="6" rx="2"/><rect x="2" y="17" width="14" height="7" rx="2.4"/></g></svg>Osso a Osso</a>
+  <nav><a href="termos.html" aria-current="page">Termos de Uso</a><a href="privacidade.html">Privacidade</a><a href="app.html">Entrar</a></nav>
+</header>
+<main>
+<span class="eyebrow">Documento legal</span>
+<h1>Termos de Uso</h1>
+<p class="meta">Última atualização: 11 de novembro de 2026</p>
+<div class="resumo"><b>Em resumo</b><ul>
+<li>O Osso a Osso é um app de estudo de anatomia em formato de jogo, oferecido por Andersson Jorge.</li>
+<li>O plano Grátis é gratuito para sempre. O plano Pro é uma assinatura que renova automaticamente e pode ser cancelada quando você quiser.</li>
+<li>Comprou e se arrependeu? Você tem 7 dias para pedir o reembolso integral.</li>
+<li>O conteúdo é educativo e não substitui aulas, livros ou orientação profissional.</li>
+</ul></div>
+<ul class="toc">
+<li><a href="#t1">1. Quem somos e aceitação</a></li><li><a href="#t2">2. O serviço</a></li><li><a href="#t3">3. Sua conta</a></li><li><a href="#t4">4. Planos, pagamento e cancelamento</a></li><li><a href="#t5">5. Direito de arrependimento</a></li><li><a href="#t6">6. Regras de uso</a></li><li><a href="#t7">7. Propriedade intelectual</a></li><li><a href="#t8">8. Conteúdo educativo</a></li><li><a href="#t9">9. Disponibilidade e mudanças no serviço</a></li><li><a href="#t10">10. Suspensão e encerramento</a></li><li><a href="#t11">11. Responsabilidade</a></li><li><a href="#t12">12. Alterações destes Termos</a></li><li><a href="#t13">13. Lei aplicável e foro</a></li>
+</ul>
+
+<h2 id="t1">1. Quem somos e aceitação</h2>
+<p>O Osso a Osso é oferecido por <strong>Andersson Jorge</strong>, pessoa física, que pode ser contatado pelo e-mail <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a>. Ao criar uma conta ou usar o site, você declara que leu e concorda com estes Termos de Uso e com a <a href="privacidade.html">Política de Privacidade</a>. Se não concordar, não use o serviço.</p>
+
+<h2 id="t2">2. O serviço</h2>
+<p>O Osso a Osso é uma plataforma on-line de estudo de anatomia humana. Uma estrutura do corpo é destacada e você digita o nome dela. A plataforma registra seu progresso, calcula pontos de experiência (XP), patentes, ofensiva de dias seguidos e conquistas, e indica quando revisar o conteúdo.</p>
+<p>A página inicial tem uma demonstração que pode ser jogada sem cadastro. Para salvar o progresso e usar todos os recursos, é preciso criar uma conta.</p>
+
+<h2 id="t3">3. Sua conta</h2>
+<ul>
+<li>Você precisa informar um nome e um e-mail válidos e confirmar o e-mail para ativar a conta.</li>
+<li>A conta é pessoal e intransferível. Não compartilhe sua senha nem permita que outra pessoa use sua conta.</li>
+<li>Você é responsável pelo que for feito com a sua conta. Se perceber um uso não autorizado, troque a senha e nos avise pelo e-mail de contato.</li>
+<li>O serviço é voltado a estudantes e profissionais da área da saúde. Menores de 18 anos só podem usar com autorização e acompanhamento dos pais ou responsáveis, que também respondem pela contratação de planos pagos.</li>
+</ul>
+
+<h2 id="t4">4. Planos, pagamento e cancelamento</h2>
+<h3>Plano Grátis</h3>
+<p>Gratuito e sem prazo de validade. Inclui o conteúdo e os recursos indicados como gratuitos na página de preços, que podem ser ajustados com o tempo.</p>
+<h3>Plano Pro</h3>
+<ul>
+<li>Assinatura de <strong>R$ 37,00 por mês</strong> ou <strong>R$ 297,00 por ano</strong>, conforme o período escolhido na contratação. Os valores vigentes são sempre os da página de preços no momento da compra.</li>
+<li><strong>Renovação automática:</strong> a assinatura é cobrada de novo ao fim de cada período (mensal ou anual) até que você cancele.</li>
+<li>O pagamento é processado por uma plataforma de pagamento parceira. O Osso a Osso <strong>não recebe nem armazena</strong> os dados do seu cartão.</li>
+<li><strong>Cancelamento:</strong> você pode cancelar quando quiser, sem multa. O acesso Pro continua até o fim do período já pago e depois a conta volta ao plano Grátis, sem perder o progresso. Não há reembolso proporcional de período já iniciado, exceto no caso do direito de arrependimento (item 5) ou quando a lei exigir.</li>
+<li><strong>Mudança de preço:</strong> se o preço mudar, você será avisado por e-mail com pelo menos 30 dias de antecedência. O novo valor só vale a partir da renovação seguinte, e você pode cancelar antes dela.</li>
+<li>Se um pagamento não for aprovado, o acesso Pro pode ser suspenso até a regularização.</li>
+</ul>
+
+<h2 id="t5">5. Direito de arrependimento</h2>
+<p>Como a contratação é feita pela internet, você pode desistir da primeira compra do plano Pro em até <strong>7 (sete) dias</strong> a partir da contratação, conforme o artigo 49 do Código de Defesa do Consumidor. Basta pedir pelo e-mail <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a> ou pela plataforma de pagamento. O valor pago é devolvido integralmente, pelo mesmo meio de pagamento.</p>
+
+<h2 id="t6">6. Regras de uso</h2>
+<p>Ao usar o Osso a Osso, você concorda em <strong>não</strong>:</p>
+<ul>
+<li>copiar, baixar em massa, revender, redistribuir ou publicar o conteúdo, as imagens ou o código da plataforma;</li>
+<li>usar robôs, scripts ou qualquer automação para jogar, gerar XP, conquistas ou posições de forma artificial;</li>
+<li>tentar acessar dados de outros usuários, contornar regras de segurança, sobrecarregar ou atacar o serviço;</li>
+<li>criar contas com dados falsos ou de outra pessoa;</li>
+<li>usar o serviço para qualquer finalidade ilegal.</li>
+</ul>
+
+<h2 id="t7">7. Propriedade intelectual</h2>
+<p>A marca Osso a Osso, o design, os textos, as ilustrações, as dicas, a seleção e organização do conteúdo e o software pertencem a Andersson Jorge ou são usados com autorização. Assinar um plano dá a você o direito pessoal, não exclusivo e intransferível de usar a plataforma para estudo, enquanto a conta estiver ativa. Os nomes das estruturas anatômicas são de domínio público; o que é protegido é a forma como o conteúdo foi criado e organizado.</p>
+
+<h2 id="t8">8. Conteúdo educativo</h2>
+<p>O Osso a Osso é uma ferramenta de memorização e reconhecimento de estruturas anatômicas. As ilustrações são simplificadas e esquemáticas. O conteúdo é revisado com cuidado, mas pode conter imprecisões: se encontrar alguma, avise pelo e-mail de contato. O serviço <strong>não substitui</strong> aulas, livros de referência, laboratório de anatomia nem orientação de profissionais de saúde, e não deve ser usado para diagnóstico ou decisão clínica.</p>
+
+<h2 id="t9">9. Disponibilidade e mudanças no serviço</h2>
+<p>Trabalhamos para manter o site disponível o tempo todo, mas podem ocorrer interrupções por manutenção, falhas de provedores de internet ou de hospedagem, ou motivos fora do nosso controle. Podemos melhorar, adicionar ou alterar módulos e funcionalidades. Se uma mudança retirar algo essencial do plano Pro que você já pagou, você pode cancelar e pedir o reembolso proporcional do período restante.</p>
+
+<h2 id="t10">10. Suspensão e encerramento</h2>
+<p>Você pode encerrar sua conta a qualquer momento pedindo a exclusão pelo e-mail de contato. Podemos suspender ou encerrar contas que violem estes Termos, especialmente nos casos do item 6, avisando você por e-mail sempre que possível. Em caso de encerramento por violação, não há reembolso do período em curso, salvo quando a lei exigir.</p>
+
+<h2 id="t11">11. Responsabilidade</h2>
+<p>O Osso a Osso responde pelos serviços que oferece nos termos do Código de Defesa do Consumidor. Não respondemos por resultados de provas ou avaliações, que dependem do seu estudo, nem por problemas causados pelo seu equipamento, sua conexão ou pelo uso da conta por terceiros a quem você deu acesso.</p>
+
+<h2 id="t12">12. Alterações destes Termos</h2>
+<p>Estes Termos podem ser atualizados. A data da última atualização fica no topo da página. Se a mudança for relevante, avisaremos por e-mail ou dentro da plataforma antes de ela valer. Continuar usando o serviço depois disso significa que você concorda com a nova versão.</p>
+
+<h2 id="t13">13. Lei aplicável e foro</h2>
+<p>Estes Termos seguem as leis da República Federativa do Brasil, incluindo o Código de Defesa do Consumidor, o Marco Civil da Internet e a Lei Geral de Proteção de Dados. Fica eleito o foro do domicílio do consumidor para resolver qualquer questão.</p>
+
+<div class="contato"><strong>Dúvidas, cancelamento ou reembolso?</strong><p style="margin:6px 0 0">Escreva para <a href="mailto:anderssonjorge52@gmail.com">anderssonjorge52@gmail.com</a>. Respondemos em até 5 dias úteis.</p></div>
+
+</main>
+</body>
+</html>

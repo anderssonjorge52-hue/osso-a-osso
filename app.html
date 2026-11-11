@@ -1105,6 +1105,7 @@ function tr(err){
   if(c==="email_not_confirmed"||/not confirmed/i.test(m))return "Você ainda não confirmou seu e-mail. Procure o link que mandamos (olhe também no spam).";
   if(c==="user_already_exists"||/already registered/i.test(m))return "Já existe uma conta com esse e-mail. Entre ou recupere a senha.";
   if(c==="weak_password"||/password should/i.test(m))return "Senha fraca. Use pelo menos 8 caracteres, misturando letras e números.";
+  if(c==="email_address_not_authorized"||/not authorized/i.test(m))return "Não conseguimos enviar o e-mail de confirmação agora. Tente de novo mais tarde ou fale com anderssonjorge52@gmail.com.";
   if(/rate limit/i.test(c+m))return "Muitos e-mails enviados agora. Espere alguns minutos e tente de novo.";
   if(c==="same_password")return "A senha nova precisa ser diferente da atual.";
   if(/fetch|network/i.test(m))return "Sem conexão com o servidor. Confira sua internet.";
