@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Osso a Osso</title>
+<meta name="description" content="Aprenda anatomia digitando: uma estrutura acende e você digita o nome.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: negatoscópio (caixa de luz de raio-X) — palco escuro com a coluna no centro, digitação embaixo, plano em coluna de leitura. Tema único escuro, por escolha. */
+:root{
+  --film:#0d151e; --film-2:#141f2b; --film-3:#1b2836; --line:#283a4e;
+  --bone:#ebe5d8; --dim:#8d9bab; --faint:#55667a;
+  --amber:#f2a65a; --amber-soft:rgba(242,166,90,.18);
+  --miss:#e8636d; --ok:#86cdb0;
+  --f-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--film);color:var(--bone)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:radial-gradient(ellipse 70% 55% at 50% 30%, #1a2a3c 0%, var(--film) 70%) fixed, var(--film);min-height:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--film)}
+.wrap{max-width:1040px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px;background:linear-gradient(var(--film) 70%, transparent)}
+.brand{font-family:var(--f-display);font-size:22px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;color:var(--bone);text-decoration:none}
+.brand svg{width:18px;height:28px}
+nav.tabs{display:flex;gap:4px;background:var(--film-2);border:1px solid var(--line);border-radius:999px;padding:3px}
+nav.tabs a{font:500 13px var(--f-body);color:var(--dim);text-decoration:none;padding:6px 14px;border-radius:999px}
+nav.tabs a[aria-current="page"]{background:var(--film-3);color:var(--bone)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.eyebrow{font:600 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:-.015em}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{background:var(--amber);color:#1b1208;border:0;border-radius:8px;padding:10px 18px;font-weight:600;font-size:14px}
+.btn.ghost{background:transparent;color:var(--bone);border:1px solid var(--line)}
+.btn:hover{filter:brightness(1.08)}
+
+/* ---------- Trilha ---------- */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;padding-block:28px 12px}
+.hero h1{font-size:clamp(34px,5.4vw,58px);line-height:1.02}
+.hero h1 em{color:var(--amber)}
+.hero p{color:var(--dim);max-width:46ch;font-size:16px;margin:16px 0 22px}
+.hero-fig{display:flex;justify-content:center;min-width:0}
+.hero-fig svg{height:min(480px,62vh);width:auto;max-width:100%;display:block;margin:0 auto}
+.example-tag{font:12px var(--f-mono);color:var(--faint);text-align:center;margin-top:4px}
+.section-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:34px 0 12px;flex-wrap:wrap}
+.section-h h2{font-size:26px}
+.modules{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mod{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--film-2);min-width:0}
+.mod.active{border-color:var(--amber)}
+.mod .n{font-family:var(--f-display);font-size:19px}
+.mod .s{font:12px var(--f-mono);color:var(--dim);margin-top:2px}
+.diffrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 6px}
+.seg{display:flex;gap:3px;background:var(--film-2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{background:transparent;border:0;border-radius:999px;padding:6px 14px;font:500 13px var(--f-body);color:var(--dim)}
+.seg button[aria-pressed="true"]{background:var(--amber);color:#1b1208}
+.diffdesc{color:var(--dim);font-size:13px;min-width:0;flex:1 1 240px}
+.timer{height:4px;background:var(--line);max-width:320px;margin:10px auto 0;border-radius:2px;overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--amber);transition:width .1s linear}
+.timer.low i{background:var(--miss)}
+button.mod{text-align:left;width:100%}
+.acct{display:flex;align-items:center;gap:8px}
+.rw-chip{display:inline-flex;align-items:center;gap:4px;font:600 12px var(--f-mono);color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:var(--film-2);font-variant-numeric:tabular-nums}
+.rw-chip.hot{color:var(--amber);border-color:rgba(242,166,90,.5)}
+.rw-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+.rw-card{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--film-2);min-width:0}
+.rk-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.rk-name{font-family:var(--f-display);font-size:24px}
+.rk-xp{font:600 13px var(--f-mono);color:var(--amber);font-variant-numeric:tabular-nums}
+.rk-bar{height:8px;border-radius:4px;background:var(--film-3);border:1px solid var(--line);margin:10px 0 6px;overflow:hidden}
+.rk-bar i{display:block;height:100%;background:var(--amber);border-radius:4px}
+.rk-next{font-size:13px;color:var(--dim)} .rk-next b{color:var(--bone);font-weight:600}
+.rw-streak{display:flex;gap:14px;align-items:center}
+.flame{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--film-3);color:var(--faint);flex:none}
+.flame svg{width:18px;height:24px}
+.flame.on{color:var(--amber);background:var(--amber-soft)}
+.rw-big{font-family:var(--f-display);font-size:24px;line-height:1.1}
+.rw-sub{font-size:13px;color:var(--dim)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:10px}
+.bd{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--film-2);color:var(--faint);min-width:0}
+.bd svg{width:24px;height:28px;flex:none}
+.bd-n{font-weight:600;font-size:14px;color:var(--dim);overflow-wrap:anywhere}
+.bd-d{font-size:12px;color:var(--faint)}
+.bd.got{color:var(--amber)} .bd.got .bd-n{color:var(--bone)} .bd.got .bd-d{color:var(--dim)}
+.bd.new{border-color:var(--amber);animation:pop .5s ease-out}
+@keyframes pop{0%{transform:scale(.9);opacity:0}100%{transform:none;opacity:1}}
+.rw-result{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--film-2);margin:0 0 22px;display:grid;gap:12px}
+.rw-gain{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.rw-plus{font:600 34px var(--f-mono);color:var(--amber);line-height:1}
+.rw-gain ul{list-style:none;margin:0;padding:0;flex:1 1 240px;min-width:0;font-size:13.5px}
+.rw-gain li{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-bottom:1px solid var(--line);color:var(--dim)}
+.rw-gain li b{font-family:var(--f-mono);color:var(--bone)}
+.rw-up{font-family:var(--f-display);font-size:22px;color:var(--amber)} .rw-up b{font-weight:600}
+.rw-result .rk{margin-top:2px}
+.prompt{position:relative}
+.xpfloat{position:absolute;left:50%;top:20px;transform:translateX(-50%);font:600 15px var(--f-mono);color:var(--amber);pointer-events:none;animation:xpup .9s ease-out forwards}
+@keyframes xpup{0%{opacity:0;transform:translate(-50%,8px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+@media (max-width:760px){.rw-grid{grid-template-columns:1fr}.acct .who{display:none}}
+.acct .who{font-size:13px;color:var(--dim);max-width:22ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn.sm{padding:7px 14px;font-size:13px}
+.auth{display:flex;justify-content:center;padding-block:24px 60px}
+.auth-wrap,.auth-wrap *,.auth-wrap *::before,.auth-wrap *::after{box-sizing:border-box}
+.auth-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);width:100%;max-width:980px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--film-2);box-shadow:0 40px 90px -50px rgba(0,0,0,.9)}
+.auth-art{position:relative;padding:30px;display:grid;grid-template-rows:auto 1fr auto auto;gap:14px;grid-template-columns:minmax(0,1fr);background:radial-gradient(ellipse 80% 60% at 50% 40%,#1c2d40,var(--film) 75%);border-right:1px solid var(--line);min-width:0}
+.auth-fig{display:grid;place-items:center;min-height:0}
+.auth-fig svg{height:min(420px,46vh);width:auto;max-width:100%}
+.auth-tag{text-align:center;font:12px var(--f-mono);color:var(--amber);letter-spacing:.06em;min-height:1.4em}
+.auth-perks{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14px;color:var(--dim)}
+.auth-perks li{display:flex;gap:10px;min-width:0}
+.auth-perks span{flex:none}
+.auth-perks span{color:var(--amber);font-weight:700}
+.auth-wrap .auth-card{max-width:none;padding:36px 34px;align-content:start}
+.pw{position:relative;display:block}
+.pw input{width:100%;padding-right:84px}
+.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--film-3);border:1px solid var(--line);color:var(--dim);font:500 12px var(--f-body);border-radius:6px;padding:5px 9px}
+.pw-eye:hover{color:var(--bone)}
+.fld input{width:100%}
+@media (max-width:760px){.auth-wrap{grid-template-columns:1fr}.auth-art{display:none}.auth-wrap .auth-card{padding:24px 18px}}
+.auth-card{width:100%;max-width:420px;display:grid;gap:14px}
+.auth-card h1{font-size:clamp(30px,5vw,40px);line-height:1.08}
+.au-sub{color:var(--dim);margin:0}
+.au-tabs{justify-self:start}
+#au-form{display:grid;gap:12px}
+.fld{display:grid;gap:5px;font-size:13px;color:var(--dim)}
+.fld input{font:15px var(--f-body);color:var(--bone);background:var(--film-2);border:1px solid var(--line);border-radius:8px;padding:11px 12px}
+.fld input:focus{outline:2px solid var(--amber);outline-offset:0;border-color:transparent}
+.chk{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--dim)}
+.chk input{margin-top:3px;accent-color:var(--amber)}
+.chk a,.au-msg a{color:var(--bone)}
+.au-msg{font-size:14px;border-radius:8px;padding:10px 12px;border:1px solid var(--miss);color:var(--bone);background:rgba(232,99,109,.1)}
+.au-msg.info{border-color:var(--ok);background:rgba(134,205,176,.1)}
+#au-submit{justify-self:start;min-width:160px}
+#au-submit[disabled]{opacity:.6;cursor:wait}
+.au-links{display:flex;gap:16px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;padding:0;color:var(--dim);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.linkbtn:hover{color:var(--bone)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--film-3);border:1px solid var(--line);color:var(--bone);padding:10px 16px;border-radius:8px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+button.mod:hover{border-color:var(--faint)}
+button.mod.active{border-color:var(--amber);background:var(--film-3)}
+.musc{fill:rgba(214,120,110,.16);stroke:#d9877c;stroke-opacity:.55;stroke-width:1;transition:fill .25s,stroke .25s}
+.org{fill:rgba(150,180,210,.13);stroke:#a9c0d6;stroke-opacity:.6;stroke-width:1;transition:fill .25s,stroke .25s}
+.org.tube{fill:none;stroke:#a9c0d6;stroke-opacity:.45;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.org.tube.thin{stroke-width:6}
+.on .musc,.on .org{fill:var(--amber);stroke:var(--amber);stroke-opacity:1;fill-opacity:.9;filter:url(#glow)}
+.on .org.tube{fill:none;stroke:var(--amber);stroke-opacity:1}
+.on .rib{stroke:var(--amber);stroke-opacity:1;filter:url(#glow)}
+.done-flash .on .musc,.done-flash .on .org,.done-flash .on .rib{fill:var(--ok);stroke:var(--ok)}
+.done-flash .on .org.tube,.done-flash .on .rib{fill:none}
+.levels{display:grid;gap:8px;margin-top:10px}
+.lvl{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--film-2);text-align:left;width:100%}
+.lvl:hover{border-color:var(--faint);background:var(--film-3)}
+.lvl .num{font:600 12px var(--f-mono);color:var(--amber);letter-spacing:.1em}
+.lvl .t{font-family:var(--f-display);font-size:20px;line-height:1.2}
+.lvl .d{color:var(--dim);font-size:13px}
+.lvl .st{font:12px var(--f-mono);color:var(--dim);text-align:right;white-space:nowrap}
+.lvl .st.done{color:var(--ok)}
+.foot{color:var(--faint);font-size:12px;padding-block:28px}
+
+/* ---------- Jogo ---------- */
+.game{padding-block:6px 30px}
+.gbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chip{font:12px var(--f-mono);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--dim);background:var(--film-2)}
+.chip b{color:var(--bone);font-weight:600}
+.stats{display:flex;gap:18px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.stats div{display:flex;align-items:baseline;gap:5px}
+.stats b{font-size:18px;font-weight:600}
+.stats span{font-size:11px;color:var(--dim);letter-spacing:.06em}
+.stage{position:relative;margin-top:6px}
+.stage svg{display:block;width:100%;height:min(54vh,520px)}
+.prompt{text-align:center;margin-top:4px;min-height:118px}
+.prompt .q{font:12px var(--f-mono);color:var(--dim);letter-spacing:.08em}
+.word{font-family:var(--f-display);font-size:clamp(34px,6vw,52px);line-height:1.15;min-height:1.2em;white-space:pre}
+.word .typed{color:var(--bone)}
+.word .ghost{color:var(--faint)}
+.word .ph{color:var(--faint);font-style:italic;font-size:.55em}
+.caret{display:inline-block;width:2px;height:.9em;background:var(--amber);vertical-align:-.08em;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.word.shake{animation:shake .28s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.word.win .typed{color:var(--ok)}
+.clue{color:var(--dim);font-size:14px;max-width:60ch;margin:4px auto 0}
+.kb{max-width:560px;margin:14px auto 0;display:grid;gap:5px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--film-2)}
+.kb .row{display:flex;gap:5px;justify-content:center}
+.kb button{flex:1 1 0;max-width:44px;height:38px;border-radius:6px;border:1px solid var(--line);background:var(--film-3);font:500 13px var(--f-mono);color:var(--dim);transition:background .15s,color .15s}
+.kb button.space{max-width:260px;flex:6}
+.kb button.hit{background:var(--amber);color:#1b1208;border-color:var(--amber)}
+.kb button.bad{background:var(--miss);color:#1b0a0b;border-color:var(--miss)}
+.kb button.next{border-color:var(--amber);color:var(--amber)}
+.kb-note{font:11px var(--f-mono);color:var(--faint);text-align:center;margin-top:8px}
+
+/* peças do esqueleto */
+.bone{fill:rgba(235,229,216,.10);stroke:var(--bone);stroke-opacity:.55;stroke-width:1.1;transition:fill .25s,stroke .25s}
+.rib{fill:none;stroke:var(--bone);stroke-opacity:.28;stroke-width:1.6;stroke-linecap:round}
+.disc{fill:rgba(141,155,171,.25);stroke:none;transition:fill .25s}
+.proc{fill:none;stroke:var(--bone);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
+.on .bone,.bone.on{fill:var(--amber);stroke:var(--amber);stroke-opacity:1;fill-opacity:.9;filter:url(#glow)}
+.disc.on{fill:var(--amber);filter:url(#glow)}
+.proc.on{stroke:var(--amber);stroke-opacity:1}
+.vlabel{font:10px var(--f-mono);fill:var(--faint);letter-spacing:.12em}
+.done-flash .on .bone,.done-flash .bone.on,.done-flash .disc.on{fill:var(--ok);stroke:var(--ok)}
+
+/* ---------- Resultado ---------- */
+.result{max-width:760px;margin:0 auto;padding-block:20px 40px}
+.result h1{font-size:clamp(30px,4.6vw,44px);line-height:1.08;margin-top:10px}
+.big{display:flex;gap:34px;margin:22px 0 18px;flex-wrap:wrap}
+.big div{display:grid}
+.big span{font:600 11px var(--f-mono);letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.big b{font:600 44px var(--f-mono);font-variant-numeric:tabular-nums;line-height:1.1}
+.goals{list-style:none;padding:0;margin:0 0 24px;display:grid;gap:6px}
+.goals li{display:flex;gap:10px;align-items:center}
+.goals .star{color:var(--faint);font-size:16px}
+.goals .star.got{color:var(--amber)}
+.recap{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.card{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--film-2);min-width:0}
+.card .n{font:600 14px var(--f-mono);overflow-wrap:anywhere}
+.card p{color:var(--dim);font-size:12.5px;margin:4px 0 6px;line-height:1.4}
+.card .s{font:11px var(--f-mono)}
+.card .s.ok{color:var(--ok)} .card .s.miss{color:var(--miss)}
+.actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+
+/* ---------- Plano ---------- */
+.plan{max-width:760px;margin:0 auto;padding-block:20px 50px}
+.plan h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:10px 0 14px}
+.plan .lede{font-size:17px;color:var(--dim);max-width:60ch}
+.plan h2{font-size:26px;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.plan p,.plan li{max-width:65ch}
+.plan ul{padding-left:20px;margin:8px 0}
+.plan li{margin:4px 0}
+.plan strong{color:var(--bone);font-weight:600}
+.tbl{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+td.num{font-family:var(--f-mono);white-space:nowrap}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.tier{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--film-2);min-width:0}
+.tier.hl{border-color:var(--amber)}
+.tier .p{font:600 24px var(--f-mono);margin:6px 0}
+.tier .p small{font-size:12px;color:var(--dim);font-weight:400}
+.tier ul{font-size:13.5px;color:var(--dim);padding-left:16px}
+.phase{display:grid;grid-template-columns:110px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.phase .w{font:600 12px var(--f-mono);color:var(--amber)}
+.note{font-size:13px;color:var(--faint)}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr}
+  .hero-fig{order:-1}.hero-fig svg{height:300px}
+  .modules{grid-template-columns:repeat(2,1fr)}
+  .tiers{grid-template-columns:1fr}
+  .stats{gap:12px}.stats b{font-size:15px}
+  .stage svg{height:min(42vh,380px)}
+  .kb button{height:34px;font-size:12px}
+  .phase{grid-template-columns:1fr;gap:2px}
+  .lvl{grid-template-columns:40px 1fr}.lvl .st{grid-column:2;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#jogar" aria-label="Osso a Osso, início">
+      <svg viewBox="0 0 18 28" aria-hidden="true"><g fill="none" stroke="#f2a65a" stroke-width="1.6"><rect x="3" y="1" width="12" height="5" rx="2"/><rect x="2.5" y="8.5" width="13" height="6" rx="2"/><rect x="2" y="17" width="14" height="7" rx="2.4"/></g></svg>
+      Osso a Osso
+    </a>
+    <div class="acct" id="acct"></div>
+  </header>
+
+  <main id="v-trilha" hidden>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Anatomia por digitação</div>
+        <h1>Uma peça acende. <em>Você digita o nome.</em></h1>
+        <p>Em cinco minutos por dia você aprende a ler o corpo inteiro: ossos, órgãos e músculos. Sem decoreba de lista: você vê, digita e o app traz de volta o que você errou no dia certo.</p>
+        <button class="btn" data-start="esqueleto:0">Começar pelo esqueleto</button>
+      </div>
+      <div class="hero-fig">
+        <div>
+          <svg id="hero-svg" viewBox="60 10 280 810" aria-label="Corpo humano com uma estrutura destacada"></svg>
+          <div class="example-tag" id="hero-tag"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rewards" hidden></section>
+
+    <div class="section-h"><h2>Módulos</h2><span class="eyebrow">Escolha um sistema</span></div>
+    <div class="modules" id="modules"></div>
+
+    <div class="section-h"><h2 id="mod-title">Coluna vertebral</h2><span class="eyebrow" id="due-line"></span></div>
+    <div class="diffrow"><span class="eyebrow">Dificuldade</span><div class="seg" id="diff" role="group" aria-label="Dificuldade"></div><span class="diffdesc" id="diff-desc"></span></div>
+    <div class="levels" id="levels"></div>
+    <p class="foot">Seu progresso e suas revisões ficam salvos na sua conta.</p>
+  </main>
+
+  <main id="v-jogo" class="game" hidden>
+    <div class="gbar">
+      <span class="chip" id="g-chip">Coluna · Nível 1</span>
+      <div class="stats" aria-live="off">
+        <div><b id="s-wpm">0</b><span>PPM</span></div>
+        <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
+        <div><b id="s-prog">0/0</b><span>PEÇAS</span></div>
+      </div>
+      <span style="display:flex;gap:6px"><button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button><button class="chip" id="g-quit" type="button">Sair</button></span>
+    </div>
+    <div class="stage" id="stage"><svg id="game-svg" viewBox="0 20 520 700" aria-label="Coluna vertebral em vista lateral e anterior"></svg></div>
+    <div class="prompt">
+      <div class="q" id="g-q">QUE PEÇA É ESSA?</div>
+      <div class="word" id="g-word" aria-live="polite"></div>
+      <div class="clue" id="g-clue"></div>
+      <div class="timer" id="g-timer" hidden><i></i></div>
+    </div>
+    <div class="kb" id="kb"></div>
+    <div class="kb-note">Digite no seu teclado ou toque nas teclas. Acentos são opcionais.</div>
+  </main>
+
+  <main id="v-result" class="result" hidden></main>
+
+  <main id="v-auth" class="auth" hidden>
+   <div class="auth-wrap">
+    <aside class="auth-art" aria-hidden="true">
+      <div class="eyebrow">Osso a Osso</div>
+      <div class="auth-fig"><svg id="auth-svg" viewBox="60 10 280 810"></svg></div>
+      <div class="auth-tag" id="auth-tag">fêmur · o maior osso do corpo</div>
+      <ul class="auth-perks">
+        <li><span>✓</span>XP, patentes e conquistas salvos na sua conta</li>
+        <li><span>✓</span>Revisão do que você errou no dia certo</li>
+        <li><span>✓</span>Continua de onde parou, no celular ou no computador</li>
+      </ul>
+    </aside>
+    <div class="auth-card">
+      <div class="eyebrow">Sua conta</div>
+      <h1 id="au-title">Crie sua conta grátis</h1>
+      <p class="au-sub" id="au-sub"></p>
+      <div class="seg au-tabs" id="au-tabs" role="group" aria-label="Entrar ou criar conta">
+        <button type="button" data-auth="signup">Criar conta</button>
+        <button type="button" data-auth="login">Entrar</button>
+      </div>
+      <form id="au-form" novalidate>
+        <label class="fld" id="w-nome">Nome<input id="f-nome" autocomplete="name" maxlength="60"></label>
+        <label class="fld" id="w-email">E-mail<input id="f-email" type="email" autocomplete="email" inputmode="email"></label>
+        <label class="fld" id="w-senha">Senha<span class="pw"><input id="f-senha" type="password" autocomplete="current-password"><button type="button" class="pw-eye" id="pw-eye" aria-label="Mostrar senha">Mostrar</button></span></label>
+        <label class="fld" id="w-senha2">Confirme a senha<input id="f-senha2" type="password" autocomplete="new-password"></label>
+        <label class="chk" id="w-termos"><input id="f-termos" type="checkbox"><span>Li e aceito os <a href="termos.html" target="_blank">Termos de Uso</a> e a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.</span></label>
+        <div class="au-msg" id="au-msg" role="alert" hidden></div>
+        <button class="btn" id="au-submit" type="submit">Criar conta</button>
+      </form>
+      <div class="au-links">
+        <button class="linkbtn" id="au-forgot" type="button" data-auth="forgot">Esqueci minha senha</button>
+        <button class="linkbtn" id="au-back" type="button" data-auth="login">Voltar para o login</button>
+        <a class="linkbtn" href="index.html" id="au-home">Voltar ao site</a>
+      </div>
+    </div>
+   </div>
+  </main>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(() => {
+// ---------- Conteúdo ----------
+const SPINE_LEVELS = [
+  { title:"As 5 regiões", desc:"Cervical, torácica, lombar, sacro e cóccix.",
+    win:"Você já divide uma coluna em regiões só de olhar.",
+    items:[
+      {a:"cervical", hl:["r:C"], clue:"7 vértebras do pescoço, com curvatura para frente (lordose)."},
+      {a:"torácica", hl:["r:T"], clue:"12 vértebras que se articulam com as costelas; curvatura para trás (cifose)."},
+      {a:"lombar", hl:["r:L"], clue:"5 vértebras grandes que carregam o peso do tronco."},
+      {a:"sacro", hl:["p:S"], clue:"5 vértebras fundidas que se encaixam na pelve."},
+      {a:"cóccix", hl:["p:Co"], clue:"3 a 5 vértebras rudimentares fundidas, o resto da cauda."}
+    ]},
+  { title:"O pescoço: C1 a C7", desc:"Atlas, áxis e as cervicais típicas.",
+    win:"Você já lê o pescoço inteiro, de C1 a C7.",
+    items:[
+      {a:"atlas", hl:["p:C1"], clue:"C1 · sustenta o crânio, como o titã que segura o mundo. Não tem corpo vertebral."},
+      {a:"áxis", hl:["p:C2"], clue:"C2 · tem o dente (processo odontoide), o pivô em que a C1 gira."},
+      {a:"C3", hl:["p:C3"], clue:"Primeira cervical típica, logo abaixo do áxis."},
+      {a:"C5", hl:["p:C5"], clue:"Cervical típica no meio do pescoço; processo espinhoso bífido."},
+      {a:"C6", hl:["p:C6"], clue:"Última cervical típica, logo acima da proeminente."},
+      {a:"C7", hl:["p:C7"], clue:"Vértebra proeminente · o processo espinhoso que você sente na base da nuca."}
+    ]},
+  { title:"Tórax e lombar", desc:"Marcos que caem em prova: T4, T7, T12, L1, L4.",
+    win:"Você já encontra os marcos do tronco pela coluna.",
+    items:[
+      {a:"T1", hl:["p:T1"], clue:"Primeira torácica; articula com a primeira costela."},
+      {a:"T4", hl:["p:T4"], clue:"Altura aproximada do ângulo do esterno (disco T4–T5)."},
+      {a:"T7", hl:["p:T7"], clue:"Altura aproximada do ângulo inferior da escápula."},
+      {a:"T12", hl:["p:T12"], clue:"Última torácica; articula com a 12ª costela, a flutuante."},
+      {a:"L1", hl:["p:L1"], clue:"Por volta daqui termina a medula espinhal (cone medular, L1–L2)."},
+      {a:"L4", hl:["p:L4"], clue:"Altura da crista ilíaca; referência para a punção lombar."},
+      {a:"L5", hl:["p:L5"], clue:"A maior vértebra; apoia-se no sacro."}
+    ]},
+  { title:"Coluna inteira", desc:"Peças nomeadas, marcos e partes, tudo misturado.",
+    win:"Você já lê uma coluna inteira: as nomeadas, os marcos e as partes.",
+    items:[
+      {a:"atlas", hl:["p:C1"], clue:"C1 · segura o crânio; não tem corpo vertebral."},
+      {a:"áxis", hl:["p:C2"], clue:"C2 · tem o dente, o pivô da rotação da cabeça."},
+      {a:"C7", hl:["p:C7"], clue:"Vértebra proeminente, na base da nuca."},
+      {a:"T4", hl:["p:T4"], clue:"Altura do ângulo do esterno."},
+      {a:"T12", hl:["p:T12"], clue:"Última torácica; a última costela se junta a ela."},
+      {a:"L1", hl:["p:L1"], clue:"Primeira lombar; perto de onde a medula termina."},
+      {a:"L4", hl:["p:L4"], clue:"Altura da crista ilíaca."},
+      {a:"L5", hl:["p:L5"], clue:"A maior vértebra, apoiada no sacro."},
+      {a:"sacro", hl:["p:S"], clue:"5 vértebras fundidas que fecham a pelve por trás."},
+      {a:"disco intervertebral", hl:["d:L4"], clue:"Amortecedor entre L4 e L5: anel fibroso por fora, núcleo pulposo por dentro."}
+    ]}
+];
+
+const SK={
+  cranio:{a:"crânio",hl:["p:cranio"],clue:"Caixa óssea que protege o encéfalo; 22 ossos contando os da face."},
+  mandibula:{a:"mandíbula",hl:["p:mandibula"],clue:"O único osso móvel da cabeça; segura os dentes de baixo."},
+  clavicula:{a:"clavícula",hl:["p:clavicula"],clue:"Liga o esterno ao ombro; uma das fraturas mais comuns em quedas."},
+  esterno:{a:"esterno",hl:["p:esterno"],clue:"Osso plano no meio do peito: manúbrio, corpo e processo xifoide."},
+  costelas:{a:"costelas",hl:["p:costelas"],clue:"12 pares: 7 verdadeiras, 3 falsas e 2 flutuantes."},
+  escapula:{a:"escápula",hl:["p:escapula"],clue:"Osso triangular das costas; forma o ombro com o úmero e a clavícula."},
+  umero:{a:"úmero",hl:["p:umero"],clue:"Osso do braço, do ombro até o cotovelo."},
+  radio:{a:"rádio",hl:["p:radio"],clue:"Osso do antebraço do lado do polegar."},
+  ulna:{a:"ulna",hl:["p:ulna"],clue:"Osso do antebraço do lado do dedo mínimo; forma a ponta do cotovelo."},
+  carpo:{a:"carpo",hl:["p:carpo"],clue:"8 ossinhos do punho, em duas fileiras."},
+  metacarpo:{a:"metacarpo",hl:["p:metacarpo"],clue:"5 ossos longos da palma da mão."},
+  falanges:{a:"falanges",hl:["p:falanges"],clue:"Ossos dos dedos: 14 em cada mão, e o polegar tem só 2."},
+  pelve:{a:"pelve",hl:["p:pelve"],clue:"Anel formado pelos dois ossos do quadril e o sacro; apoia o tronco."},
+  femur:{a:"fêmur",hl:["p:femur"],clue:"O maior e mais longo osso do corpo, na coxa."},
+  patela:{a:"patela",hl:["p:patela"],clue:"Osso do joelho que fica dentro do tendão do quadríceps."},
+  tibia:{a:"tíbia",hl:["p:tibia"],clue:"Osso da canela, do lado de dentro; carrega quase todo o peso da perna."},
+  fibula:{a:"fíbula",hl:["p:fibula"],clue:"Osso fino do lado de fora da perna; forma o maléolo lateral."},
+  tarso:{a:"tarso",hl:["p:tarso"],clue:"7 ossos do tornozelo e do pé, como o tálus e o calcâneo."},
+  metatarso:{a:"metatarso",hl:["p:metatarso"],clue:"5 ossos longos do pé, entre o tarso e os dedos."}
+};
+const OR={
+  encefalo:{a:"encéfalo",hl:["p:encefalo"],clue:"Cérebro, cerebelo e tronco encefálico, dentro do crânio."},
+  traqueia:{a:"traqueia",hl:["p:traqueia"],clue:"Tubo com anéis de cartilagem que leva o ar até os brônquios."},
+  pulmoes:{a:"pulmões",hl:["p:pulmoes"],clue:"O direito tem 3 lobos e o esquerdo 2, para dar espaço ao coração."},
+  coracao:{a:"coração",hl:["p:coracao"],clue:"Bomba de 4 câmaras, um pouco à esquerda do centro do peito."},
+  figado:{a:"fígado",hl:["p:figado"],clue:"A maior glândula do corpo, do lado direito, logo abaixo do diafragma."},
+  vesicula:{a:"vesícula biliar",hl:["p:vesicula"],clue:"Guarda a bile que o fígado produz."},
+  estomago:{a:"estômago",hl:["p:estomago"],clue:"Bolsa em forma de J do lado esquerdo; começa a digerir as proteínas."},
+  baco:{a:"baço",hl:["p:baco"],clue:"Do lado esquerdo, atrás do estômago; filtra o sangue e ajuda na defesa."},
+  pancreas:{a:"pâncreas",hl:["p:pancreas"],clue:"Atrás do estômago; produz insulina e enzimas digestivas."},
+  rins:{a:"rins",hl:["p:rins"],clue:"Dois órgãos em forma de feijão, atrás do abdome; filtram o sangue."},
+  delgado:{a:"intestino delgado",hl:["p:delgado"],clue:"Duodeno, jejuno e íleo, com uns 6 metros; absorve os nutrientes."},
+  grosso:{a:"intestino grosso",hl:["p:grosso"],clue:"Contorna o delgado como uma moldura; absorve água e forma as fezes."},
+  bexiga:{a:"bexiga",hl:["p:bexiga"],clue:"Bolsa muscular na pelve que armazena a urina."}
+};
+const MU={
+  ecm:{a:"esternocleidomastoideo",hl:["p:ecm"],clue:"Vai do esterno e da clavícula até atrás da orelha; gira a cabeça."},
+  trapezio:{a:"trapézio",hl:["p:trapezio"],clue:"Grande músculo do pescoço e das costas que eleva os ombros."},
+  peitoral:{a:"peitoral maior",hl:["p:peitoral"],clue:"Músculo em leque do peito; puxa o braço para frente e para dentro."},
+  reto:{a:"reto abdominal",hl:["p:reto"],clue:"O tanquinho: duas faixas verticais cortadas por intersecções tendíneas."},
+  obliquo:{a:"oblíquo externo",hl:["p:obliquo"],clue:"Na lateral do abdome; gira e inclina o tronco."},
+  deltoide:{a:"deltoide",hl:["p:deltoide"],clue:"Cobre o ombro como uma ombreira; levanta o braço para o lado."},
+  biceps:{a:"bíceps braquial",hl:["p:biceps"],clue:"Frente do braço, com duas cabeças; dobra o cotovelo e vira a palma para cima."},
+  quadriceps:{a:"quadríceps",hl:["p:quadriceps"],clue:"4 músculos na frente da coxa; esticam o joelho."},
+  sartorio:{a:"sartório",hl:["p:sartorio"],clue:"O músculo mais longo do corpo; cruza a coxa na diagonal."},
+  adutores:{a:"adutores",hl:["p:adutores"],clue:"Parte de dentro da coxa; aproximam uma perna da outra."},
+  tibialant:{a:"tibial anterior",hl:["p:tibialant"],clue:"Ao lado da tíbia, na frente da perna; levanta a ponta do pé."},
+  gastro:{a:"gastrocnêmio",hl:["p:gastro"],clue:"A panturrilha; fica atrás, mas aparece pelos lados. Põe você na ponta do pé."}
+};
+const pick=(o,ks)=>ks.map(k=>o[k]);
+const MODULES=[
+  {id:"coluna",name:"Coluna vertebral",view:"coluna",levels:SPINE_LEVELS},
+  {id:"esqueleto",name:"Esqueleto",view:"esqueleto",levels:[
+    {title:"Cabeça e tronco",desc:"Crânio, mandíbula, clavícula, esterno, costelas e escápula.",win:"Você já monta a cabeça e o tronco de um esqueleto.",items:pick(SK,["cranio","mandibula","clavicula","esterno","costelas","escapula"])},
+    {title:"Membro superior",desc:"Do ombro à ponta dos dedos.",win:"Você já lê um braço inteiro, do úmero às falanges.",items:pick(SK,["umero","radio","ulna","carpo","metacarpo","falanges"])},
+    {title:"Membro inferior",desc:"Da pelve aos pés.",win:"Você já lê uma perna inteira, da pelve ao metatarso.",items:pick(SK,["pelve","femur","patela","tibia","fibula","tarso","metatarso"])},
+    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","clavicula","costelas","umero","radio","ulna","pelve","femur","patela","tibia","fibula"])}
+  ]},
+  {id:"orgaos",name:"Órgãos",view:"orgaos",levels:[
+    {title:"Cabeça e tórax",desc:"Encéfalo, traqueia, pulmões e coração.",win:"Você já encontra os órgãos da cabeça e do tórax.",items:pick(OR,["encefalo","traqueia","pulmoes","coracao"])},
+    {title:"Abdome superior",desc:"Fígado, vesícula, estômago, baço e pâncreas.",win:"Você já lê o andar de cima do abdome.",items:pick(OR,["figado","vesicula","estomago","baco","pancreas"])},
+    {title:"Abdome inferior",desc:"Rins, intestinos e bexiga.",win:"Você já lê o andar de baixo do abdome.",items:pick(OR,["rins","delgado","grosso","bexiga"])},
+    {title:"Todos os órgãos",desc:"Os 13 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)}
+  ]},
+  {id:"musculos",name:"Músculos",view:"musculos",levels:[
+    {title:"Pescoço e tronco",desc:"Esternocleidomastoideo, trapézio, peitoral e abdome.",win:"Você já lê os músculos do tronco.",items:pick(MU,["ecm","trapezio","peitoral","reto","obliquo"])},
+    {title:"Braços e pernas",desc:"Deltoide, bíceps, coxa e perna.",win:"Você já lê os músculos dos membros.",items:pick(MU,["deltoide","biceps","quadriceps","sartorio","adutores","tibialant","gastro"])},
+    {title:"Todos os músculos",desc:"Os 12 músculos, misturados.",win:"Você já lê a musculatura da frente do corpo inteira.",items:Object.values(MU)}
+  ]}
+];
+const modById=id=>MODULES.find(m=>m.id===id)||MODULES[0];
+
+// ---------- Geometria da coluna ----------
+const SVGNS="http://www.w3.org/2000/svg";
+function layout(){
+  const v=[]; let y=40;
+  const push=(id,r,h,w,gap)=>{v.push({id,r,y,h,w}); y+=h+gap;};
+  push("C1","C",10,40,3); push("C2","C",18,30,3);
+  for(let i=3;i<=7;i++) push("C"+i,"C",13,30+i,i===7?4:3);
+  for(let i=1;i<=12;i++) push("T"+i,"T",16+i*0.35,34+i,i===12?6:4);
+  for(let i=1;i<=5;i++) push("L"+i,"L",23+i*0.4,49+i*2,6);
+  push("S","S",80,62,4); push("Co","Co",24,20,0);
+  return v;
+}
+const V=layout();
+// curvatura lateral (offset no eixo x, anterior para a esquerda)
+const CP=[["C1",-4],["C4",-13],["C7",-2],["T1",2],["T7",20],["T12",6],["L1",0],["L3",-15],["L5",-5],["S",14],["Co",28]];
+function offAt(y){
+  const pts=CP.map(([id,o])=>{const s=V.find(x=>x.id===id);return [s.y+s.h/2,o];});
+  if(y<=pts[0][0])return pts[0][1];
+  for(let i=0;i<pts.length-1;i++){const [y0,o0]=pts[i],[y1,o1]=pts[i+1];
+    if(y<=y1){const t=(y-y0)/(y1-y0),k=(1-Math.cos(Math.PI*t))/2;return o0+(o1-o0)*k;}}
+  return pts[pts.length-1][1];
+}
+function el(tag,attrs,parent){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+
+function drawAnterior(g,cx){
+  const ribsR=[34,48,60,70,78,84,86,84,78,68,46,34];
+  V.forEach((s,i)=>{
+    const grp=el("g",{"data-p":s.id,"data-r":s.r},g);
+    if(s.id==="S"){
+      const t=s.y,b=s.y+s.h,w=s.w/2;
+      el("path",{class:"bone",d:`M${cx-w} ${t} Q${cx} ${t-6} ${cx+w} ${t} L${cx+12} ${b} Q${cx} ${b+5} ${cx-12} ${b} Z`},grp);
+      for(let k=1;k<5;k++){const yy=t+k*s.h/5, ww=w-(w-12)*k/5; el("path",{class:"proc",d:`M${cx-ww+6} ${yy} L${cx+ww-6} ${yy}`,"stroke-opacity":".25"},grp);}
+    } else if(s.id==="Co"){
+      el("path",{class:"bone",d:`M${cx-10} ${s.y} L${cx+10} ${s.y} L${cx+2} ${s.y+s.h} L${cx-2} ${s.y+s.h} Z`},grp);
+    } else if(s.id==="C1"){
+      el("ellipse",{class:"bone",cx,cy:s.y+s.h/2,rx:s.w/2,ry:s.h/2+1},grp);
+      el("ellipse",{class:"proc",cx,cy:s.y+s.h/2,rx:s.w/2-9,ry:s.h/2-2,"stroke-opacity":".3"},grp);
+    } else {
+      el("rect",{class:"bone",x:cx-s.w/2,y:s.y,width:s.w,height:s.h,rx:Math.min(5,s.h/3)},grp);
+      if(s.id==="C2") el("rect",{class:"bone",x:cx-4,y:s.y-9,width:8,height:10,rx:4},grp);
+      const tp=s.r==="L"?16:s.r==="C"?8:10;
+      el("path",{class:"proc",d:`M${cx-s.w/2} ${s.y+s.h/2} l${-tp} ${s.r==="T"?-2:0} M${cx+s.w/2} ${s.y+s.h/2} l${tp} ${s.r==="T"?-2:0}`},grp);
+      if(s.r==="T"){
+        const n=+s.id.slice(1),R=ribsR[n-1],y0=s.y+s.h/2,x0=s.w/2+6,drop=R*0.62;
+        [-1,1].forEach(sg=>{
+          const d=`M${cx+sg*x0} ${y0} C${cx+sg*(x0+R*0.9)} ${y0-10} ${cx+sg*(x0+R*1.2)} ${y0+drop*0.55} ${cx+sg*(x0+R*0.78)} ${y0+drop}`
+            + (n<=7?` Q${cx+sg*(x0+R*0.35)} ${y0+drop*1.25} ${cx+sg*14} ${y0+drop*1.18}`:"");
+          el("path",{class:"rib",d},g);
+        });
+      }
+    }
+    const nx=V[i+1];
+    if(nx && s.id!=="S" && s.id!=="C1"){
+      el("rect",{class:"disc","data-d":s.id,x:cx-s.w/2+2,y:s.y+s.h+0.5,width:s.w-4,height:Math.max(1.5,nx.y-(s.y+s.h)-1),rx:1.5},g);
+    }
+  });
+  // esterno
+  el("path",{class:"rib",d:`M${cx-9} ${V[7].y+14} L${cx+9} ${V[7].y+14} L${cx+7} ${V[15].y+10} L${cx} ${V[16].y+8} L${cx-7} ${V[15].y+10} Z`,"stroke-opacity":".22",fill:"rgba(235,229,216,.04)"},g);
+}
+function drawLateral(g,cx,sc){
+  const gg=el("g",{transform:`translate(${cx} 0) scale(${sc}) translate(${-cx} 0)`},g);
+  V.forEach((s,i)=>{
+    const o=offAt(s.y+s.h/2), x=cx+o, grp=el("g",{"data-p":s.id,"data-r":s.r},gg);
+    if(s.id==="S"){
+      const t=s.y,b=s.y+s.h,ot=offAt(t),ob=offAt(b);
+      el("path",{class:"bone",d:`M${cx+ot-20} ${t} L${cx+ot+16} ${t-2} Q${cx+ob+26} ${t+s.h*0.5} ${cx+ob+10} ${b} L${cx+ob} ${b} Q${cx+ot-2} ${t+s.h*0.55} ${cx+ot-20} ${t} Z`},grp);
+    } else if(s.id==="Co"){
+      const ob=offAt(s.y+s.h);
+      el("path",{class:"bone",d:`M${x-4} ${s.y} L${x+8} ${s.y} L${cx+ob-2} ${s.y+s.h} Z`},grp);
+    } else {
+      const bw=s.r==="C"?s.w*0.55:s.w*0.62;
+      el("rect",{class:"bone",x:x-bw/2-6,y:s.y,width:bw,height:s.h,rx:Math.min(4,s.h/3)},grp);
+      const sp=s.r==="C"?(s.id==="C7"?26:16):s.r==="T"?24:20, dy=s.r==="T"?14:4;
+      el("path",{class:"proc",d:`M${x+bw/2-6} ${s.y+s.h*0.35} L${x+bw/2-6+sp} ${s.y+s.h*0.5+dy}`},grp);
+      if(s.id==="C2") el("rect",{class:"bone",x:x-bw/2-2,y:s.y-8,width:7,height:9,rx:3},grp);
+      const nx=V[i+1];
+      if(nx && s.id!=="C1"){
+        el("rect",{class:"disc","data-d":s.id,x:x-bw/2-5,y:s.y+s.h+0.5,width:bw-2,height:Math.max(1.5,nx.y-(s.y+s.h)-1),rx:1.5},gg);
+      }
+    }
+  });
+}
+function buildSpine(svg,opts){
+  svg.innerHTML="";
+  const defs=el("defs",{},svg), f=el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+  el("feGaussianBlur",{stdDeviation:"3",result:"b"},f);
+  const m=el("feMerge",{},f); el("feMergeNode",{in:"b"},m); el("feMergeNode",{in:"SourceGraphic"},m);
+  if(opts.lateral){ const g=el("g",{},svg); drawLateral(g,96,0.92); const t=el("text",{class:"vlabel",x:70,y:712},svg); t.textContent="LATERAL"; }
+  const g=el("g",{},svg); drawAnterior(g,opts.cx);
+  if(opts.lateral){ const t=el("text",{class:"vlabel",x:opts.cx-28,y:712},svg); t.textContent="ANTERIOR"; }
+}
+function highlight(svg,hl){
+  svg.querySelectorAll(".on").forEach(e=>e.classList.remove("on"));
+  hl.forEach(h=>{
+    const [k,v]=h.split(":");
+    if(k==="d") svg.querySelectorAll(`[data-d="${v}"]`).forEach(e=>e.classList.add("on"));
+    else svg.querySelectorAll(`g[data-${k==="r"?"r":"p"}="${v}"]`).forEach(e=>e.classList.add("on"));
+  });
+}
+
+// ---------- Corpo inteiro (vista anterior) ----------
+const CX=200;
+function addGlow(svg){
+  const defs=el("defs",{},svg), f=el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+  el("feGaussianBlur",{stdDeviation:"3",result:"b"},f);
+  const m=el("feMerge",{},f); el("feMergeNode",{in:"b"},m); el("feMergeNode",{in:"SourceGraphic"},m);
+}
+function cap(p,cls,x1,y1,x2,y2,w){
+  const len=Math.hypot(x2-x1,y2-y1), ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI-90;
+  return el("rect",{class:cls,x:-w/2,y:0,width:w,height:len,rx:w/2,transform:`translate(${x1} ${y1}) rotate(${ang})`},p);
+}
+const X=(s,dx)=>CX+s*dx;
+const BOTH=f=>[-1,1].forEach(f);
+function part(g,id){return el("g",{"data-p":id},g);}
+function drawSilhouette(svg){
+  const g=el("g",{opacity:".07",fill:"var(--bone)",stroke:"var(--bone)","stroke-linecap":"round"},svg);
+  el("ellipse",{cx:CX,cy:72,rx:46,ry:56},g);
+  el("rect",{x:CX-20,y:115,width:40,height:40},g);
+  el("path",{d:"M172 140 L228 140 Q236 152 270 158 Q290 166 288 200 L262 300 Q256 350 266 400 Q268 432 240 446 L160 446 Q132 432 134 400 Q144 350 138 300 L112 200 Q110 166 130 158 Q164 152 172 140 Z"},g);
+  BOTH(s=>{
+    el("path",{d:`M${X(s,76)} 168 L${X(s,96)} 330`,"stroke-width":30,fill:"none"},g);
+    el("path",{d:`M${X(s,96)} 330 L${X(s,112)} 462`,"stroke-width":22,fill:"none"},g);
+    el("ellipse",{cx:X(s,113),cy:498,rx:16,ry:36},g);
+    el("path",{d:`M${X(s,40)} 430 L${X(s,36)} 600`,"stroke-width":54,fill:"none"},g);
+    el("path",{d:`M${X(s,36)} 600 L${X(s,36)} 764`,"stroke-width":34,fill:"none"},g);
+    el("ellipse",{cx:X(s,36),cy:790,rx:18,ry:22},g);
+  });
+}
+function drawSkeleton(svg,faint){
+  const g=el("g",faint?{opacity:".3"}:{},svg);
+  let p=part(g,"cranio");
+  el("path",{class:"bone",d:"M158 80 C156 24 244 24 242 80 C242 100 236 112 228 118 L172 118 C164 112 158 100 158 80Z"},p);
+  BOTH(s=>el("ellipse",{class:"proc",cx:X(s,16),cy:84,rx:10,ry:9,"stroke-opacity":".35"},p));
+  el("path",{class:"proc",d:"M196 98 L200 92 L204 98","stroke-opacity":".35"},p);
+  p=part(g,"mandibula");
+  el("path",{class:"bone",d:"M170 104 Q172 134 200 140 Q228 134 230 104 L224 106 Q222 128 200 132 Q178 128 176 106Z"},p);
+  p=part(g,"coluna");
+  for(let y=144;y<396;y+=y<288?11:16) el("rect",{class:"bone",x:CX-(y<288?7:11),y,width:y<288?14:22,height:y<288?9:13,rx:3},p);
+  p=part(g,"escapula");
+  BOTH(s=>el("path",{class:"bone",d:`M${X(s,48)} 164 L${X(s,82)} 168 L${X(s,58)} 244 Z`},p));
+  p=part(g,"costelas");
+  for(let i=0;i<10;i++){const y0=172+i*12.5, w=[34,46,56,62,66,68,68,66,62,56][i];
+    BOTH(s=>el("path",{class:"rib",d:`M${X(s,9)} ${y0} C${X(s,w*0.6)} ${y0-8} ${X(s,w)} ${y0} ${X(s,w*1.02)} ${y0+20+i*1.6}`},p));}
+  p=part(g,"esterno");
+  el("path",{class:"bone",d:"M191 166 L209 166 L206 182 L207 250 L200 266 L193 250 L194 182 Z"},p);
+  p=part(g,"clavicula");
+  BOTH(s=>cap(p,"bone",X(s,10),160,X(s,72),151,8));
+  p=part(g,"pelve");
+  BOTH(s=>{
+    el("path",{class:"bone",d:`M${X(s,16)} 374 Q${X(s,74)} 356 ${X(s,70)} 392 Q${X(s,64)} 410 ${X(s,46)} 418 Q${X(s,42)} 442 ${X(s,4)} 442 L${X(s,3)} 428 Q${X(s,24)} 422 ${X(s,20)} 400 Z`},p);
+    el("ellipse",{class:"proc",cx:X(s,26),cy:430,rx:7,ry:6,"stroke-opacity":".35"},p);
+  });
+  el("path",{class:"bone",d:"M184 380 L216 380 L206 418 L194 418 Z"},p);
+  p=part(g,"umero");
+  BOTH(s=>{el("circle",{class:"bone",cx:X(s,74),cy:172,r:10},p);cap(p,"bone",X(s,78),172,X(s,93),324,13);});
+  p=part(g,"radio"); BOTH(s=>cap(p,"bone",X(s,103),334,X(s,118),452,7));
+  p=part(g,"ulna"); BOTH(s=>cap(p,"bone",X(s,90),330,X(s,104),456,7));
+  p=part(g,"carpo"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,111),cy:468,rx:14,ry:9},p));
+  p=part(g,"metacarpo");
+  BOTH(s=>{for(let k=0;k<5;k++)cap(p,"bone",X(s,103+k*4.5),476,X(s,k===4?126:100+k*6),k===4?492:506,3.6);});
+  p=part(g,"falanges");
+  BOTH(s=>{for(let k=0;k<5;k++){const x0=k===4?126:100+k*6,y0=k===4?494:508,l=k===4?18:[24,28,30,26][k];cap(p,"bone",X(s,x0),y0,X(s,x0+(k===4?6:k-1.5)),y0+l,3);}});
+  p=part(g,"femur");
+  BOTH(s=>{el("circle",{class:"bone",cx:X(s,44),cy:416,r:9},p);cap(p,"bone",X(s,50),420,X(s,36),590,15);});
+  p=part(g,"patela"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,36),cy:604,rx:8,ry:10},p));
+  p=part(g,"tibia"); BOTH(s=>cap(p,"bone",X(s,32),616,X(s,32),762,13));
+  p=part(g,"fibula"); BOTH(s=>cap(p,"bone",X(s,50),620,X(s,48),760,6));
+  p=part(g,"tarso"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,38),cy:774,rx:15,ry:8},p));
+  p=part(g,"metatarso"); BOTH(s=>{for(let k=0;k<5;k++)cap(p,"bone",X(s,27+k*6),782,X(s,22+k*8.5),806,3.6);});
+}
+function drawOrgans(svg){
+  const g=el("g",{},svg);
+  let p=part(g,"rins"); BOTH(s=>el("path",{class:"org",d:`M${X(s,30)} 344 Q${X(s,48)} 336 ${X(s,50)} 362 Q${X(s,50)} 386 ${X(s,32)} 384 Q${X(s,26)} 372 ${X(s,32)} 364 Q${X(s,26)} 354 ${X(s,30)} 344Z`},p));
+  p=part(g,"encefalo");
+  el("path",{class:"org",d:"M166 74 C164 30 236 30 234 74 C234 92 222 98 200 98 C178 98 166 92 166 74Z"},p);
+  el("path",{class:"proc",d:"M200 40 L200 96 M176 56 Q186 64 180 76 M224 56 Q214 64 220 76","stroke-opacity":".4"},p);
+  p=part(g,"traqueia");
+  el("rect",{class:"org",x:194,y:126,width:12,height:64,rx:5},p);
+  for(let y=132;y<188;y+=7) el("path",{class:"proc",d:`M195 ${y} L205 ${y}`,"stroke-opacity":".35"},p);
+  el("path",{class:"org tube",d:"M200 188 L184 204 M200 188 L216 204"},p);
+  p=part(g,"pulmoes");
+  BOTH(s=>{const inn=s>0?30:13;
+    el("path",{class:"org",d:`M${X(s,inn)} 186 Q${X(s,18)} 160 ${X(s,36)} 158 Q${X(s,66)} 168 ${X(s,70)} 240 Q${X(s,72)} 290 ${X(s,52)} 292 Q${X(s,30)} 296 ${X(s,inn)} 282 Z`},p);});
+  p=part(g,"coracao");
+  el("path",{class:"org",d:"M194 222 Q212 206 232 220 Q246 238 228 262 L212 278 Q196 266 190 248 Q186 230 194 222Z"},p);
+  p=part(g,"grosso");
+  el("path",{class:"org tube",d:"M162 430 L158 364 Q160 352 172 352 L228 352 Q242 352 242 364 L242 412 Q242 430 224 434 L208 438"},p);
+  p=part(g,"delgado");
+  el("path",{class:"org tube thin",d:"M180 368 Q220 360 222 372 Q222 384 182 382 Q174 394 220 394 Q228 406 182 406 Q174 418 214 420"},p);
+  p=part(g,"bexiga"); el("ellipse",{class:"org",cx:200,cy:446,rx:15,ry:11},p);
+  p=part(g,"pancreas"); cap(p,"org",186,340,248,330,9);
+  p=part(g,"figado");
+  el("path",{class:"org",d:"M138 292 Q186 278 228 294 Q216 318 188 330 Q160 340 146 330 Q134 312 138 292Z"},p);
+  p=part(g,"vesicula"); el("ellipse",{class:"org",cx:180,cy:332,rx:6,ry:9},p);
+  p=part(g,"baco"); el("ellipse",{class:"org",cx:266,cy:316,rx:8,ry:16,transform:"rotate(-20 266 316)"},p);
+  p=part(g,"estomago");
+  el("path",{class:"org",d:"M216 296 Q242 282 258 300 Q264 328 242 342 Q220 352 206 338 Q216 330 222 314 Z"},p);
+}
+function drawMuscles(svg){
+  const g=el("g",{},svg);
+  let p=part(g,"trapezio");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,14)} 126 Q${X(s,40)} 150 ${X(s,72)} 156 L${X(s,60)} 164 Q${X(s,30)} 160 ${X(s,12)} 150 Z`},p));
+  p=part(g,"ecm"); BOTH(s=>cap(p,"musc",X(s,26),104,X(s,6),158,8));
+  p=part(g,"peitoral");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,4)} 170 Q${X(s,40)} 162 ${X(s,70)} 174 L${X(s,82)} 196 Q${X(s,50)} 238 ${X(s,5)} 234 Z`},p));
+  p=part(g,"deltoide");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,62)} 158 Q${X(s,94)} 152 ${X(s,98)} 190 Q${X(s,98)} 214 ${X(s,92)} 228 Q${X(s,76)} 202 ${X(s,66)} 172 Z`},p));
+  p=part(g,"biceps"); BOTH(s=>cap(p,"musc",X(s,86),214,X(s,96),318,15));
+  p=part(g,"reto");
+  BOTH(s=>{const x=s>0?CX+3:CX-24; el("rect",{class:"musc",x,y:248,width:21,height:166,rx:9},p);
+    [284,316,348].forEach(y=>el("path",{class:"proc",d:`M${x+3} ${y} L${x+18} ${y}`,"stroke-opacity":".4"},p));});
+  p=part(g,"obliquo");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,28)} 256 Q${X(s,60)} 262 ${X(s,62)} 300 Q${X(s,66)} 350 ${X(s,60)} 392 Q${X(s,44)} 398 ${X(s,28)} 406 Z`},p));
+  p=part(g,"quadriceps");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,30)} 440 Q${X(s,62)} 428 ${X(s,62)} 470 Q${X(s,60)} 550 ${X(s,46)} 594 L${X(s,28)} 594 Q${X(s,20)} 520 ${X(s,30)} 440Z`},p));
+  p=part(g,"adutores");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,8)} 444 L${X(s,26)} 448 Q${X(s,26)} 500 ${X(s,24)} 544 Q${X(s,14)} 500 ${X(s,8)} 444Z`},p));
+  p=part(g,"sartorio"); BOTH(s=>cap(p,"musc",X(s,62),404,X(s,22),608,7));
+  p=part(g,"gastro");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,22)} 618 Q${X(s,10)} 652 ${X(s,18)} 702 L${X(s,25)} 702 Q${X(s,27)} 652 ${X(s,25)} 618 Z`},p));
+  p=part(g,"tibialant"); BOTH(s=>cap(p,"musc",X(s,45),624,X(s,41),742,9));
+}
+function buildBody(svg,view){
+  svg.innerHTML=""; addGlow(svg); drawSilhouette(svg);
+  if(view==="esqueleto") drawSkeleton(svg,false);
+  else { drawSkeleton(svg,true); view==="orgaos"?drawOrgans(svg):drawMuscles(svg); }
+}
+function buildView(svg,view,big){
+  if(view==="coluna"){ svg.setAttribute("viewBox",big?"0 20 520 700":"190 20 280 700"); buildSpine(svg,{lateral:big,cx:330}); }
+  else { svg.setAttribute("viewBox","60 10 280 810"); buildBody(svg,view); }
+}
+
+// ---------- Armazenamento (opcional) ----------
+const KEY="osso-a-osso-v1";
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+function save(d){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}
+
+// ---------- Utilidades ----------
+const $=s=>document.querySelector(s);
+const norm=c=>c.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const fmtDate=d=>d.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// ---------- Trilha ----------
+const DIFFS={
+  facil:{name:"Fácil",ghost:1,clue:true,shape:true,timed:false,desc:"Dica, tamanho da palavra e a 1ª letra. A resposta aparece depois de 1 erro."},
+  medio:{name:"Médio",ghost:2,clue:true,shape:false,timed:false,desc:"Dica visível. A resposta aparece depois de 2 erros."},
+  dificil:{name:"Difícil",ghost:3,clue:false,shape:false,timed:true,desc:"Sem dica e com tempo por peça. Se o tempo acabar, a resposta aparece e conta como erro."}
+};
+let curMod=modById(load().mod).id;
+let curDiff=DIFFS[load().diff]?load().diff:"medio";
+function renderLevels(){
+  const M=modById(curMod), prog=PROG;
+  $("#diff").innerHTML=Object.entries(DIFFS).map(([k,d])=>`<button type="button" data-diff="${k}" aria-pressed="${k===curDiff}">${d.name}</button>`).join("");
+  $("#diff-desc").textContent=DIFFS[curDiff].desc;
+  $("#modules").innerHTML=MODULES.map(m=>{
+    const done=m.levels.filter((_,i)=>prog[`${m.id}-${i}-${curDiff}`]).length;
+    const n=new Set(m.levels.flatMap(L=>L.items.map(it=>it.a))).size;
+    return `<button class="mod${m.id===curMod?" active":""}" data-mod="${m.id}" type="button" aria-pressed="${m.id===curMod}"><div class="n">${m.name}</div><div class="s">${m.levels.length} níveis · ${n} estruturas${done?` · ${done} feito${done>1?"s":""}`:""}</div></button>`;
+  }).join("");
+  $("#mod-title").textContent=M.name;
+  $("#levels").innerHTML=M.levels.map((L,i)=>{
+    const r=prog[`${M.id}-${i}-${curDiff}`];
+    const s=r?`<span class="st done">✓ ${r.wpm} ppm · ${r.first}% de primeira</span>`:`<span class="st">${L.items.length} peças</span>`;
+    return `<button class="lvl" data-start="${M.id}:${i}" type="button"><span class="num">NÍVEL ${i+1}</span><span><span class="t">${L.title}</span><br><span class="d">${L.desc}</span></span>${s}</button>`;
+  }).join("");
+  const dues=Object.values(prog).map(r=>r.due).filter(Boolean).sort();
+  $("#due-line").textContent=dues.length?`Próxima revisão: ${fmtDate(new Date(dues[0]))}`:`${M.levels.length} níveis`;
+}
+
+// ---------- Teclado ----------
+const ROWS=["qwertyuiop","asdfghjkl","zxcvbnm","1234567890"];
+function buildKb(){
+  const kb=$("#kb"); kb.innerHTML="";
+  ROWS.forEach(r=>{const row=document.createElement("div");row.className="row";
+    [...r].forEach(ch=>{const b=document.createElement("button");b.type="button";b.textContent=ch;b.dataset.k=ch;row.appendChild(b);});
+    kb.appendChild(row);});
+  const row=document.createElement("div");row.className="row";
+  const sp=document.createElement("button");sp.type="button";sp.className="space";sp.dataset.k=" ";sp.textContent="espaço";row.appendChild(sp);kb.appendChild(row);
+  kb.addEventListener("click",e=>{const b=e.target.closest("button");if(b)press(b.dataset.k);});
+}
+function flashKey(k,cls){const b=$(`#kb button[data-k="${CSS.escape(norm(k))}"]`);if(!b)return;b.classList.add(cls);setTimeout(()=>b.classList.remove(cls),220);}
+
+// ---------- Jogo ----------
+let G=null;
+let TT=null;
+const timeFor=a=>6000+a.length*450;
+function startTimer(){
+  clearInterval(TT); const t=$("#g-timer");
+  if(!G||!DIFFS[G.diff].timed){t.hidden=true;return;}
+  t.hidden=false; G.total=timeFor(cur().a); G.deadline=Date.now()+G.total;
+  t.firstElementChild.style.width="100%"; t.classList.remove("low");
+  TT=setInterval(()=>{
+    if(!G||$("#v-jogo").hidden){clearInterval(TT);return;}
+    if(G.busy)return;
+    const left=G.deadline-Date.now(), f=Math.max(0,left/G.total);
+    t.firstElementChild.style.width=(f*100)+"%"; t.classList.toggle("low",f<0.3);
+    if(left<=0&&!G.timeout[G.idx]){G.timeout[G.idx]=true;G.miss[G.idx]=Math.max(G.miss[G.idx]||0,DIFFS[G.diff].ghost);sfx.wrong();renderItem();}
+  },100);
+}
+function startLevel(modId,i){
+  const M=modById(modId), L=M.levels[i];
+  G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},keys:0,good:0,chars:0,t0:0,busy:false};
+  buildView($("#game-svg"),M.view,true);
+  $("#game-svg").setAttribute("aria-label",M.view==="coluna"?"Coluna vertebral em vista lateral e anterior":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
+  $("#g-chip").innerHTML=`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
+  show("jogo"); renderItem(); updStats(); startTimer();
+}
+function cur(){return G.items[G.idx];}
+function renderItem(){
+  const it=cur(), a=it.a, n=G.typed, m=G.miss[G.idx]||0, D=DIFFS[G.diff], reveal=m>=D.ghost;
+  highlight($("#game-svg"),it.hl);
+  const typed=esc(a.slice(0,n));
+  const shape=[...a.slice(n)].map((ch,i)=>i===0&&n===0?ch:(ch===" "?" ":"_")).join("");
+  const rest=reveal?`<span class="ghost">${esc(a.slice(n))}</span>`:(D.shape?`<span class="ghost">${esc(shape)}</span>`:"");
+  const ph=(!n&&!reveal&&!D.shape)?`<span class="ph">digite o nome</span>`:"";
+  $("#g-word").innerHTML=`<span class="typed">${typed}</span><span class="caret"></span>${rest}${ph}`;
+  $("#g-clue").textContent=(D.clue||reveal)?it.clue.replace(new RegExp(norm(a),"ig"),"___"):"Sem dica no modo difícil. Olhe a peça acesa.";
+  $("#g-q").textContent=`PEÇA ${G.idx+1} DE ${G.items.length}`;
+  document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
+  if(reveal&&n<a.length){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+}
+function updStats(){
+  const mins=G.t0?(Date.now()-G.t0)/60000:0;
+  $("#s-wpm").textContent=mins>0.03?Math.round(G.chars/5/mins):0;
+  $("#s-acc").textContent=G.keys?Math.round(G.good/G.keys*100)+"%":"100%";
+  $("#s-prog").textContent=`${G.idx}/${G.items.length}`;
+}
+// ---------- Sons (Web Audio, sem arquivos) ----------
+let AC=null, muted=!!load().muted;
+function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();}catch(e){AC=null}return AC;}
+function tone(freq,start,dur,type,vol,slideTo){
+  const c=ac(); if(!c||muted)return;
+  const t=c.currentTime+start, o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t);
+  if(slideTo)o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+0.02);
+}
+const sfx={
+  key:()=>tone(1320,0,0.05,"sine",0.05),
+  wrong:()=>{tone(180,0,0.18,"square",0.06,120);tone(150,0.06,0.16,"square",0.05,100);},
+  right:()=>{tone(659,0,0.14,"triangle",0.16);tone(988,0.09,0.22,"triangle",0.14);},
+  level:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,i*0.1,0.28,"triangle",0.14));},
+  badge:()=>{[1047,1319,1568,2093].forEach((f,i)=>tone(f,i*0.07,0.22,"sine",0.12));}
+};
+function setMute(m){muted=m;const st=load();st.muted=m;save(st);const b=$("#g-sound");b.textContent=m?"Som: desligado":"Som: ligado";b.setAttribute("aria-pressed",String(!m));}
+
+function press(k){
+  if(!G||G.busy||$("#v-jogo").hidden)return;
+  if(!G.t0)G.t0=Date.now();
+  const a=cur().a, exp=a[G.typed];
+  G.keys++;
+  if(norm(k)===norm(exp)){G.good++;G.typed++;G.chars++;flashKey(k,"hit");if(G.typed<a.length)sfx.key();}
+  else{G.miss[G.idx]=(G.miss[G.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
+  renderItem();
+  if(G.typed>=a.length){
+    G.busy=true; sfx.right(); if(USER)xpFloat(XP_PECA[G.diff]+(G.miss[G.idx]?0:5)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
+    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");
+      G.idx++;G.typed=0;G.busy=false;updStats();
+      if(G.idx>=G.items.length){sfx.level();finish();}else{renderItem();startTimer();}},650);
+  }
+  updStats();
+}
+document.addEventListener("keydown",e=>{
+  if($("#v-jogo").hidden||e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key.length===1){e.preventDefault();press(e.key);}
+});
+setInterval(()=>{if(G&&!$("#v-jogo").hidden)updStats();},1000);
+
+function finish(){
+  clearInterval(TT);
+  const M=modById(G.mod), L=M.levels[G.lvl], D=DIFFS[G.diff], mins=(Date.now()-G.t0)/60000;
+  const wpm=Math.round(G.chars/5/Math.max(mins,0.01)), acc=Math.round(G.good/Math.max(G.keys,1)*100);
+  const firsts=G.items.filter((_,i)=>!G.miss[i]).length, first=Math.round(firsts/G.items.length*100);
+  const due=new Date(Date.now()+3*864e5);
+  const key=`${M.id}-${G.lvl}-${G.diff}`, prev=PROG[key];
+  saveProgress(key,{wpm:Math.max(wpm,prev?prev.wpm:0),first:Math.max(first,prev?prev.first:0),due:due.toISOString()});
+  const RW=USER?applyRewards({diff:G.diff,pieces:G.items.length,firsts,acc,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&!G.miss[i])}):null;
+  const rwHtml=RW?`<section class="rw-result">
+      <div class="rw-gain"><span class="rw-plus">+${fmtN(RW.gained)} XP</span><ul>${RW.lines.map(([t,v])=>`<li><span>${esc(t)}</span><b>+${v}</b></li>`).join("")}</ul></div>
+      ${RW.levelUp?`<div class="rw-up">Nova patente: <b>${RW.levelUp}</b></div>`:""}
+      ${rankBar(RW.rank)}
+      ${RW.newBadges.length?`<div class="eyebrow" style="margin:14px 0 8px">Conquista${RW.newBadges.length>1?"s":""} desbloqueada${RW.newBadges.length>1?"s":""}</div><div class="badges">${RW.newBadges.map(b=>badgeTile(b,true,true)).join("")}</div>`:""}
+    </section>`:"";
+  if(RW&&(RW.levelUp||RW.newBadges.length))setTimeout(()=>sfx.badge(),650);
+  const today=new Date().toLocaleDateString("pt-BR");
+  const cards=G.items.map((it,i)=>{const m=G.miss[i]||0;
+    const lab=G.timeout[i]?"tempo esgotado":m?`${m} erro${m>1?"s":""} de tecla`:"de primeira";
+    return `<div class="card"><div class="n">${esc(it.a)}</div><p>${esc(it.clue)}</p><div class="s ${m?"miss":"ok"}">${lab}</div></div>`;}).join("");
+  const goals=[[true,"Concluir o nível"],[acc===100,"Terminar sem nenhum erro de tecla"],[false,`Revisar em outro dia (revisão em ${fmtDate(due)})`]];
+  $("#v-result").innerHTML=`
+    <div class="eyebrow">${M.name} · ${D.name} · Nível ${G.lvl+1} concluído · ${today}</div>
+    <h1>${L.win}</h1>
+    <div class="big"><div><span>PPM</span><b>${wpm}</b></div><div><span>Precisão de teclas</span><b>${acc}%</b></div><div><span>Acerto de primeira</span><b>${first}%</b></div></div>
+    ${rwHtml}
+    <ul class="goals">${goals.map(([g,t])=>`<li><span class="star ${g?"got":""}">★</span>${t}</li>`).join("")}</ul>
+    <div class="eyebrow" style="margin-bottom:8px">Peças desta rodada</div>
+    <div class="recap">${cards}</div>
+    <div class="actions">
+      ${G.lvl<M.levels.length-1?`<button class="btn" data-start="${M.id}:${G.lvl+1}" type="button">Próximo nível</button>`:(()=>{const nx=MODULES[MODULES.indexOf(M)+1];return nx?`<button class="btn" data-start="${nx.id}:0" type="button">Começar ${nx.name}</button>`:"";})()}
+      <button class="btn ghost" data-start="${M.id}:${G.lvl}" type="button">Jogar de novo</button>
+      <a class="btn ghost" href="#jogar" style="text-decoration:none">Voltar à trilha</a>
+    </div>`;
+  show("result"); window.scrollTo(0,0);
+}
+
+// ---------- Recompensas: XP, patentes, ofensiva e conquistas ----------
+const XP_PECA={facil:10,medio:15,dificil:25};
+const RANKS=[[0,"Calouro"],[300,"Monitor"],[900,"Dissecador"],[2000,"Anatomista"],[4000,"Professor"],[8000,"Mestre do Corpo"]];
+const BADGES=[
+  {id:"primeiro",n:"Primeiro osso",d:"Conclua seu primeiro nível."},
+  {id:"semerro",n:"Mão firme",d:"Termine um nível sem nenhum erro de tecla."},
+  {id:"rapido",n:"Dedo ligeiro",d:"Faça 40 PPM ou mais num nível."},
+  {id:"dificil",n:"Sangue frio",d:"Conclua um nível no Difícil."},
+  {id:"ecm",n:"Esternocleido­mastoideo",d:"Digite esternocleidomastoideo de primeira."},
+  {id:"modulo",n:"Sistema dominado",d:"Conclua todos os níveis de um módulo."},
+  {id:"corpo",n:"Corpo inteiro",d:"Conclua um nível em cada módulo."},
+  {id:"maratona",n:"Maratonista",d:"Conclua 10 níveis diferentes."},
+  {id:"of3",n:"Pegando o ritmo",d:"Estude 3 dias seguidos."},
+  {id:"of7",n:"Semana cheia",d:"Estude 7 dias seguidos."},
+  {id:"of30",n:"Hábito de ferro",d:"Estude 30 dias seguidos."},
+  {id:"mestre",n:"Mestre do Corpo",d:"Chegue a 8.000 XP."}
+];
+const emptyRew=()=>({xp:0,ofensiva:0,melhor:0,ultimo:null,conq:[]});
+let REW=emptyRew();
+const pad=n=>String(n).padStart(2,"0");
+const dayStr=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>dayStr(new Date()), yesterday=()=>dayStr(new Date(Date.now()-864e5));
+const fmtN=n=>n.toLocaleString("pt-BR");
+function rankOf(xp){let i=0;RANKS.forEach((r,k)=>{if(xp>=r[0])i=k;});const c=RANKS[i],nx=RANKS[i+1];
+  return {i,name:c[1],next:nx?nx[0]:null,nextName:nx?nx[1]:null,pct:nx?(xp-c[0])/(nx[0]-c[0]):1};}
+function streakNow(){return (REW.ultimo===today()||REW.ultimo===yesterday())?REW.ofensiva:0;}
+const FLAME=`<svg viewBox="0 0 12 16" width="11" height="14" aria-hidden="true"><path d="M6 1c1 3 4 4.5 4 8.5A4 4 0 0 1 2 9.5c0-2 1-3 2-4 .2 1.4.8 2.2 1.6 2.6C5.2 6 5 3.5 6 1z" fill="currentColor"/></svg>`;
+
+async function loadRewards(){
+  REW=emptyRew(); if(!sb||!USER)return;
+  const {data,error}=await sb.from("recompensas").select("xp,ofensiva,melhor_ofensiva,ultimo_dia,conquistas").maybeSingle();
+  if(error){console.error(error);return;}
+  if(data)REW={xp:data.xp||0,ofensiva:data.ofensiva||0,melhor:data.melhor_ofensiva||0,ultimo:data.ultimo_dia,conq:data.conquistas||[]};
+}
+async function saveRewards(){
+  if(!sb||!USER)return;
+  const {error}=await sb.from("recompensas").upsert({user_id:USER.id,xp:REW.xp,ofensiva:REW.ofensiva,melhor_ofensiva:REW.melhor,ultimo_dia:REW.ultimo,conquistas:REW.conq,atualizado_em:new Date().toISOString()},{onConflict:"user_id"});
+  if(error){console.error(error);toast("Seu XP não foi salvo. Confira a internet.");}
+}
+function applyRewards(run){
+  const D=DIFFS[run.diff], lines=[];
+  lines.push([`${run.pieces} peças no ${D.name}`,run.pieces*XP_PECA[run.diff]]);
+  if(run.firsts)lines.push([`${run.firsts} de primeira`,run.firsts*5]);
+  if(run.acc===100)lines.push(["Nível sem nenhum erro",50]);
+  if(run.firstTime)lines.push(["Nível concluído pela primeira vez",100]);
+  if(REW.ultimo!==today()){
+    REW.ofensiva=REW.ultimo===yesterday()?REW.ofensiva+1:1; REW.ultimo=today(); REW.melhor=Math.max(REW.melhor,REW.ofensiva);
+    lines.push([`Primeiro nível do dia · ofensiva de ${REW.ofensiva} dia${REW.ofensiva>1?"s":""}`,25]);
+  }
+  const gained=lines.reduce((s,l)=>s+l[1],0), before=rankOf(REW.xp);
+  REW.xp+=gained; const after=rankOf(REW.xp);
+  const has=new Set(REW.conq), neu=[], add=id=>{if(!has.has(id)){has.add(id);neu.push(id);}};
+  const done=new Set(Object.keys(PROG).map(k=>k.replace(/-[a-z]+$/,"")));
+  add("primeiro");
+  if(run.acc===100)add("semerro");
+  if(run.wpm>=40)add("rapido");
+  if(run.diff==="dificil")add("dificil");
+  if(run.ecmFirst)add("ecm");
+  if(MODULES.some(m=>m.levels.every((_,i)=>done.has(`${m.id}-${i}`))))add("modulo");
+  if(MODULES.every(m=>m.levels.some((_,i)=>done.has(`${m.id}-${i}`))))add("corpo");
+  if(done.size>=10)add("maratona");
+  if(REW.ofensiva>=3)add("of3"); if(REW.ofensiva>=7)add("of7"); if(REW.ofensiva>=30)add("of30");
+  if(REW.xp>=8000)add("mestre");
+  REW.conq=[...has];
+  saveRewards(); renderAcct();
+  return {lines,gained,rank:after,levelUp:after.i>before.i?after.name:null,newBadges:neu.map(id=>BADGES.find(b=>b.id===id))};
+}
+function rankBar(r){
+  return `<div class="rk"><div class="rk-top"><span class="rk-name">${r.name}</span><span class="rk-xp">${fmtN(REW.xp)} XP</span></div>
+    <div class="rk-bar"><i style="width:${Math.round(r.pct*100)}%"></i></div>
+    <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div></div>`;
+}
+function badgeTile(b,got,isNew){
+  return `<div class="bd${got?" got":""}${isNew?" new":""}" title="${esc(b.d)}"><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M7 1h10l-2 8H9z" fill="currentColor" opacity=".55"/><circle cx="12" cy="17" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z" fill="currentColor"/></svg><div><div class="bd-n">${b.n}</div><div class="bd-d">${got?b.d:"Bloqueada · "+b.d}</div></div></div>`;
+}
+function renderRewards(){
+  const box=$("#rewards"); if(!USER){box.hidden=true;return;}
+  box.hidden=false; const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq);
+  box.innerHTML=`<div class="section-h"><h2>Seu progresso</h2><span class="eyebrow">${got.size} de ${BADGES.length} conquistas</span></div>
+    <div class="rw-grid">
+      <div class="rw-card">${rankBar(r)}</div>
+      <div class="rw-card rw-streak"><span class="flame ${s?"on":""}">${FLAME}</span><div><div class="rw-big">${s} dia${s===1?"":"s"}</div><div class="rw-sub">de ofensiva · recorde ${REW.melhor}</div><div class="rw-sub">${REW.ultimo===today()?"Você já estudou hoje.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a ofensiva."}</div></div></div>
+    </div>
+    <div class="badges">${BADGES.map(b=>badgeTile(b,got.has(b.id))).join("")}</div>`;
+}
+function xpFloat(n){
+  const f=document.createElement("div"); f.className="xpfloat"; f.textContent=`+${n} XP`;
+  $("#v-jogo .prompt").appendChild(f); setTimeout(()=>f.remove(),900);
+}
+
+// ---------- Conta (Supabase) ----------
+const CFG=window.OSSO_CONFIG||{};
+const configured=!!(window.supabase&&CFG.SUPABASE_URL&&CFG.SUPABASE_KEY&&!/COLE/.test(CFG.SUPABASE_URL+CFG.SUPABASE_KEY));
+const sb=configured?window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY):null;
+let USER=null, PROG={}, pendingStart=null, authMode="signup";
+
+function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,4200);}
+async function loadProgress(){
+  PROG={}; if(!sb||!USER)return;
+  const {data,error}=await sb.from("progresso").select("chave,ppm,acerto_primeira,revisao_em");
+  if(error){console.error(error);toast("Não foi possível carregar seu progresso. Recarregue a página.");return;}
+  data.forEach(r=>PROG[r.chave]={wpm:r.ppm,first:r.acerto_primeira,due:r.revisao_em});
+}
+async function saveProgress(key,rec){
+  PROG[key]=rec; if(!sb||!USER)return;
+  const {error}=await sb.from("progresso").upsert({user_id:USER.id,chave:key,ppm:rec.wpm,acerto_primeira:rec.first,revisao_em:rec.due,atualizado_em:new Date().toISOString()},{onConflict:"user_id,chave"});
+  if(error){console.error(error);toast("Seu resultado não foi salvo. Confira a internet e jogue o nível de novo.");}
+}
+function displayName(){return (USER&&(USER.user_metadata&&USER.user_metadata.nome||USER.email))||"";}
+function renderAcct(){
+  const a=$("#acct");
+  if(USER) a.innerHTML=`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span><span class="who" title="${esc(USER.email||"")}">${esc(displayName())}</span><button class="chip" id="logout" type="button">Sair da conta</button>`;
+  else a.innerHTML=`<button class="chip" data-auth="login" type="button">Entrar</button><button class="btn sm" data-auth="signup" type="button">Criar conta</button>`;
+}
+const MODES={
+  signup:{title:"Crie sua conta grátis",sub:"Seu progresso e suas revisões ficam salvos e aparecem em qualquer aparelho.",f:["nome","email","senha","senha2","termos"],btn:"Criar conta",tabs:true},
+  login:{title:"Entre na sua conta",sub:"Use o e-mail e a senha que você cadastrou.",f:["email","senha"],btn:"Entrar",tabs:true,forgot:true},
+  forgot:{title:"Recuperar senha",sub:"Mandamos um link para o seu e-mail. Clique nele para criar uma senha nova.",f:["email"],btn:"Enviar link",back:true},
+  newpass:{title:"Crie uma senha nova",sub:"Escolha uma senha com pelo menos 8 caracteres.",f:["senha","senha2"],btn:"Salvar senha"},
+  setup:{title:"Login ainda não configurado",sub:"Este site ainda não está ligado ao Supabase. Siga o passo 3 do LEIA-ME e preencha o arquivo config.js.",f:[],btn:"",back:false}
+};
+function msg(text,info){const m=$("#au-msg");if(!text){m.hidden=true;return;}m.textContent=text;m.classList.toggle("info",!!info);m.hidden=false;}
+function openAuth(mode){
+  if(!sb)mode="setup";
+  authMode=mode; const M=MODES[mode];
+  $("#au-title").textContent=M.title; $("#au-sub").textContent=M.sub;
+  ["nome","email","senha","senha2","termos"].forEach(k=>$("#w-"+k).hidden=!M.f.includes(k));
+  $("#au-tabs").hidden=!M.tabs; $("#au-forgot").hidden=!M.forgot; $("#au-back").hidden=!M.back;
+  $("#au-submit").hidden=!M.btn; $("#au-submit").textContent=M.btn;
+  $("#f-senha").autocomplete=mode==="login"?"current-password":"new-password";
+  document.querySelectorAll("#au-tabs button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.auth===mode)));
+  msg(""); show("auth"); window.scrollTo(0,0); startAuthArt();
+  const first=M.f.find(k=>k!=="termos"); if(first)setTimeout(()=>$("#f-"+first).focus(),30);
+}
+let AUTH_T=null, AUTH_BUILT=false;
+const AUTH_SEQ=[["p:femur","fêmur · o maior osso do corpo"],["p:cranio","crânio · protege o encéfalo"],["p:umero","úmero · o osso do braço"],["p:pelve","pelve · apoia o tronco"],["p:costelas","costelas · 12 pares"],["p:tibia","tíbia · o osso da canela"]];
+function startAuthArt(){
+  const svg=$("#auth-svg"); if(!AUTH_BUILT){buildView(svg,"esqueleto",false);AUTH_BUILT=true;}
+  clearInterval(AUTH_T); let i=0;
+  const t=()=>{if($("#v-auth").hidden){clearInterval(AUTH_T);return;}const [h,txt]=AUTH_SEQ[i%AUTH_SEQ.length];highlight(svg,[h]);$("#auth-tag").textContent=txt;i++;};
+  t(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches)AUTH_T=setInterval(t,2000);
+}
+$("#pw-eye").addEventListener("click",()=>{const i=$("#f-senha"),show=i.type==="password";i.type=show?"text":"password";$("#pw-eye").textContent=show?"Ocultar":"Mostrar";$("#pw-eye").setAttribute("aria-label",show?"Ocultar senha":"Mostrar senha");});
+function tr(err){
+  const c=err.code||"", m=err.message||"";
+  if(c==="invalid_credentials"||/invalid login credentials/i.test(m))return "E-mail ou senha incorretos.";
+  if(c==="email_not_confirmed"||/not confirmed/i.test(m))return "Você ainda não confirmou seu e-mail. Procure o link que mandamos (olhe também no spam).";
+  if(c==="user_already_exists"||/already registered/i.test(m))return "Já existe uma conta com esse e-mail. Entre ou recupere a senha.";
+  if(c==="weak_password"||/password should/i.test(m))return "Senha fraca. Use pelo menos 8 caracteres, misturando letras e números.";
+  if(/rate limit/i.test(c+m))return "Muitos e-mails enviados agora. Espere alguns minutos e tente de novo.";
+  if(c==="same_password")return "A senha nova precisa ser diferente da atual.";
+  if(/fetch|network/i.test(m))return "Sem conexão com o servidor. Confira sua internet.";
+  return "Não deu certo: "+m;
+}
+$("#au-form").addEventListener("submit",async e=>{
+  e.preventDefault(); if(!sb)return;
+  const nome=$("#f-nome").value.trim(), email=$("#f-email").value.trim().toLowerCase(), senha=$("#f-senha").value, senha2=$("#f-senha2").value, M=MODES[authMode];
+  if(M.f.includes("nome")&&!nome)return msg("Digite seu nome.");
+  if(M.f.includes("email")&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg("Digite um e-mail válido, como nome@exemplo.com.");
+  if(M.f.includes("senha2")&&senha.length<8)return msg("A senha precisa ter pelo menos 8 caracteres.");
+  if(M.f.includes("senha")&&!senha)return msg("Digite sua senha.");
+  if(M.f.includes("senha2")&&senha!==senha2)return msg("As duas senhas não são iguais.");
+  if(M.f.includes("termos")&&!$("#f-termos").checked)return msg("Para criar a conta, aceite os Termos de Uso e a Política de Privacidade.");
+  const btn=$("#au-submit"), label=btn.textContent; btn.disabled=true; btn.textContent="Aguarde…"; msg("");
+  const back=location.origin+location.pathname;
+  try{
+    if(authMode==="signup"){
+      const {data,error}=await sb.auth.signUp({email,password:senha,options:{data:{nome},emailRedirectTo:back}});
+      if(error)msg(tr(error));
+      else if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0)msg("Já existe uma conta com esse e-mail. Entre ou recupere a senha.");
+      else if(!data.session)msg(`Quase lá! Enviamos um link de confirmação para ${email}. Abra o e-mail e clique no link para ativar sua conta (olhe também no spam).`,true);
+    } else if(authMode==="login"){
+      const {error}=await sb.auth.signInWithPassword({email,password:senha});
+      if(error)msg(tr(error));
+    } else if(authMode==="forgot"){
+      const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:back});
+      if(error)msg(tr(error)); else msg(`Se existir uma conta com ${email}, você vai receber um link para criar uma senha nova.`,true);
+    } else if(authMode==="newpass"){
+      const {error}=await sb.auth.updateUser({password:senha});
+      if(error)msg(tr(error)); else {toast("Senha alterada. Você já está dentro.");$("#f-senha").value=$("#f-senha2").value="";route();}
+    }
+  }catch(err){msg(tr(err));}
+  btn.disabled=false; btn.textContent=label;
+});
+async function logout(){if(sb)await sb.auth.signOut();USER=null;PROG={};REW=emptyRew();G=null;renderAcct();route();toast("Você saiu da conta.");}
+function afterLogin(){
+  if(pendingStart){const [m,i]=pendingStart.split(":");pendingStart=null;startLevel(m,+i);window.scrollTo(0,0);}
+  else if(!$("#v-auth").hidden)route();
+  else if(!$("#v-trilha").hidden){renderLevels();renderRewards();}
+}
+async function initAuth(){
+  if(!sb){renderAcct();return;}
+  sb.auth.onAuthStateChange((ev,session)=>{
+    const was=USER&&USER.id; USER=session?session.user:null;
+    // chamadas ao Supabase fora do callback, como a documentação recomenda
+    setTimeout(async()=>{
+      if(ev==="PASSWORD_RECOVERY"){renderAcct();openAuth("newpass");return;}
+      if((USER&&USER.id)!==was){
+        await Promise.all([loadProgress(),loadRewards()]); renderAcct();
+        if(USER)afterLogin(); else if(!$("#v-trilha").hidden){renderLevels();renderRewards();}
+      } else renderAcct();
+    },0);
+  });
+}
+
+// ---------- Navegação ----------
+function show(v){["trilha","jogo","result","auth"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+function route(){renderLevels();renderRewards();show("trilha");}
+document.addEventListener("click",e=>{
+  const m=e.target.closest("[data-mod]");
+  if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
+  const d=e.target.closest("[data-diff]");
+  if(d){curDiff=d.dataset.diff;const st=load();st.diff=curDiff;save(st);renderLevels();return;}
+  const b=e.target.closest("[data-start]");
+  if(b){e.preventDefault();
+    if(!USER){pendingStart=b.dataset.start;openAuth(sb?"signup":"setup");return;}
+    const [mid,i]=b.dataset.start.split(":");startLevel(mid,+i);window.scrollTo(0,0);}
+  const au=e.target.closest("[data-auth]");
+  if(au){e.preventDefault();openAuth(au.dataset.auth);return;}
+  if(e.target.closest("#logout")){e.preventDefault();logout();}
+});
+$("#g-quit").addEventListener("click",()=>{G=null;route();});
+window.addEventListener("hashchange",()=>{G=null;route();});
+
+// hero animado
+const hero=$("#hero-svg");
+const demo=[["esqueleto","p:femur","fêmur · o maior osso do corpo"],["orgaos","p:coracao","coração · 4 câmaras"],["musculos","p:deltoide","deltoide · cobre o ombro"],["esqueleto","p:cranio","crânio · protege o encéfalo"],["orgaos","p:figado","fígado · a maior glândula"],["musculos","p:quadriceps","quadríceps · estende o joelho"]];
+let di=0, heroView=null; const tick=()=>{const [v,h,t]=demo[di]; if(v!==heroView){buildView(hero,v,false);heroView=v;} highlight(hero,[h]);$("#hero-tag").textContent=t;di=(di+1)%demo.length;};
+tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(tick,2200);
+
+$("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
+setMute(muted);
+buildKb(); route(); initAuth();
+if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");
+})();
+</script>
+
+</body>
+</html>

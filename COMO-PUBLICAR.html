@@ -1,0 +1,66 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Como publicar · Osso a Osso</title>
+<style>:root{color-scheme:light}body{margin:0;background:#f6f4ef;color:#1d2530;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px max(16px,env(safe-area-inset-left,0px))}main{max-width:720px;margin:0 auto}h1{font-family:Georgia,serif;font-weight:400;font-size:36px;margin:0 0 6px}h2{font-size:20px;margin:34px 0 8px;padding-top:16px;border-top:1px solid #ddd6c8}code,pre{font-family:ui-monospace,Menlo,monospace;font-size:13.5px;background:#ebe6db;border-radius:5px}code{padding:1px 5px}pre{padding:12px;overflow-x:auto;white-space:pre-wrap}.tip{background:#fff3e2;border-left:3px solid #e08a2e;padding:10px 14px;border-radius:4px}.n{display:inline-block;background:#1d2530;color:#fff;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;font-size:14px;margin-right:8px}li{margin:4px 0}</style></head><body><main>
+<h1>Como colocar o Osso a Osso no ar</h1>
+<p>Tempo: uns 20 minutos. Você não precisa instalar nada. Arquivos desta pasta:</p>
+<ul><li><code>index.html</code>: a página de vendas, com a demonstração jogável e os preços.</li><li><code>app.html</code>: a plataforma (login, jogo, progresso e recompensas).</li><li><code>config.js</code>: onde você cola as chaves do Supabase.</li><li><code>supabase.sql</code>: cria as tabelas de progresso e de recompensas, com as regras de segurança.</li><li><code>supabase-recompensas.sql</code>: só a parte das recompensas, para quem já tinha rodado o arquivo anterior.</li><li><code>termos.html</code> e <code>privacidade.html</code>: modelos para você preencher.</li></ul>
+
+<p class="tip"><b>Já feito por mim:</b> o projeto <code>osso-a-osso</code> (região São Paulo) foi criado, as tabelas e as regras de segurança estão prontas e o <code>config.js</code> já está preenchido. Pule direto para o <b>passo 4</b>.</p>
+<h2><span class="n">1</span>Crie o projeto no Supabase</h2>
+<ol><li>Entre em <a href="https://supabase.com">supabase.com</a> e crie uma conta (pode usar o GitHub ou o e-mail).</li>
+<li>Clique em <b>New project</b>. Dê o nome <i>osso-a-osso</i>, crie uma senha para o banco (guarde-a) e escolha a região <b>South America (São Paulo)</b>.</li>
+<li>Espere uns 2 minutos até o projeto ficar pronto.</li></ol>
+
+<h2><span class="n">2</span>Crie a tabela de progresso</h2>
+<ol><li>No menu da esquerda, abra <b>SQL Editor</b> e clique em <b>New query</b>.</li>
+<li>Abra o arquivo <code>supabase.sql</code> num editor de texto (Bloco de Notas serve), copie tudo e cole lá.</li>
+<li>Clique em <b>Run</b>. Deve aparecer "Success. No rows returned".</li></ol>
+<p class="tip"><b>Já tinha rodado o supabase.sql antes das recompensas?</b> Rode só o arquivo <code>supabase-recompensas.sql</code> do mesmo jeito. Ele cria a tabela de XP, ofensiva e conquistas sem mexer no progresso que já existe.</p>
+
+<h2><span class="n">3</span>Cole as chaves no config.js</h2>
+<ol><li>No topo do projeto, clique em <b>Connect</b> (ou vá em <b>Project Settings → API Keys</b>).</li>
+<li>Copie a <b>Project URL</b> (algo como <code>https://abcd1234.supabase.co</code>) e a <b>Publishable key</b> (começa com <code>sb_publishable_</code>; se só aparecer a <i>anon key</i>, pode usar ela).</li>
+<li>Abra <code>config.js</code> no Bloco de Notas e troque os dois textos <code>COLE_AQUI...</code> pelos valores, mantendo as aspas. Salve.</li></ol>
+<p class="tip"><b>Nunca</b> cole a <i>secret key</i> nem a <i>service_role key</i> no site. A publishable pode ficar pública: quem protege os dados são as regras do passo 2.</p>
+
+<h2><span class="n">4</span>Publique na Netlify</h2>
+<ol><li>Crie uma conta em <a href="https://app.netlify.com">netlify.com</a> e <b>entre nela antes</b> (sites enviados sem conta são apagados depois de um tempo).</li>
+<li>Abra <a href="https://app.netlify.com/drop">app.netlify.com/drop</a> e arraste a <b>pasta inteira</b> do site para a área indicada.</li>
+<li>Em segundos aparece o endereço do site, tipo <code>https://nome-aleatorio.netlify.app</code>. Em <b>Site configuration → Change site name</b> você pode trocar para <code>ossoaosso.netlify.app</code>, se estiver livre.</li></ol>
+
+<h2><span class="n">5</span>Diga ao Supabase qual é o endereço do site</h2>
+<p>Sem isso, os links dos e-mails de confirmação e de senha vão para o lugar errado.</p>
+<ol><li>No Supabase, abra <b>Authentication → URL Configuration</b>.</li>
+<li>Em <b>Site URL</b>, coloque o endereço da Netlify (ex.: <code>https://ossoaosso.netlify.app</code>) e salve.</li>
+<li>Em <b>Redirect URLs</b>, adicione o mesmo endereço com <code>/**</code> no fim (ex.: <code>https://ossoaosso.netlify.app/**</code>).</li></ol>
+
+<h2><span class="n">6</span>Teste</h2>
+<ol><li>Abra o site, clique em <b>Criar conta</b> e cadastre seu e-mail.</li>
+<li>Abra o e-mail de confirmação e clique no link: você volta ao site já logado.</li>
+<li>Jogue um nível, saia da conta, entre de novo (ou abra no celular): o nível deve aparecer como feito.</li>
+<li>Teste o <b>Esqueci minha senha</b>.</li>
+<li>No Supabase, em <b>Authentication → Users</b>, você vê quem se cadastrou. Em <b>Table Editor → progresso</b>, o progresso de cada um. Em <b>Table Editor → recompensas</b>, o XP, a ofensiva e as conquistas.</li></ol>
+
+<h2><span class="n">7</span>Antes de divulgar</h2>
+<ul>
+<li><b>E-mail próprio:</b> o e-mail grátis do Supabase manda só 2 por hora. Crie uma conta no <a href="https://resend.com">Resend</a> (ou outro serviço de e-mail), e cole os dados em <b>Authentication → Emails → SMTP Settings</b>.</li>
+<li><b>E-mails em português:</b> em <b>Authentication → Emails → Templates</b>, troque os textos pelos modelos abaixo.</li>
+<li><b>Termos e Privacidade:</b> preencha <code>termos.html</code> e <code>privacidade.html</code> e peça para um advogado revisar.</li>
+<li><b>Pausa por inatividade:</b> no plano grátis, o Supabase pausa o projeto depois de 7 dias sem uso. Reative no painel, ou passe para o plano Pro quando tiver usuários.</li>
+<li><b>Domínio próprio (opcional):</b> registre em <a href="https://registro.br">registro.br</a> e ligue na Netlify em <b>Domain management</b>. Depois, atualize o passo 5 com o domínio novo.</li></ul>
+
+<h3>Modelo: Confirm signup</h3>
+<p>Assunto: <code>Confirme sua conta no Osso a Osso</code></p>
+<pre>&lt;h2&gt;Falta só um clique&lt;/h2&gt;
+&lt;p&gt;Confirme seu e-mail para ativar sua conta no Osso a Osso e começar a salvar seu progresso.&lt;/p&gt;
+&lt;p&gt;&lt;a href="{{ .ConfirmationURL }}"&gt;Confirmar meu e-mail&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Se você não criou essa conta, pode ignorar este e-mail.&lt;/p&gt;</pre>
+<h3>Modelo: Reset password</h3>
+<p>Assunto: <code>Crie uma senha nova no Osso a Osso</code></p>
+<pre>&lt;h2&gt;Senha nova&lt;/h2&gt;
+&lt;p&gt;Recebemos um pedido para trocar a senha da sua conta.&lt;/p&gt;
+&lt;p&gt;&lt;a href="{{ .ConfirmationURL }}"&gt;Criar uma senha nova&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Se não foi você, ignore este e-mail: sua senha continua a mesma.&lt;/p&gt;</pre>
+
+<h2>Como atualizar o site depois</h2>
+<p>Mude os arquivos e, na Netlify, abra o site → <b>Deploys</b> → arraste a pasta de novo. O <code>config.js</code> precisa continuar preenchido.</p>
+</main></body></html>

@@ -1,0 +1,4 @@
+# Arquivos internos: ficam no GitHub, mas não vão para o site público
+COMO-PUBLICAR.html
+*.sql
+README.md

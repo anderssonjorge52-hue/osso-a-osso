@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Osso a Osso</title>
+<meta name="description" content="Aprenda anatomia digitando. Uma estrutura acende no corpo, você digita o nome e o app traz de volta o que você errou. Jogue a demonstração grátis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: página de vendas em "negatoscópio" — fundo de filme radiográfico, luz âmbar como destaque, o próprio jogo como herói e como demonstração. Tema único escuro, por escolha da marca. */
+:root{
+  --film:#0b121a; --film-2:#121c27; --film-3:#192634; --line:#253649; --line-2:#31465d;
+  --bone:#efe9dc; --dim:#93a1b1; --faint:#5a6b7f;
+  --amber:#f2a65a; --amber-2:#ffd29a; --amber-soft:rgba(242,166,90,.16);
+  --miss:#e8636d; --ok:#86cdb0; --musc:#d9877c; --org:#a9c0d6;
+  --f-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --maxw:1180px;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{background:var(--film);color:var(--bone)}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--film)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:70;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.in{max-width:var(--maxw);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;letter-spacing:-.02em;text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{font:600 11.5px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+.lead{color:var(--dim);font-size:18px;max-width:58ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--f-body);text-decoration:none;border-radius:10px;padding:14px 22px;border:0;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s,background .2s}
+.btn-primary{background:linear-gradient(180deg,var(--amber-2),var(--amber));color:#1d1206;box-shadow:0 10px 30px -10px rgba(242,166,90,.6),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -12px rgba(242,166,90,.75),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-primary:hover::after{transform:translateX(120%)}
+.btn-ghost{background:rgba(255,255,255,.03);color:var(--bone);border:1px solid var(--line-2)}
+.btn-ghost:hover{background:rgba(255,255,255,.07);transform:translateY(-2px)}
+.btn svg{width:16px;height:16px}
+
+/* ---------- Navegação ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(11,18,26,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.nav .in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-size:23px;text-decoration:none;letter-spacing:-.01em}
+.brand svg{width:18px;height:28px}
+.links{display:flex;gap:26px;font-size:14.5px}
+.links a{text-decoration:none;color:var(--dim);transition:color .2s}
+.links a:hover{color:var(--bone)}
+.nav-cta{display:flex;gap:10px;align-items:center}
+.nav-cta .btn{padding:9px 16px;font-size:14px}
+.login{font-size:14.5px;color:var(--dim);text-decoration:none}
+.login:hover{color:var(--bone)}
+
+/* ---------- Herói ---------- */
+.hero{position:relative;padding-block:56px 40px;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:-120px 0 0;z-index:-1;background:radial-gradient(ellipse 60% 55% at 72% 38%,rgba(242,166,90,.13),transparent 65%),radial-gradient(ellipse 50% 60% at 18% 20%,rgba(80,130,190,.16),transparent 70%)}
+.hero .in{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(44px,6.6vw,86px);line-height:.98;margin:18px 0 22px}
+.hero h1 em{font-style:italic;background:linear-gradient(100deg,var(--amber-2),var(--amber) 60%,#e2793a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{margin-bottom:30px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.facts{display:flex;gap:28px;flex-wrap:wrap;margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+.facts div{display:grid}
+.facts b{font:600 26px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--bone)}
+.facts span{font-size:13px;color:var(--dim)}
+.badge-live{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--f-mono);letter-spacing:.08em;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 10px;background:rgba(18,28,39,.6)}
+.badge-live i{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(134,205,176,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(134,205,176,0)}100%{box-shadow:0 0 0 0 rgba(134,205,176,0)}}
+
+.device{position:relative;border-radius:22px;padding:14px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.01));border:1px solid var(--line-2);box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.4) inset;transform:perspective(1400px) rotateY(-7deg) rotateX(3deg);transition:transform .6s}
+.device:hover{transform:perspective(1400px) rotateY(-2deg) rotateX(1deg)}
+.screen{border-radius:14px;background:radial-gradient(ellipse 80% 60% at 50% 35%,#1a2a3c,var(--film) 75%);border:1px solid var(--line);overflow:hidden}
+.scr-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font:600 11px var(--f-mono);color:var(--dim);letter-spacing:.06em}
+.scr-bar .dots{display:flex;gap:5px}.scr-bar .dots i{width:8px;height:8px;border-radius:50%;background:var(--line-2)}
+.scr-bar b{color:var(--amber);font-variant-numeric:tabular-nums}
+.scr-stage{display:grid;place-items:center;height:330px;position:relative}
+.scr-stage svg{height:100%;width:auto;max-width:100%}
+.scr-word{text-align:center;font-family:var(--f-display);font-size:30px;min-height:46px;padding:0 10px;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.scr-word .caret,.word .caret{display:inline-block;width:2px;height:.85em;background:var(--amber);vertical-align:-.06em;margin-left:2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.scr-word.win{color:var(--ok)}
+.scr-hint{text-align:center;font:11px var(--f-mono);color:var(--faint);letter-spacing:.1em;margin-top:2px}
+.mini-kb{display:grid;gap:4px;padding:12px 14px 14px}
+.mini-kb .r{display:flex;gap:4px;justify-content:center}
+.mini-kb span{flex:1;max-width:26px;height:22px;border-radius:4px;background:var(--film-3);border:1px solid var(--line);font:10px var(--f-mono);color:var(--faint);display:grid;place-items:center;transition:background .12s,color .12s}
+.mini-kb span.hit{background:var(--amber);color:#1d1206;border-color:var(--amber)}
+.float{position:absolute;display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:12px;background:rgba(18,28,39,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line-2);font-size:13px;box-shadow:0 18px 40px -18px rgba(0,0,0,.8);animation:bob 6s ease-in-out infinite}
+.float b{font-family:var(--f-mono);color:var(--amber)}
+.float svg{width:14px;height:18px;color:var(--amber)}
+.f1{top:16%;left:-34px}.f2{bottom:22%;right:-30px;animation-delay:-2s}.f3{top:-16px;right:18%;animation-delay:-4s}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.xp-pop{position:absolute;left:50%;top:44%;transform:translateX(-50%);font:600 15px var(--f-mono);color:var(--amber);pointer-events:none;animation:xpup 1s ease-out forwards}
+@keyframes xpup{0%{opacity:0;transform:translate(-50%,10px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-34px)}}
+
+/* ---------- Faixa de termos ---------- */
+.marquee{border-block:1px solid var(--line);padding-block:18px;overflow:hidden;background:linear-gradient(90deg,var(--film),transparent 12%,transparent 88%,var(--film)),rgba(18,28,39,.5);position:relative}
+.track{display:flex;gap:44px;width:max-content;animation:slide 60s linear infinite;font-family:var(--f-display);font-size:26px;color:var(--faint);white-space:nowrap}
+.track.rev{animation-direction:reverse;animation-duration:70s;margin-top:10px;font-style:italic;font-size:22px}
+.track span::after{content:"·";margin-left:44px;color:var(--amber)}
+@keyframes slide{to{transform:translateX(-50%)}}
+.marquee::before,.marquee::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:1;pointer-events:none}
+.marquee::before{left:0;background:linear-gradient(90deg,var(--film),transparent)}
+.marquee::after{right:0;background:linear-gradient(-90deg,var(--film),transparent)}
+
+/* ---------- Seções ---------- */
+section.blk{padding-block:110px}
+.head{display:grid;gap:14px;margin-bottom:52px;max-width:760px}
+.head h2{font-size:clamp(36px,4.6vw,58px);line-height:1.02}
+.head h2 em{font-style:italic;color:var(--amber)}
+.center{text-align:center;margin-left:auto;margin-right:auto;justify-items:center}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{position:relative;border:1px solid var(--line);border-radius:18px;padding:26px;background:linear-gradient(180deg,var(--film-2),rgba(18,28,39,.4));min-width:0;overflow:hidden}
+.step .num{font:600 12px var(--f-mono);color:var(--amber);letter-spacing:.14em}
+.step h3{font-size:30px;margin:10px 0 8px}
+.step p{color:var(--dim);font-size:15px}
+.step .viz{height:150px;margin:-6px -6px 18px;border-radius:12px;background:var(--film);border:1px solid var(--line);display:grid;place-items:center;overflow:hidden;position:relative}
+.viz-type{font-family:var(--f-display);font-size:30px}
+.viz-type span{display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;border-right:2px solid var(--amber);animation:typing 3.6s steps(6) infinite,caretb .8s steps(1) infinite;width:0}
+@keyframes typing{0%{width:0}45%,80%{width:6ch}100%{width:0}}
+@keyframes caretb{50%{border-color:transparent}}
+.viz-cal{display:flex;gap:10px;align-items:flex-end}
+.viz-cal div{display:grid;justify-items:center;gap:6px;font:11px var(--f-mono);color:var(--faint)}
+.viz-cal i{width:30px;border-radius:6px;background:var(--film-3);border:1px solid var(--line);animation:fillc 4s ease-in-out infinite}
+.viz-cal div:nth-child(1) i{height:26px;animation-delay:0s}.viz-cal div:nth-child(2) i{height:44px;animation-delay:.4s}.viz-cal div:nth-child(3) i{height:66px;animation-delay:.8s}.viz-cal div:nth-child(4) i{height:92px;animation-delay:1.2s}
+@keyframes fillc{0%,15%{background:var(--film-3)}35%,80%{background:var(--amber);border-color:var(--amber)}100%{background:var(--film-3)}}
+.step .viz svg.mini{height:132px;width:auto}
+
+/* ---------- Demonstração ---------- */
+.demo-wrap{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:start}
+.demo-side{display:grid;gap:12px;position:sticky;top:90px}
+.sys{display:grid;gap:8px}
+.sys button{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--film-2);color:var(--bone);font:500 15px var(--f-body);cursor:pointer;transition:border-color .2s,background .2s,transform .2s}
+.sys button small{font:12px var(--f-mono);color:var(--dim)}
+.sys button:hover{border-color:var(--line-2);transform:translateX(3px)}
+.sys button[aria-pressed="true"]{border-color:var(--amber);background:var(--film-3);box-shadow:0 0 0 3px var(--amber-soft)}
+.demo-note{font-size:13.5px;color:var(--dim);padding:14px 16px;border-radius:12px;border:1px dashed var(--line-2)}
+.game{position:relative;border-radius:22px;border:1px solid var(--line-2);background:radial-gradient(ellipse 70% 55% at 50% 30%,#1a2a3c,var(--film) 75%);padding:18px;box-shadow:0 30px 70px -40px rgba(0,0,0,.9);min-width:0}
+.g-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.chip{font:12px var(--f-mono);border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--dim);background:var(--film-2)}
+button.chip{cursor:pointer}
+.stats{display:flex;gap:20px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.stats div{display:flex;align-items:baseline;gap:5px}
+.stats b{font-size:18px}
+.stats span{font-size:10.5px;color:var(--dim);letter-spacing:.08em}
+.stage{height:min(46vh,430px);display:grid;place-items:center;margin-top:6px}
+.stage svg{height:100%;width:100%}
+.prompt{text-align:center;position:relative;min-height:104px}
+.q{font:11.5px var(--f-mono);color:var(--dim);letter-spacing:.1em}
+.word{font-family:var(--f-display);font-size:clamp(30px,4.6vw,46px);line-height:1.15;min-height:1.2em;white-space:pre}
+.word .ghost{color:var(--faint)} .word .ph{color:var(--faint);font-style:italic;font-size:.55em}
+.word.win .typed{color:var(--ok)}
+.word.shake{animation:shake .28s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.clue{color:var(--dim);font-size:14px;max-width:60ch;margin:2px auto 0}
+.kb{max-width:560px;margin:14px auto 0;display:grid;gap:5px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--film-2)}
+.kb .row{display:flex;gap:5px;justify-content:center}
+.kb button{flex:1 1 0;max-width:44px;height:38px;border-radius:7px;border:1px solid var(--line);background:var(--film-3);font:500 13px var(--f-mono);color:var(--dim);cursor:pointer;transition:background .12s,color .12s}
+.kb button.space{max-width:260px;flex:6}
+.kb button.hit{background:var(--amber);color:#1d1206;border-color:var(--amber)}
+.kb button.bad{background:var(--miss);color:#1b0a0b;border-color:var(--miss)}
+.kb button.next{border-color:var(--amber);color:var(--amber)}
+.overlay{position:absolute;inset:0;border-radius:22px;display:grid;place-items:center;text-align:center;background:rgba(11,18,26,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:3;padding:24px}
+.overlay h3{font-size:clamp(28px,3.4vw,40px);margin:10px 0 8px}
+.overlay p{color:var(--dim);margin-bottom:20px}
+.ov-card{max-width:520px;display:grid;justify-items:center}
+.res-stats{display:flex;gap:26px;justify-content:center;margin:14px 0 6px;flex-wrap:wrap}
+.res-stats div{display:grid}
+.res-stats b{font:600 34px var(--f-mono);font-variant-numeric:tabular-nums}
+.res-stats span{font:11px var(--f-mono);color:var(--dim);letter-spacing:.1em}
+.res-xp{font:600 15px var(--f-mono);color:var(--amber);margin-bottom:18px}
+
+/* peças do esqueleto (iguais ao app) */
+.bone{fill:rgba(235,229,216,.10);stroke:var(--bone);stroke-opacity:.55;stroke-width:1.1;transition:fill .25s,stroke .25s}
+.rib{fill:none;stroke:var(--bone);stroke-opacity:.28;stroke-width:1.6;stroke-linecap:round}
+.disc{fill:rgba(141,155,171,.25);stroke:none;transition:fill .25s}
+.proc{fill:none;stroke:var(--bone);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
+.musc{fill:rgba(214,120,110,.16);stroke:var(--musc);stroke-opacity:.55;stroke-width:1;transition:fill .25s,stroke .25s}
+.org{fill:rgba(150,180,210,.13);stroke:var(--org);stroke-opacity:.6;stroke-width:1;transition:fill .25s,stroke .25s}
+.org.tube{fill:none;stroke:var(--org);stroke-opacity:.45;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.org.tube.thin{stroke-width:6}
+.on .bone,.bone.on,.on .musc,.on .org{fill:var(--amber);stroke:var(--amber);stroke-opacity:1;fill-opacity:.9;filter:url(#glow)}
+.disc.on{fill:var(--amber);filter:url(#glow)}
+.proc.on{stroke:var(--amber);stroke-opacity:1}
+.on .org.tube{fill:none;stroke:var(--amber);stroke-opacity:1}
+.on .rib{stroke:var(--amber);stroke-opacity:1;filter:url(#glow)}
+.vlabel{font:10px var(--f-mono);fill:var(--faint);letter-spacing:.12em}
+.done-flash .on .bone,.done-flash .bone.on,.done-flash .disc.on,.done-flash .on .musc,.done-flash .on .org{fill:var(--ok);stroke:var(--ok)}
+.done-flash .on .org.tube,.done-flash .on .rib{fill:none;stroke:var(--ok)}
+
+/* ---------- Sistemas ---------- */
+.systems{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sc{border:1px solid var(--line);border-radius:18px;background:var(--film-2);padding:18px;display:grid;gap:12px;min-width:0;transition:border-color .3s,transform .3s,box-shadow .3s}
+.sc:hover{border-color:var(--amber);transform:translateY(-6px);box-shadow:0 26px 50px -30px rgba(242,166,90,.45)}
+.sc .fig{height:240px;border-radius:12px;background:radial-gradient(ellipse at 50% 40%,#18283a,var(--film) 75%);display:grid;place-items:center;overflow:hidden}
+.sc .fig svg{height:100%;width:auto;max-width:100%}
+.sc h3{font-size:26px}
+.sc .meta{font:12px var(--f-mono);color:var(--dim)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-size:12.5px;padding:3px 9px;border-radius:999px;background:var(--film-3);border:1px solid var(--line);color:var(--dim)}
+
+/* ---------- Recompensas ---------- */
+.rw{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{border:1px solid var(--line);border-radius:18px;background:var(--film-2);padding:26px;min-width:0}
+.panel h3{font-size:26px;margin-bottom:6px}
+.panel > p{color:var(--dim);font-size:15px;margin-bottom:20px}
+.ladder{display:grid;gap:0;position:relative;padding:0;margin:0}
+.ladder li{list-style:none;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ladder li:last-child{border-bottom:0}
+.ladder .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line-2);justify-self:center;transition:background .4s,border-color .4s,box-shadow .4s}
+.ladder li.lit .dot{background:var(--amber);border-color:var(--amber);box-shadow:0 0 12px rgba(242,166,90,.7)}
+.ladder .nm{font-family:var(--f-display);font-size:20px;color:var(--dim);transition:color .4s}
+.ladder li.lit .nm{color:var(--bone)}
+.ladder .xp{font:12px var(--f-mono);color:var(--faint)}
+.ladder ul{padding:0;margin:0}
+.streak{display:flex;gap:8px;margin:6px 0 22px}
+.streak div{flex:1;display:grid;justify-items:center;gap:6px;font:11px var(--f-mono);color:var(--faint)}
+.streak i{width:100%;max-width:44px;aspect-ratio:1;border-radius:10px;background:var(--film-3);border:1px solid var(--line);display:grid;place-items:center;color:transparent;transition:background .3s,color .3s,border-color .3s}
+.streak i svg{width:14px;height:18px}
+.streak .lit i{background:var(--amber-soft);border-color:rgba(242,166,90,.5);color:var(--amber)}
+.bgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.bd{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--film-3);color:var(--amber);min-width:0}
+.bd svg{width:22px;height:26px;flex:none}
+.bd b{display:block;font-size:14px;color:var(--bone);font-weight:600}
+.bd small{display:block;font-size:12px;color:var(--dim);line-height:1.35}
+.xp-big{font:600 clamp(40px,5vw,60px) var(--f-mono);color:var(--amber);font-variant-numeric:tabular-nums;line-height:1}
+.xp-rules{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:0}
+.xp-rules li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--dim)}
+.xp-rules b{font-family:var(--f-mono);color:var(--bone)}
+
+/* ---------- Por que funciona ---------- */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:46px}
+.why div{padding-top:20px;border-top:2px solid var(--amber)}
+.why h3{font-size:26px;margin-bottom:8px}
+.why p{color:var(--dim);font-size:15px}
+.cmp{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--film-2)}
+.cmp table{width:100%;border-collapse:collapse;min-width:640px;font-size:15px}
+.cmp th,.cmp td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp th{font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.cmp th.us,.cmp td.us{background:var(--amber-soft);color:var(--bone)}
+.cmp th.us{color:var(--amber)}
+.yes{color:var(--ok);font-weight:600}.no{color:var(--faint)}
+.who{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:30px}
+.who span{padding:10px 18px;border-radius:999px;border:1px solid var(--line-2);font-size:15px;background:rgba(18,28,39,.6);transition:border-color .2s,color .2s}
+.who span:hover{border-color:var(--amber);color:var(--amber-2)}
+
+/* ---------- Preços ---------- */
+.toggle{display:inline-flex;gap:4px;padding:4px;border-radius:999px;border:1px solid var(--line-2);background:var(--film-2);margin-top:6px}
+.toggle button{border:0;background:transparent;color:var(--dim);font:600 14px var(--f-body);padding:9px 18px;border-radius:999px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.toggle button[aria-pressed="true"]{background:var(--bone);color:var(--film)}
+.toggle em{font-style:normal;font:600 11px var(--f-mono);color:var(--ok)}
+.toggle button[aria-pressed="true"] em{color:#1f7a55}
+.prices{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:18px;align-items:stretch}
+.price{border:1px solid var(--line);border-radius:22px;background:var(--film-2);padding:30px;display:flex;flex-direction:column;gap:16px;min-width:0;position:relative}
+.price h3{font-size:28px}
+.price .desc{color:var(--dim);font-size:14.5px}
+.amount{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.amount b{font:600 52px var(--f-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.amount small{color:var(--dim);font-size:15px}
+.amount .cur{font:600 22px var(--f-mono);align-self:flex-start;margin-top:6px}
+.sub-amt{font-size:13.5px;color:var(--ok);min-height:1.4em}
+.price ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;font-size:15px;flex:1}
+.price li{display:flex;gap:10px;align-items:flex-start}
+.price li svg{flex:none;width:18px;height:18px;margin-top:3px;color:var(--amber)}
+.price li.off{color:var(--faint)} .price li.off svg{color:var(--faint)}
+.price .btn{width:100%}
+.price.pro{background:linear-gradient(180deg,#1d2b3b,var(--film-2));border-color:transparent;transform:translateY(-12px);box-shadow:0 40px 80px -40px rgba(242,166,90,.5)}
+.price.pro::before{content:"";position:absolute;inset:-1px;border-radius:23px;padding:1.5px;background:conic-gradient(from var(--ang,0deg),var(--amber),rgba(242,166,90,.1),var(--amber-2),rgba(242,166,90,.1),var(--amber));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;pointer-events:none}
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes spin{to{--ang:360deg}}
+.tag-pop{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;background:var(--amber);color:#1d1206;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.price-note{text-align:center;color:var(--dim);font-size:14px;margin-top:26px}
+
+/* ---------- Perguntas ---------- */
+.faq{max-width:820px;margin:0 auto;display:grid;gap:10px}
+.faq details{border:1px solid var(--line);border-radius:14px;background:var(--film-2);transition:border-color .2s}
+.faq details[open]{border-color:var(--line-2)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 22px;font-size:17px;font-weight:500;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;transition:transform .3s,background .3s}
+.faq summary i::before{content:"+";font:400 18px var(--f-mono);color:var(--amber)}
+.faq details[open] summary i{transform:rotate(45deg);background:var(--amber-soft)}
+.faq .ans{padding:0 22px 20px;color:var(--dim);max-width:70ch}
+
+/* ---------- Chamada final e rodapé ---------- */
+.final{position:relative;overflow:hidden;border-radius:30px;border:1px solid var(--line-2);padding:80px 40px;text-align:center;background:radial-gradient(ellipse 60% 70% at 50% 110%,rgba(242,166,90,.25),transparent 70%),linear-gradient(180deg,var(--film-2),var(--film));isolation:isolate}
+.final h2{font-size:clamp(38px,5.4vw,70px);line-height:1;margin:14px 0 18px}
+.final h2 em{font-style:italic;color:var(--amber)}
+.final .lead{margin:0 auto 30px}
+.final .cta-row{justify-content:center}
+.final .ghostfig{position:absolute;z-index:-1;opacity:.12;height:130%;top:-15%;right:-40px;pointer-events:none}
+footer{padding-block:60px 40px;border-top:1px solid var(--line);margin-top:100px;color:var(--dim);font-size:14px}
+footer .in{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-start}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer a{text-decoration:none}footer a:hover{color:var(--bone)}
+
+/* ---------- Aparecer ao rolar ---------- */
+.rv{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.pre{opacity:0;transform:translateY(28px)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+@media (max-width:1020px){
+  .links{display:none}
+  .hero .in{grid-template-columns:1fr}
+  .device{transform:none;max-width:520px;margin:0 auto;width:100%}
+  .device:hover{transform:none}
+  .f1{left:-6px}.f2{right:-6px}
+  .demo-wrap{grid-template-columns:1fr}
+  .demo-side{position:static}
+  .sys{grid-template-columns:repeat(4,1fr)}
+  .sys button{flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;font-size:14px}
+  .systems{grid-template-columns:repeat(2,1fr)}
+  .prices{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+  .price.pro{transform:none;order:-1}
+  .rw{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  section.blk{padding-block:76px}
+  .login{display:none}
+  .steps,.why{grid-template-columns:1fr}
+  .systems{grid-template-columns:1fr}
+  .sys{grid-template-columns:repeat(2,1fr)}
+  .stats{gap:12px}.stats b{font-size:15px}
+  .kb button{height:34px;font-size:12px}
+  .scr-stage{height:260px}
+  .float{font-size:12px;padding:7px 10px}
+  .f3{display:none}
+  .f2{bottom:-16px;right:6px}
+  .bgrid{grid-template-columns:1fr}
+  .final{padding:56px 22px}
+  .track{font-size:20px}.track.rev{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .rv.pre{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+
+<header class="nav" id="nav">
+  <div class="in">
+    <a class="brand" href="#topo" aria-label="Osso a Osso, início">
+      <svg viewBox="0 0 18 28" aria-hidden="true"><g fill="none" stroke="#f2a65a" stroke-width="1.6"><rect x="3" y="1" width="12" height="5" rx="2"/><rect x="2.5" y="8.5" width="13" height="6" rx="2"/><rect x="2" y="17" width="14" height="7" rx="2.4"/></g></svg>
+      Osso a Osso
+    </a>
+    <nav class="links" aria-label="Seções">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#demo">Jogar</a>
+      <a href="#conteudo">Conteúdo</a>
+      <a href="#recompensas">Recompensas</a>
+      <a href="#precos">Preços</a>
+      <a href="#perguntas">Perguntas</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="login" href="app.html#entrar">Entrar</a>
+      <a class="btn btn-primary" href="app.html#criar-conta">Começar grátis</a>
+    </div>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="hero">
+    <div class="in">
+      <div>
+        <span class="badge-live"><i></i>Anatomia em português, do crânio ao metatarso</span>
+        <h1>Anatomia que fica <em>na ponta dos dedos.</em></h1>
+        <p class="lead">Uma estrutura acende no corpo. Você digita o nome. Em poucos minutos por dia, ossos, órgãos e músculos deixam de ser lista decorada e passam a ser coisa que você reconhece de olho e escreve certo na prova.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#demo">Jogar a demonstração
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          <a class="btn btn-ghost" href="app.html#criar-conta">Criar conta grátis</a>
+        </div>
+        <div class="facts">
+          <div><b id="f-struct">0</b><span>estruturas para dominar</span></div>
+          <div><b>4</b><span>sistemas do corpo</span></div>
+          <div><b>3</b><span>níveis de dificuldade</span></div>
+        </div>
+      </div>
+      <div style="position:relative">
+        <div class="device" aria-label="Demonstração automática do jogo">
+          <div class="screen">
+            <div class="scr-bar"><span class="dots"><i></i><i></i><i></i></span><span id="h-sys">ESQUELETO · MÉDIO</span><span>XP <b id="h-xp">1.240</b></span></div>
+            <div class="scr-stage"><svg id="hero-svg" viewBox="60 10 280 810" aria-hidden="true"></svg></div>
+            <div class="scr-word" id="h-word"><span class="caret"></span></div>
+            <div class="scr-hint" id="h-hint">QUE PEÇA É ESSA?</div>
+            <div class="mini-kb" id="h-kb" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="float f1"><svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 1c1 3 4 4.5 4 8.5A4 4 0 0 1 2 9.5c0-2 1-3 2-4 .2 1.4.8 2.2 1.6 2.6C5.2 6 5 3.5 6 1z" fill="currentColor"/></svg>Ofensiva de <b>12 dias</b></div>
+        <div class="float f2">Conquista: <b>Mão firme</b></div>
+        <div class="float f3">Patente <b>Dissecador</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="mq1"></div>
+    <div class="track rev" id="mq2"></div>
+  </div>
+
+  <section class="blk" id="como-funciona">
+    <div class="in">
+      <div class="head rv">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Três passos. <em>Cinco minutos.</em> Todo dia.</h2>
+        <p class="lead">Nada de ler lista e esquecer. Você é obrigado a lembrar e escrever, e é isso que fixa.</p>
+      </div>
+      <div class="steps">
+        <article class="step rv">
+          <div class="viz"><svg class="mini" id="step-svg" viewBox="60 10 280 810" aria-hidden="true"></svg></div>
+          <span class="num">PASSO 1</span>
+          <h3>A peça acende</h3>
+          <p>O corpo aparece em vista anatômica e uma estrutura brilha: um osso, um órgão, um músculo, uma vértebra.</p>
+        </article>
+        <article class="step rv d1">
+          <div class="viz"><div class="viz-type"><span>fêmur</span></div></div>
+          <span class="num">PASSO 2</span>
+          <h3>Você digita o nome</h3>
+          <p>Letra por letra, com som de acerto e de erro. Errou duas vezes? A resposta aparece em cinza para você aprender na hora.</p>
+        </article>
+        <article class="step rv d2">
+          <div class="viz"><div class="viz-cal"><div><i></i>1 dia</div><div><i></i>3 dias</div><div><i></i>7 dias</div><div><i></i>21 dias</div></div></div>
+          <span class="num">PASSO 3</span>
+          <h3>O app traz de volta</h3>
+          <p>O que você errou volta para revisão no dia certo, com intervalos cada vez maiores, até ficar na memória de longo prazo.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="demo" style="padding-top:40px">
+    <div class="in">
+      <div class="head rv">
+        <span class="eyebrow">Demonstração</span>
+        <h2>Jogue agora. <em>Sem cadastro.</em></h2>
+        <p class="lead">Escolha um sistema e responda 6 peças. É o mesmo jogo da plataforma, no modo Médio.</p>
+      </div>
+      <div class="demo-wrap">
+        <aside class="demo-side rv">
+          <div class="sys" id="sys" role="group" aria-label="Sistema da demonstração"></div>
+          <p class="demo-note">Use o teclado do computador ou toque nas teclas. Acentos são opcionais. Na conta você salva o progresso, ganha XP e libera os três níveis de dificuldade.</p>
+        </aside>
+        <div class="game rv d1" id="game">
+          <div class="g-top">
+            <span class="chip" id="g-chip">Esqueleto · Médio</span>
+            <div class="stats">
+              <div><b id="s-wpm">0</b><span>PPM</span></div>
+              <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
+              <div><b id="s-prog">0/6</b><span>PEÇAS</span></div>
+            </div>
+            <button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button>
+          </div>
+          <div class="stage" id="stage"><svg id="game-svg" viewBox="60 10 280 810" aria-label="Corpo humano com uma estrutura destacada"></svg></div>
+          <div class="prompt">
+            <div class="q" id="g-q">PEÇA 1 DE 6</div>
+            <div class="word" id="g-word" aria-live="polite"></div>
+            <div class="clue" id="g-clue"></div>
+          </div>
+          <div class="kb" id="kb"></div>
+          <div class="overlay" id="ov">
+            <div class="ov-card">
+              <span class="eyebrow">Pronto para jogar</span>
+              <h3>Uma peça vai acender.<br>Digite o nome dela.</h3>
+              <p>6 peças · modo Médio · leva menos de 2 minutos</p>
+              <button class="btn btn-primary" id="ov-start" type="button">Começar a demonstração</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="conteudo">
+    <div class="in">
+      <div class="head rv">
+        <span class="eyebrow">Conteúdo</span>
+        <h2>O corpo inteiro, <em>sistema por sistema.</em></h2>
+        <p class="lead">Cada sistema tem níveis que vão do básico à mistura completa, com dicas de prova em cada estrutura, como "L4: altura da crista ilíaca".</p>
+      </div>
+      <div class="systems" id="systems"></div>
+    </div>
+  </section>
+
+  <section class="blk" id="recompensas">
+    <div class="in">
+      <div class="head rv">
+        <span class="eyebrow">Recompensas</span>
+        <h2>Estudar vira <em>jogo de verdade.</em></h2>
+        <p class="lead">XP a cada peça, patentes que sobem, ofensiva de dias seguidos e conquistas para desbloquear. O motivo para voltar amanhã já vem pronto.</p>
+      </div>
+      <div class="rw">
+        <div class="panel rv">
+          <h3>Suba de patente</h3>
+          <p>Cada acerto vale XP. Quanto mais difícil o modo, mais XP por peça.</p>
+          <ul class="ladder" id="ladder"></ul>
+        </div>
+        <div class="panel rv d1">
+          <h3>Mantenha a ofensiva</h3>
+          <p>Conclua um nível por dia e veja a chama crescer. Pulou um dia, volta para zero.</p>
+          <div class="streak" id="streak"></div>
+          <div class="bgrid" id="bgrid"></div>
+        </div>
+        <div class="panel rv" style="grid-column:1/-1">
+          <div style="display:flex;gap:30px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between">
+            <div><h3>Quanto vale cada nível</h3><p style="color:var(--dim);font-size:15px">Exemplo: nível de 6 peças no Médio, todas de primeira, sem erros, concluído pela primeira vez e primeiro do dia.</p></div>
+            <div class="xp-big" id="xp-count">+0 XP</div>
+          </div>
+          <ul class="xp-rules">
+            <li><span>Peça certa (Fácil / Médio / Difícil)</span><b>+10 / +15 / +25</b></li>
+            <li><span>Peça acertada de primeira</span><b>+5</b></li>
+            <li><span>Nível sem nenhum erro de tecla</span><b>+50</b></li>
+            <li><span>Nível concluído pela primeira vez</span><b>+100</b></li>
+            <li><span>Primeiro nível do dia</span><b>+25</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="metodo">
+    <div class="in">
+      <div class="head rv">
+        <span class="eyebrow">Por que funciona</span>
+        <h2>Feito em cima de <em>como a memória funciona.</em></h2>
+      </div>
+      <div class="why">
+        <div class="rv"><h3>Lembrar, não reler</h3><p>Puxar a resposta da memória (recordação ativa) é uma das técnicas de estudo com mais evidência. Aqui você não reconhece a resposta numa lista: você precisa produzir.</p></div>
+        <div class="rv d1"><h3>Revisar no tempo certo</h3><p>Revisões espaçadas fixam mais do que estudar tudo de uma vez. O app agenda sozinho o que voltar e quando.</p></div>
+        <div class="rv d2"><h3>Escrever certo</h3><p>Prova prática cobra o nome escrito. Digitar letra por letra treina a grafia: esternocleidomastoideo deixa de dar medo.</p></div>
+      </div>
+      <div class="cmp rv">
+        <table>
+          <thead><tr><th></th><th>Atlas e livro</th><th>Flashcards</th><th class="us">Osso a Osso</th></tr></thead>
+          <tbody>
+            <tr><td>Imagem ligada ao nome</td><td class="yes">Sim</td><td class="no">Depende de você montar</td><td class="us yes">Sim, em todas as peças</td></tr>
+            <tr><td>Obriga a lembrar sozinho</td><td class="no">Não</td><td class="yes">Sim</td><td class="us yes">Sim, e a escrever</td></tr>
+            <tr><td>Revisão agendada</td><td class="no">Não</td><td class="yes">Sim, se configurar</td><td class="us yes">Sim, automática</td></tr>
+            <tr><td>Conteúdo pronto em português</td><td class="yes">Sim</td><td class="no">Você cria</td><td class="us yes">Sim</td></tr>
+            <tr><td>Dá vontade de voltar amanhã</td><td class="no">Raramente</td><td class="no">Às vezes</td><td class="us yes">XP, ofensiva e conquistas</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="who rv">
+        <span>Medicina</span><span>Fisioterapia</span><span>Enfermagem</span><span>Odontologia</span><span>Educação Física</span><span>Biomedicina</span><span>Farmácia</span><span>Radiologia</span><span>Residência e Revalida</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="precos">
+    <div class="in">
+      <div class="head center rv">
+        <span class="eyebrow">Preços</span>
+        <h2>Menos que um livro de anatomia. <em>Todo mês.</em></h2>
+        <div class="toggle" role="group" aria-label="Período de cobrança">
+          <button type="button" data-per="m" aria-pressed="true">Mensal</button>
+          <button type="button" data-per="a" aria-pressed="false">Anual <em>−33%</em></button>
+        </div>
+      </div>
+      <div class="prices">
+        <article class="price rv">
+          <h3>Grátis</h3>
+          <p class="desc">Para conhecer o método e ver se combina com você.</p>
+          <div class="amount"><span class="cur">R$</span><b>0</b><small>para sempre</small></div>
+          <div class="sub-amt"></div>
+          <ul>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Coluna vertebral completa</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Nível 1 de cada sistema</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Modos Fácil e Médio</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>XP e ofensiva</li>
+            <li class="off"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9h8"/></svg>Modo Difícil e todas as conquistas</li>
+          </ul>
+          <a class="btn btn-ghost" href="app.html#criar-conta">Criar conta grátis</a>
+        </article>
+        <article class="price pro rv d1">
+          <span class="tag-pop">Mais escolhido</span>
+          <h3>Pro</h3>
+          <p class="desc">O corpo inteiro, sem limite, com tudo liberado.</p>
+          <div class="amount"><span class="cur">R$</span><b id="pro-amt">37</b><small id="pro-per">/mês</small></div>
+          <div class="sub-amt" id="pro-sub">Cobrança mensal. Cancele quando quiser.</div>
+          <ul>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Todos os sistemas e níveis</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Fácil, Médio e Difícil com cronômetro</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Revisão espaçada automática</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Todas as patentes e conquistas</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Novos módulos sem custo extra</li>
+          </ul>
+          <a class="btn btn-primary" href="app.html#criar-conta" id="pro-cta">Assinar o Pro</a>
+        </article>
+        <article class="price rv d2">
+          <h3>Turmas</h3>
+          <p class="desc">Para professores e faculdades que querem o treino entre as aulas práticas.</p>
+          <div class="amount"><b style="font-size:34px">Sob consulta</b></div>
+          <div class="sub-amt">A partir de 30 alunos</div>
+          <ul>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Tudo do Pro para cada aluno</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Painel do professor (em breve)</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Nota fiscal para a instituição</li>
+          </ul>
+          <a class="btn btn-ghost" href="#contato">Falar com a gente</a>
+        </article>
+      </div>
+      <p class="price-note">Pagamento por Pix ou cartão. Sem fidelidade.</p>
+    </div>
+  </section>
+
+  <section class="blk" id="perguntas" style="padding-top:20px">
+    <div class="in">
+      <div class="head center rv">
+        <span class="eyebrow">Perguntas</span>
+        <h2>Dúvidas <em>frequentes</em></h2>
+      </div>
+      <div class="faq rv">
+        <details><summary>Preciso instalar alguma coisa?<i></i></summary><p class="ans">Não. O Osso a Osso funciona no navegador do computador, do tablet e do celular. No celular, você usa o teclado que aparece na tela do jogo.</p></details>
+        <details><summary>Serve para qual curso?<i></i></summary><p class="ans">Para qualquer curso com anatomia humana no currículo: Medicina, Fisioterapia, Enfermagem, Odontologia, Educação Física, Biomedicina e outros. Também ajuda quem está revisando para residência ou Revalida.</p></details>
+        <details><summary>Preciso digitar os acentos?<i></i></summary><p class="ans">Não. "Fêmur" e "femur" valem igual. O foco é você lembrar a estrutura e a grafia das letras.</p></details>
+        <details><summary>Meu progresso fica salvo?<i></i></summary><p class="ans">Sim. Com a conta, seus níveis, XP, ofensiva, conquistas e revisões ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar.</p></details>
+        <details><summary>Como funciona a assinatura?<i></i></summary><p class="ans">O Pro custa R$ 37 por mês ou R$ 297 por ano. Você paga por Pix ou cartão e pode cancelar quando quiser, sem multa. O plano Grátis continua disponível para sempre.</p></details>
+        <details><summary>O conteúdo substitui o livro e as aulas?<i></i></summary><p class="ans">Não. O Osso a Osso é um treino de memorização e reconhecimento. Ele funciona melhor junto com as aulas, as peças do laboratório e o seu atlas de referência.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" style="padding-block:40px 0">
+    <div class="in">
+      <div class="final rv">
+        <svg class="ghostfig" id="final-svg" viewBox="60 10 280 810" aria-hidden="true"></svg>
+        <span class="eyebrow">Comece hoje</span>
+        <h2>Sua próxima prova de anatomia <em>começa aqui.</em></h2>
+        <p class="lead">Crie sua conta grátis em menos de um minuto e jogue o primeiro nível agora.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="app.html#criar-conta">Criar conta grátis</a>
+          <a class="btn btn-ghost" href="#demo">Jogar a demonstração</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contato">
+  <div class="in">
+    <div style="display:grid;gap:10px;max-width:340px">
+      <a class="brand" href="#topo"><svg viewBox="0 0 18 28" aria-hidden="true"><g fill="none" stroke="#f2a65a" stroke-width="1.6"><rect x="3" y="1" width="12" height="5" rx="2"/><rect x="2.5" y="8.5" width="13" height="6" rx="2"/><rect x="2" y="17" width="14" height="7" rx="2.4"/></g></svg>Osso a Osso</a>
+      <p>Anatomia por digitação, em português.</p>
+      <p>Contato: <span style="color:var(--bone)">[seu e-mail de contato]</span></p>
+    </div>
+    <nav aria-label="Rodapé">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#precos">Preços</a>
+      <a href="app.html#entrar">Entrar</a>
+      <a href="termos.html">Termos de Uso</a>
+      <a href="privacidade.html">Privacidade</a>
+    </nav>
+  </div>
+  <div class="in" style="margin-top:30px;color:var(--faint);font-size:13px;display:block">© <span id="yr"></span> Osso a Osso. Conteúdo educativo; não substitui orientação profissional.</div>
+</footer>
+
+<script>
+(() => {
+const load=()=>{try{return JSON.parse(localStorage.getItem("osso-landing"))||{}}catch(e){return {}}};
+const save=d=>{try{localStorage.setItem("osso-landing",JSON.stringify(d))}catch(e){}};
+// ---------- Conteúdo ----------
+const SPINE_LEVELS = [
+  { title:"As 5 regiões", desc:"Cervical, torácica, lombar, sacro e cóccix.",
+    win:"Você já divide uma coluna em regiões só de olhar.",
+    items:[
+      {a:"cervical", hl:["r:C"], clue:"7 vértebras do pescoço, com curvatura para frente (lordose)."},
+      {a:"torácica", hl:["r:T"], clue:"12 vértebras que se articulam com as costelas; curvatura para trás (cifose)."},
+      {a:"lombar", hl:["r:L"], clue:"5 vértebras grandes que carregam o peso do tronco."},
+      {a:"sacro", hl:["p:S"], clue:"5 vértebras fundidas que se encaixam na pelve."},
+      {a:"cóccix", hl:["p:Co"], clue:"3 a 5 vértebras rudimentares fundidas, o resto da cauda."}
+    ]},
+  { title:"O pescoço: C1 a C7", desc:"Atlas, áxis e as cervicais típicas.",
+    win:"Você já lê o pescoço inteiro, de C1 a C7.",
+    items:[
+      {a:"atlas", hl:["p:C1"], clue:"C1 · sustenta o crânio, como o titã que segura o mundo. Não tem corpo vertebral."},
+      {a:"áxis", hl:["p:C2"], clue:"C2 · tem o dente (processo odontoide), o pivô em que a C1 gira."},
+      {a:"C3", hl:["p:C3"], clue:"Primeira cervical típica, logo abaixo do áxis."},
+      {a:"C5", hl:["p:C5"], clue:"Cervical típica no meio do pescoço; processo espinhoso bífido."},
+      {a:"C6", hl:["p:C6"], clue:"Última cervical típica, logo acima da proeminente."},
+      {a:"C7", hl:["p:C7"], clue:"Vértebra proeminente · o processo espinhoso que você sente na base da nuca."}
+    ]},
+  { title:"Tórax e lombar", desc:"Marcos que caem em prova: T4, T7, T12, L1, L4.",
+    win:"Você já encontra os marcos do tronco pela coluna.",
+    items:[
+      {a:"T1", hl:["p:T1"], clue:"Primeira torácica; articula com a primeira costela."},
+      {a:"T4", hl:["p:T4"], clue:"Altura aproximada do ângulo do esterno (disco T4–T5)."},
+      {a:"T7", hl:["p:T7"], clue:"Altura aproximada do ângulo inferior da escápula."},
+      {a:"T12", hl:["p:T12"], clue:"Última torácica; articula com a 12ª costela, a flutuante."},
+      {a:"L1", hl:["p:L1"], clue:"Por volta daqui termina a medula espinhal (cone medular, L1–L2)."},
+      {a:"L4", hl:["p:L4"], clue:"Altura da crista ilíaca; referência para a punção lombar."},
+      {a:"L5", hl:["p:L5"], clue:"A maior vértebra; apoia-se no sacro."}
+    ]},
+  { title:"Coluna inteira", desc:"Peças nomeadas, marcos e partes, tudo misturado.",
+    win:"Você já lê uma coluna inteira: as nomeadas, os marcos e as partes.",
+    items:[
+      {a:"atlas", hl:["p:C1"], clue:"C1 · segura o crânio; não tem corpo vertebral."},
+      {a:"áxis", hl:["p:C2"], clue:"C2 · tem o dente, o pivô da rotação da cabeça."},
+      {a:"C7", hl:["p:C7"], clue:"Vértebra proeminente, na base da nuca."},
+      {a:"T4", hl:["p:T4"], clue:"Altura do ângulo do esterno."},
+      {a:"T12", hl:["p:T12"], clue:"Última torácica; a última costela se junta a ela."},
+      {a:"L1", hl:["p:L1"], clue:"Primeira lombar; perto de onde a medula termina."},
+      {a:"L4", hl:["p:L4"], clue:"Altura da crista ilíaca."},
+      {a:"L5", hl:["p:L5"], clue:"A maior vértebra, apoiada no sacro."},
+      {a:"sacro", hl:["p:S"], clue:"5 vértebras fundidas que fecham a pelve por trás."},
+      {a:"disco intervertebral", hl:["d:L4"], clue:"Amortecedor entre L4 e L5: anel fibroso por fora, núcleo pulposo por dentro."}
+    ]}
+];
+
+const SK={
+  cranio:{a:"crânio",hl:["p:cranio"],clue:"Caixa óssea que protege o encéfalo; 22 ossos contando os da face."},
+  mandibula:{a:"mandíbula",hl:["p:mandibula"],clue:"O único osso móvel da cabeça; segura os dentes de baixo."},
+  clavicula:{a:"clavícula",hl:["p:clavicula"],clue:"Liga o esterno ao ombro; uma das fraturas mais comuns em quedas."},
+  esterno:{a:"esterno",hl:["p:esterno"],clue:"Osso plano no meio do peito: manúbrio, corpo e processo xifoide."},
+  costelas:{a:"costelas",hl:["p:costelas"],clue:"12 pares: 7 verdadeiras, 3 falsas e 2 flutuantes."},
+  escapula:{a:"escápula",hl:["p:escapula"],clue:"Osso triangular das costas; forma o ombro com o úmero e a clavícula."},
+  umero:{a:"úmero",hl:["p:umero"],clue:"Osso do braço, do ombro até o cotovelo."},
+  radio:{a:"rádio",hl:["p:radio"],clue:"Osso do antebraço do lado do polegar."},
+  ulna:{a:"ulna",hl:["p:ulna"],clue:"Osso do antebraço do lado do dedo mínimo; forma a ponta do cotovelo."},
+  carpo:{a:"carpo",hl:["p:carpo"],clue:"8 ossinhos do punho, em duas fileiras."},
+  metacarpo:{a:"metacarpo",hl:["p:metacarpo"],clue:"5 ossos longos da palma da mão."},
+  falanges:{a:"falanges",hl:["p:falanges"],clue:"Ossos dos dedos: 14 em cada mão, e o polegar tem só 2."},
+  pelve:{a:"pelve",hl:["p:pelve"],clue:"Anel formado pelos dois ossos do quadril e o sacro; apoia o tronco."},
+  femur:{a:"fêmur",hl:["p:femur"],clue:"O maior e mais longo osso do corpo, na coxa."},
+  patela:{a:"patela",hl:["p:patela"],clue:"Osso do joelho que fica dentro do tendão do quadríceps."},
+  tibia:{a:"tíbia",hl:["p:tibia"],clue:"Osso da canela, do lado de dentro; carrega quase todo o peso da perna."},
+  fibula:{a:"fíbula",hl:["p:fibula"],clue:"Osso fino do lado de fora da perna; forma o maléolo lateral."},
+  tarso:{a:"tarso",hl:["p:tarso"],clue:"7 ossos do tornozelo e do pé, como o tálus e o calcâneo."},
+  metatarso:{a:"metatarso",hl:["p:metatarso"],clue:"5 ossos longos do pé, entre o tarso e os dedos."}
+};
+const OR={
+  encefalo:{a:"encéfalo",hl:["p:encefalo"],clue:"Cérebro, cerebelo e tronco encefálico, dentro do crânio."},
+  traqueia:{a:"traqueia",hl:["p:traqueia"],clue:"Tubo com anéis de cartilagem que leva o ar até os brônquios."},
+  pulmoes:{a:"pulmões",hl:["p:pulmoes"],clue:"O direito tem 3 lobos e o esquerdo 2, para dar espaço ao coração."},
+  coracao:{a:"coração",hl:["p:coracao"],clue:"Bomba de 4 câmaras, um pouco à esquerda do centro do peito."},
+  figado:{a:"fígado",hl:["p:figado"],clue:"A maior glândula do corpo, do lado direito, logo abaixo do diafragma."},
+  vesicula:{a:"vesícula biliar",hl:["p:vesicula"],clue:"Guarda a bile que o fígado produz."},
+  estomago:{a:"estômago",hl:["p:estomago"],clue:"Bolsa em forma de J do lado esquerdo; começa a digerir as proteínas."},
+  baco:{a:"baço",hl:["p:baco"],clue:"Do lado esquerdo, atrás do estômago; filtra o sangue e ajuda na defesa."},
+  pancreas:{a:"pâncreas",hl:["p:pancreas"],clue:"Atrás do estômago; produz insulina e enzimas digestivas."},
+  rins:{a:"rins",hl:["p:rins"],clue:"Dois órgãos em forma de feijão, atrás do abdome; filtram o sangue."},
+  delgado:{a:"intestino delgado",hl:["p:delgado"],clue:"Duodeno, jejuno e íleo, com uns 6 metros; absorve os nutrientes."},
+  grosso:{a:"intestino grosso",hl:["p:grosso"],clue:"Contorna o delgado como uma moldura; absorve água e forma as fezes."},
+  bexiga:{a:"bexiga",hl:["p:bexiga"],clue:"Bolsa muscular na pelve que armazena a urina."}
+};
+const MU={
+  ecm:{a:"esternocleidomastoideo",hl:["p:ecm"],clue:"Vai do esterno e da clavícula até atrás da orelha; gira a cabeça."},
+  trapezio:{a:"trapézio",hl:["p:trapezio"],clue:"Grande músculo do pescoço e das costas que eleva os ombros."},
+  peitoral:{a:"peitoral maior",hl:["p:peitoral"],clue:"Músculo em leque do peito; puxa o braço para frente e para dentro."},
+  reto:{a:"reto abdominal",hl:["p:reto"],clue:"O tanquinho: duas faixas verticais cortadas por intersecções tendíneas."},
+  obliquo:{a:"oblíquo externo",hl:["p:obliquo"],clue:"Na lateral do abdome; gira e inclina o tronco."},
+  deltoide:{a:"deltoide",hl:["p:deltoide"],clue:"Cobre o ombro como uma ombreira; levanta o braço para o lado."},
+  biceps:{a:"bíceps braquial",hl:["p:biceps"],clue:"Frente do braço, com duas cabeças; dobra o cotovelo e vira a palma para cima."},
+  quadriceps:{a:"quadríceps",hl:["p:quadriceps"],clue:"4 músculos na frente da coxa; esticam o joelho."},
+  sartorio:{a:"sartório",hl:["p:sartorio"],clue:"O músculo mais longo do corpo; cruza a coxa na diagonal."},
+  adutores:{a:"adutores",hl:["p:adutores"],clue:"Parte de dentro da coxa; aproximam uma perna da outra."},
+  tibialant:{a:"tibial anterior",hl:["p:tibialant"],clue:"Ao lado da tíbia, na frente da perna; levanta a ponta do pé."},
+  gastro:{a:"gastrocnêmio",hl:["p:gastro"],clue:"A panturrilha; fica atrás, mas aparece pelos lados. Põe você na ponta do pé."}
+};
+const pick=(o,ks)=>ks.map(k=>o[k]);
+const MODULES=[
+  {id:"coluna",name:"Coluna vertebral",view:"coluna",levels:SPINE_LEVELS},
+  {id:"esqueleto",name:"Esqueleto",view:"esqueleto",levels:[
+    {title:"Cabeça e tronco",desc:"Crânio, mandíbula, clavícula, esterno, costelas e escápula.",win:"Você já monta a cabeça e o tronco de um esqueleto.",items:pick(SK,["cranio","mandibula","clavicula","esterno","costelas","escapula"])},
+    {title:"Membro superior",desc:"Do ombro à ponta dos dedos.",win:"Você já lê um braço inteiro, do úmero às falanges.",items:pick(SK,["umero","radio","ulna","carpo","metacarpo","falanges"])},
+    {title:"Membro inferior",desc:"Da pelve aos pés.",win:"Você já lê uma perna inteira, da pelve ao metatarso.",items:pick(SK,["pelve","femur","patela","tibia","fibula","tarso","metatarso"])},
+    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","clavicula","costelas","umero","radio","ulna","pelve","femur","patela","tibia","fibula"])}
+  ]},
+  {id:"orgaos",name:"Órgãos",view:"orgaos",levels:[
+    {title:"Cabeça e tórax",desc:"Encéfalo, traqueia, pulmões e coração.",win:"Você já encontra os órgãos da cabeça e do tórax.",items:pick(OR,["encefalo","traqueia","pulmoes","coracao"])},
+    {title:"Abdome superior",desc:"Fígado, vesícula, estômago, baço e pâncreas.",win:"Você já lê o andar de cima do abdome.",items:pick(OR,["figado","vesicula","estomago","baco","pancreas"])},
+    {title:"Abdome inferior",desc:"Rins, intestinos e bexiga.",win:"Você já lê o andar de baixo do abdome.",items:pick(OR,["rins","delgado","grosso","bexiga"])},
+    {title:"Todos os órgãos",desc:"Os 13 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)}
+  ]},
+  {id:"musculos",name:"Músculos",view:"musculos",levels:[
+    {title:"Pescoço e tronco",desc:"Esternocleidomastoideo, trapézio, peitoral e abdome.",win:"Você já lê os músculos do tronco.",items:pick(MU,["ecm","trapezio","peitoral","reto","obliquo"])},
+    {title:"Braços e pernas",desc:"Deltoide, bíceps, coxa e perna.",win:"Você já lê os músculos dos membros.",items:pick(MU,["deltoide","biceps","quadriceps","sartorio","adutores","tibialant","gastro"])},
+    {title:"Todos os músculos",desc:"Os 12 músculos, misturados.",win:"Você já lê a musculatura da frente do corpo inteira.",items:Object.values(MU)}
+  ]}
+];
+const modById=id=>MODULES.find(m=>m.id===id)||MODULES[0];
+
+// ---------- Geometria da coluna ----------
+const SVGNS="http://www.w3.org/2000/svg";
+function layout(){
+  const v=[]; let y=40;
+  const push=(id,r,h,w,gap)=>{v.push({id,r,y,h,w}); y+=h+gap;};
+  push("C1","C",10,40,3); push("C2","C",18,30,3);
+  for(let i=3;i<=7;i++) push("C"+i,"C",13,30+i,i===7?4:3);
+  for(let i=1;i<=12;i++) push("T"+i,"T",16+i*0.35,34+i,i===12?6:4);
+  for(let i=1;i<=5;i++) push("L"+i,"L",23+i*0.4,49+i*2,6);
+  push("S","S",80,62,4); push("Co","Co",24,20,0);
+  return v;
+}
+const V=layout();
+// curvatura lateral (offset no eixo x, anterior para a esquerda)
+const CP=[["C1",-4],["C4",-13],["C7",-2],["T1",2],["T7",20],["T12",6],["L1",0],["L3",-15],["L5",-5],["S",14],["Co",28]];
+function offAt(y){
+  const pts=CP.map(([id,o])=>{const s=V.find(x=>x.id===id);return [s.y+s.h/2,o];});
+  if(y<=pts[0][0])return pts[0][1];
+  for(let i=0;i<pts.length-1;i++){const [y0,o0]=pts[i],[y1,o1]=pts[i+1];
+    if(y<=y1){const t=(y-y0)/(y1-y0),k=(1-Math.cos(Math.PI*t))/2;return o0+(o1-o0)*k;}}
+  return pts[pts.length-1][1];
+}
+function el(tag,attrs,parent){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+
+function drawAnterior(g,cx){
+  const ribsR=[34,48,60,70,78,84,86,84,78,68,46,34];
+  V.forEach((s,i)=>{
+    const grp=el("g",{"data-p":s.id,"data-r":s.r},g);
+    if(s.id==="S"){
+      const t=s.y,b=s.y+s.h,w=s.w/2;
+      el("path",{class:"bone",d:`M${cx-w} ${t} Q${cx} ${t-6} ${cx+w} ${t} L${cx+12} ${b} Q${cx} ${b+5} ${cx-12} ${b} Z`},grp);
+      for(let k=1;k<5;k++){const yy=t+k*s.h/5, ww=w-(w-12)*k/5; el("path",{class:"proc",d:`M${cx-ww+6} ${yy} L${cx+ww-6} ${yy}`,"stroke-opacity":".25"},grp);}
+    } else if(s.id==="Co"){
+      el("path",{class:"bone",d:`M${cx-10} ${s.y} L${cx+10} ${s.y} L${cx+2} ${s.y+s.h} L${cx-2} ${s.y+s.h} Z`},grp);
+    } else if(s.id==="C1"){
+      el("ellipse",{class:"bone",cx,cy:s.y+s.h/2,rx:s.w/2,ry:s.h/2+1},grp);
+      el("ellipse",{class:"proc",cx,cy:s.y+s.h/2,rx:s.w/2-9,ry:s.h/2-2,"stroke-opacity":".3"},grp);
+    } else {
+      el("rect",{class:"bone",x:cx-s.w/2,y:s.y,width:s.w,height:s.h,rx:Math.min(5,s.h/3)},grp);
+      if(s.id==="C2") el("rect",{class:"bone",x:cx-4,y:s.y-9,width:8,height:10,rx:4},grp);
+      const tp=s.r==="L"?16:s.r==="C"?8:10;
+      el("path",{class:"proc",d:`M${cx-s.w/2} ${s.y+s.h/2} l${-tp} ${s.r==="T"?-2:0} M${cx+s.w/2} ${s.y+s.h/2} l${tp} ${s.r==="T"?-2:0}`},grp);
+      if(s.r==="T"){
+        const n=+s.id.slice(1),R=ribsR[n-1],y0=s.y+s.h/2,x0=s.w/2+6,drop=R*0.62;
+        [-1,1].forEach(sg=>{
+          const d=`M${cx+sg*x0} ${y0} C${cx+sg*(x0+R*0.9)} ${y0-10} ${cx+sg*(x0+R*1.2)} ${y0+drop*0.55} ${cx+sg*(x0+R*0.78)} ${y0+drop}`
+            + (n<=7?` Q${cx+sg*(x0+R*0.35)} ${y0+drop*1.25} ${cx+sg*14} ${y0+drop*1.18}`:"");
+          el("path",{class:"rib",d},g);
+        });
+      }
+    }
+    const nx=V[i+1];
+    if(nx && s.id!=="S" && s.id!=="C1"){
+      el("rect",{class:"disc","data-d":s.id,x:cx-s.w/2+2,y:s.y+s.h+0.5,width:s.w-4,height:Math.max(1.5,nx.y-(s.y+s.h)-1),rx:1.5},g);
+    }
+  });
+  // esterno
+  el("path",{class:"rib",d:`M${cx-9} ${V[7].y+14} L${cx+9} ${V[7].y+14} L${cx+7} ${V[15].y+10} L${cx} ${V[16].y+8} L${cx-7} ${V[15].y+10} Z`,"stroke-opacity":".22",fill:"rgba(235,229,216,.04)"},g);
+}
+function drawLateral(g,cx,sc){
+  const gg=el("g",{transform:`translate(${cx} 0) scale(${sc}) translate(${-cx} 0)`},g);
+  V.forEach((s,i)=>{
+    const o=offAt(s.y+s.h/2), x=cx+o, grp=el("g",{"data-p":s.id,"data-r":s.r},gg);
+    if(s.id==="S"){
+      const t=s.y,b=s.y+s.h,ot=offAt(t),ob=offAt(b);
+      el("path",{class:"bone",d:`M${cx+ot-20} ${t} L${cx+ot+16} ${t-2} Q${cx+ob+26} ${t+s.h*0.5} ${cx+ob+10} ${b} L${cx+ob} ${b} Q${cx+ot-2} ${t+s.h*0.55} ${cx+ot-20} ${t} Z`},grp);
+    } else if(s.id==="Co"){
+      const ob=offAt(s.y+s.h);
+      el("path",{class:"bone",d:`M${x-4} ${s.y} L${x+8} ${s.y} L${cx+ob-2} ${s.y+s.h} Z`},grp);
+    } else {
+      const bw=s.r==="C"?s.w*0.55:s.w*0.62;
+      el("rect",{class:"bone",x:x-bw/2-6,y:s.y,width:bw,height:s.h,rx:Math.min(4,s.h/3)},grp);
+      const sp=s.r==="C"?(s.id==="C7"?26:16):s.r==="T"?24:20, dy=s.r==="T"?14:4;
+      el("path",{class:"proc",d:`M${x+bw/2-6} ${s.y+s.h*0.35} L${x+bw/2-6+sp} ${s.y+s.h*0.5+dy}`},grp);
+      if(s.id==="C2") el("rect",{class:"bone",x:x-bw/2-2,y:s.y-8,width:7,height:9,rx:3},grp);
+      const nx=V[i+1];
+      if(nx && s.id!=="C1"){
+        el("rect",{class:"disc","data-d":s.id,x:x-bw/2-5,y:s.y+s.h+0.5,width:bw-2,height:Math.max(1.5,nx.y-(s.y+s.h)-1),rx:1.5},gg);
+      }
+    }
+  });
+}
+function buildSpine(svg,opts){
+  svg.innerHTML="";
+  const defs=el("defs",{},svg), f=el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+  el("feGaussianBlur",{stdDeviation:"3",result:"b"},f);
+  const m=el("feMerge",{},f); el("feMergeNode",{in:"b"},m); el("feMergeNode",{in:"SourceGraphic"},m);
+  if(opts.lateral){ const g=el("g",{},svg); drawLateral(g,96,0.92); const t=el("text",{class:"vlabel",x:70,y:712},svg); t.textContent="LATERAL"; }
+  const g=el("g",{},svg); drawAnterior(g,opts.cx);
+  if(opts.lateral){ const t=el("text",{class:"vlabel",x:opts.cx-28,y:712},svg); t.textContent="ANTERIOR"; }
+}
+function highlight(svg,hl){
+  svg.querySelectorAll(".on").forEach(e=>e.classList.remove("on"));
+  hl.forEach(h=>{
+    const [k,v]=h.split(":");
+    if(k==="d") svg.querySelectorAll(`[data-d="${v}"]`).forEach(e=>e.classList.add("on"));
+    else svg.querySelectorAll(`g[data-${k==="r"?"r":"p"}="${v}"]`).forEach(e=>e.classList.add("on"));
+  });
+}
+
+// ---------- Corpo inteiro (vista anterior) ----------
+const CX=200;
+function addGlow(svg){
+  const defs=el("defs",{},svg), f=el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+  el("feGaussianBlur",{stdDeviation:"3",result:"b"},f);
+  const m=el("feMerge",{},f); el("feMergeNode",{in:"b"},m); el("feMergeNode",{in:"SourceGraphic"},m);
+}
+function cap(p,cls,x1,y1,x2,y2,w){
+  const len=Math.hypot(x2-x1,y2-y1), ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI-90;
+  return el("rect",{class:cls,x:-w/2,y:0,width:w,height:len,rx:w/2,transform:`translate(${x1} ${y1}) rotate(${ang})`},p);
+}
+const X=(s,dx)=>CX+s*dx;
+const BOTH=f=>[-1,1].forEach(f);
+function part(g,id){return el("g",{"data-p":id},g);}
+function drawSilhouette(svg){
+  const g=el("g",{opacity:".07",fill:"var(--bone)",stroke:"var(--bone)","stroke-linecap":"round"},svg);
+  el("ellipse",{cx:CX,cy:72,rx:46,ry:56},g);
+  el("rect",{x:CX-20,y:115,width:40,height:40},g);
+  el("path",{d:"M172 140 L228 140 Q236 152 270 158 Q290 166 288 200 L262 300 Q256 350 266 400 Q268 432 240 446 L160 446 Q132 432 134 400 Q144 350 138 300 L112 200 Q110 166 130 158 Q164 152 172 140 Z"},g);
+  BOTH(s=>{
+    el("path",{d:`M${X(s,76)} 168 L${X(s,96)} 330`,"stroke-width":30,fill:"none"},g);
+    el("path",{d:`M${X(s,96)} 330 L${X(s,112)} 462`,"stroke-width":22,fill:"none"},g);
+    el("ellipse",{cx:X(s,113),cy:498,rx:16,ry:36},g);
+    el("path",{d:`M${X(s,40)} 430 L${X(s,36)} 600`,"stroke-width":54,fill:"none"},g);
+    el("path",{d:`M${X(s,36)} 600 L${X(s,36)} 764`,"stroke-width":34,fill:"none"},g);
+    el("ellipse",{cx:X(s,36),cy:790,rx:18,ry:22},g);
+  });
+}
+function drawSkeleton(svg,faint){
+  const g=el("g",faint?{opacity:".3"}:{},svg);
+  let p=part(g,"cranio");
+  el("path",{class:"bone",d:"M158 80 C156 24 244 24 242 80 C242 100 236 112 228 118 L172 118 C164 112 158 100 158 80Z"},p);
+  BOTH(s=>el("ellipse",{class:"proc",cx:X(s,16),cy:84,rx:10,ry:9,"stroke-opacity":".35"},p));
+  el("path",{class:"proc",d:"M196 98 L200 92 L204 98","stroke-opacity":".35"},p);
+  p=part(g,"mandibula");
+  el("path",{class:"bone",d:"M170 104 Q172 134 200 140 Q228 134 230 104 L224 106 Q222 128 200 132 Q178 128 176 106Z"},p);
+  p=part(g,"coluna");
+  for(let y=144;y<396;y+=y<288?11:16) el("rect",{class:"bone",x:CX-(y<288?7:11),y,width:y<288?14:22,height:y<288?9:13,rx:3},p);
+  p=part(g,"escapula");
+  BOTH(s=>el("path",{class:"bone",d:`M${X(s,48)} 164 L${X(s,82)} 168 L${X(s,58)} 244 Z`},p));
+  p=part(g,"costelas");
+  for(let i=0;i<10;i++){const y0=172+i*12.5, w=[34,46,56,62,66,68,68,66,62,56][i];
+    BOTH(s=>el("path",{class:"rib",d:`M${X(s,9)} ${y0} C${X(s,w*0.6)} ${y0-8} ${X(s,w)} ${y0} ${X(s,w*1.02)} ${y0+20+i*1.6}`},p));}
+  p=part(g,"esterno");
+  el("path",{class:"bone",d:"M191 166 L209 166 L206 182 L207 250 L200 266 L193 250 L194 182 Z"},p);
+  p=part(g,"clavicula");
+  BOTH(s=>cap(p,"bone",X(s,10),160,X(s,72),151,8));
+  p=part(g,"pelve");
+  BOTH(s=>{
+    el("path",{class:"bone",d:`M${X(s,16)} 374 Q${X(s,74)} 356 ${X(s,70)} 392 Q${X(s,64)} 410 ${X(s,46)} 418 Q${X(s,42)} 442 ${X(s,4)} 442 L${X(s,3)} 428 Q${X(s,24)} 422 ${X(s,20)} 400 Z`},p);
+    el("ellipse",{class:"proc",cx:X(s,26),cy:430,rx:7,ry:6,"stroke-opacity":".35"},p);
+  });
+  el("path",{class:"bone",d:"M184 380 L216 380 L206 418 L194 418 Z"},p);
+  p=part(g,"umero");
+  BOTH(s=>{el("circle",{class:"bone",cx:X(s,74),cy:172,r:10},p);cap(p,"bone",X(s,78),172,X(s,93),324,13);});
+  p=part(g,"radio"); BOTH(s=>cap(p,"bone",X(s,103),334,X(s,118),452,7));
+  p=part(g,"ulna"); BOTH(s=>cap(p,"bone",X(s,90),330,X(s,104),456,7));
+  p=part(g,"carpo"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,111),cy:468,rx:14,ry:9},p));
+  p=part(g,"metacarpo");
+  BOTH(s=>{for(let k=0;k<5;k++)cap(p,"bone",X(s,103+k*4.5),476,X(s,k===4?126:100+k*6),k===4?492:506,3.6);});
+  p=part(g,"falanges");
+  BOTH(s=>{for(let k=0;k<5;k++){const x0=k===4?126:100+k*6,y0=k===4?494:508,l=k===4?18:[24,28,30,26][k];cap(p,"bone",X(s,x0),y0,X(s,x0+(k===4?6:k-1.5)),y0+l,3);}});
+  p=part(g,"femur");
+  BOTH(s=>{el("circle",{class:"bone",cx:X(s,44),cy:416,r:9},p);cap(p,"bone",X(s,50),420,X(s,36),590,15);});
+  p=part(g,"patela"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,36),cy:604,rx:8,ry:10},p));
+  p=part(g,"tibia"); BOTH(s=>cap(p,"bone",X(s,32),616,X(s,32),762,13));
+  p=part(g,"fibula"); BOTH(s=>cap(p,"bone",X(s,50),620,X(s,48),760,6));
+  p=part(g,"tarso"); BOTH(s=>el("ellipse",{class:"bone",cx:X(s,38),cy:774,rx:15,ry:8},p));
+  p=part(g,"metatarso"); BOTH(s=>{for(let k=0;k<5;k++)cap(p,"bone",X(s,27+k*6),782,X(s,22+k*8.5),806,3.6);});
+}
+function drawOrgans(svg){
+  const g=el("g",{},svg);
+  let p=part(g,"rins"); BOTH(s=>el("path",{class:"org",d:`M${X(s,30)} 344 Q${X(s,48)} 336 ${X(s,50)} 362 Q${X(s,50)} 386 ${X(s,32)} 384 Q${X(s,26)} 372 ${X(s,32)} 364 Q${X(s,26)} 354 ${X(s,30)} 344Z`},p));
+  p=part(g,"encefalo");
+  el("path",{class:"org",d:"M166 74 C164 30 236 30 234 74 C234 92 222 98 200 98 C178 98 166 92 166 74Z"},p);
+  el("path",{class:"proc",d:"M200 40 L200 96 M176 56 Q186 64 180 76 M224 56 Q214 64 220 76","stroke-opacity":".4"},p);
+  p=part(g,"traqueia");
+  el("rect",{class:"org",x:194,y:126,width:12,height:64,rx:5},p);
+  for(let y=132;y<188;y+=7) el("path",{class:"proc",d:`M195 ${y} L205 ${y}`,"stroke-opacity":".35"},p);
+  el("path",{class:"org tube",d:"M200 188 L184 204 M200 188 L216 204"},p);
+  p=part(g,"pulmoes");
+  BOTH(s=>{const inn=s>0?30:13;
+    el("path",{class:"org",d:`M${X(s,inn)} 186 Q${X(s,18)} 160 ${X(s,36)} 158 Q${X(s,66)} 168 ${X(s,70)} 240 Q${X(s,72)} 290 ${X(s,52)} 292 Q${X(s,30)} 296 ${X(s,inn)} 282 Z`},p);});
+  p=part(g,"coracao");
+  el("path",{class:"org",d:"M194 222 Q212 206 232 220 Q246 238 228 262 L212 278 Q196 266 190 248 Q186 230 194 222Z"},p);
+  p=part(g,"grosso");
+  el("path",{class:"org tube",d:"M162 430 L158 364 Q160 352 172 352 L228 352 Q242 352 242 364 L242 412 Q242 430 224 434 L208 438"},p);
+  p=part(g,"delgado");
+  el("path",{class:"org tube thin",d:"M180 368 Q220 360 222 372 Q222 384 182 382 Q174 394 220 394 Q228 406 182 406 Q174 418 214 420"},p);
+  p=part(g,"bexiga"); el("ellipse",{class:"org",cx:200,cy:446,rx:15,ry:11},p);
+  p=part(g,"pancreas"); cap(p,"org",186,340,248,330,9);
+  p=part(g,"figado");
+  el("path",{class:"org",d:"M138 292 Q186 278 228 294 Q216 318 188 330 Q160 340 146 330 Q134 312 138 292Z"},p);
+  p=part(g,"vesicula"); el("ellipse",{class:"org",cx:180,cy:332,rx:6,ry:9},p);
+  p=part(g,"baco"); el("ellipse",{class:"org",cx:266,cy:316,rx:8,ry:16,transform:"rotate(-20 266 316)"},p);
+  p=part(g,"estomago");
+  el("path",{class:"org",d:"M216 296 Q242 282 258 300 Q264 328 242 342 Q220 352 206 338 Q216 330 222 314 Z"},p);
+}
+function drawMuscles(svg){
+  const g=el("g",{},svg);
+  let p=part(g,"trapezio");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,14)} 126 Q${X(s,40)} 150 ${X(s,72)} 156 L${X(s,60)} 164 Q${X(s,30)} 160 ${X(s,12)} 150 Z`},p));
+  p=part(g,"ecm"); BOTH(s=>cap(p,"musc",X(s,26),104,X(s,6),158,8));
+  p=part(g,"peitoral");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,4)} 170 Q${X(s,40)} 162 ${X(s,70)} 174 L${X(s,82)} 196 Q${X(s,50)} 238 ${X(s,5)} 234 Z`},p));
+  p=part(g,"deltoide");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,62)} 158 Q${X(s,94)} 152 ${X(s,98)} 190 Q${X(s,98)} 214 ${X(s,92)} 228 Q${X(s,76)} 202 ${X(s,66)} 172 Z`},p));
+  p=part(g,"biceps"); BOTH(s=>cap(p,"musc",X(s,86),214,X(s,96),318,15));
+  p=part(g,"reto");
+  BOTH(s=>{const x=s>0?CX+3:CX-24; el("rect",{class:"musc",x,y:248,width:21,height:166,rx:9},p);
+    [284,316,348].forEach(y=>el("path",{class:"proc",d:`M${x+3} ${y} L${x+18} ${y}`,"stroke-opacity":".4"},p));});
+  p=part(g,"obliquo");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,28)} 256 Q${X(s,60)} 262 ${X(s,62)} 300 Q${X(s,66)} 350 ${X(s,60)} 392 Q${X(s,44)} 398 ${X(s,28)} 406 Z`},p));
+  p=part(g,"quadriceps");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,30)} 440 Q${X(s,62)} 428 ${X(s,62)} 470 Q${X(s,60)} 550 ${X(s,46)} 594 L${X(s,28)} 594 Q${X(s,20)} 520 ${X(s,30)} 440Z`},p));
+  p=part(g,"adutores");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,8)} 444 L${X(s,26)} 448 Q${X(s,26)} 500 ${X(s,24)} 544 Q${X(s,14)} 500 ${X(s,8)} 444Z`},p));
+  p=part(g,"sartorio"); BOTH(s=>cap(p,"musc",X(s,62),404,X(s,22),608,7));
+  p=part(g,"gastro");
+  BOTH(s=>el("path",{class:"musc",d:`M${X(s,22)} 618 Q${X(s,10)} 652 ${X(s,18)} 702 L${X(s,25)} 702 Q${X(s,27)} 652 ${X(s,25)} 618 Z`},p));
+  p=part(g,"tibialant"); BOTH(s=>cap(p,"musc",X(s,45),624,X(s,41),742,9));
+}
+function buildBody(svg,view){
+  svg.innerHTML=""; addGlow(svg); drawSilhouette(svg);
+  if(view==="esqueleto") drawSkeleton(svg,false);
+  else { drawSkeleton(svg,true); view==="orgaos"?drawOrgans(svg):drawMuscles(svg); }
+}
+function buildView(svg,view,big){
+  if(view==="coluna"){ svg.setAttribute("viewBox",big?"0 20 520 700":"190 20 280 700"); buildSpine(svg,{lateral:big,cx:330}); }
+  else { svg.setAttribute("viewBox","60 10 280 810"); buildBody(svg,view); }
+}
+
+
+// ---------- Utilidades ----------
+const $=s=>document.querySelector(s);
+const norm=c=>c.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const fmtDate=d=>d.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+
+// ---------- Sons (Web Audio, sem arquivos) ----------
+let AC=null, muted=!!load().muted;
+function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();}catch(e){AC=null}return AC;}
+function tone(freq,start,dur,type,vol,slideTo){
+  const c=ac(); if(!c||muted)return;
+  const t=c.currentTime+start, o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t);
+  if(slideTo)o.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.01); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+0.02);
+}
+const sfx={
+  key:()=>tone(1320,0,0.05,"sine",0.05),
+  wrong:()=>{tone(180,0,0.18,"square",0.06,120);tone(150,0.06,0.16,"square",0.05,100);},
+  right:()=>{tone(659,0,0.14,"triangle",0.16);tone(988,0.09,0.22,"triangle",0.14);},
+  level:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,i*0.1,0.28,"triangle",0.14));},
+  badge:()=>{[1047,1319,1568,2093].forEach((f,i)=>tone(f,i*0.07,0.22,"sine",0.12));}
+};
+
+// ---------- Página de vendas ----------
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const fmtN=n=>n.toLocaleString("pt-BR");
+const allItems=M=>{const seen=new Set();return M.levels.flatMap(L=>L.items).filter(it=>!seen.has(it.a)&&seen.add(it.a));};
+const TOTAL=new Set(MODULES.flatMap(m=>allItems(m).map(i=>i.a))).size;
+const NAMES={esqueleto:"ESQUELETO",orgaos:"ÓRGÃOS",musculos:"MÚSCULOS",coluna:"COLUNA"};
+const FLAME=`<svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 1c1 3 4 4.5 4 8.5A4 4 0 0 1 2 9.5c0-2 1-3 2-4 .2 1.4.8 2.2 1.6 2.6C5.2 6 5 3.5 6 1z" fill="currentColor"/></svg>`;
+const MEDAL=`<svg viewBox="0 0 24 28" aria-hidden="true"><path d="M7 1h10l-2 8H9z" fill="currentColor" opacity=".55"/><circle cx="12" cy="17" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z" fill="currentColor"/></svg>`;
+
+function countTo(el,to,{dur=1200,pre="",suf=""}={}){
+  if(reduce){el.textContent=pre+fmtN(to)+suf;return;}
+  const t0=performance.now(), from=0;
+  const step=t=>{const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3);el.textContent=pre+fmtN(Math.round(from+(to-from)*e))+suf;if(k<1)requestAnimationFrame(step);};
+  requestAnimationFrame(step);
+}
+function onView(el,fn,th=.35){
+  if(!("IntersectionObserver" in window)){fn();return;}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.disconnect();fn();}}),{threshold:th});
+  io.observe(el);
+}
+
+// navegação com fundo ao rolar
+const nav=$("#nav"); const onScroll=()=>nav.classList.toggle("scrolled",scrollY>10); addEventListener("scroll",onScroll,{passive:true}); onScroll();
+
+// aparecer ao rolar (o que já está na tela nunca some)
+if("IntersectionObserver" in window && !reduce){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("pre");io.unobserve(e.target);}}),{threshold:.12,rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll(".rv").forEach(el=>{if(el.getBoundingClientRect().top>innerHeight*.92){el.classList.add("pre");io.observe(el);}});
+}
+
+// números do topo
+countTo($("#f-struct"),TOTAL,{dur:1400});
+
+// faixa de termos
+(()=>{const terms=shuffle(MODULES.flatMap(m=>allItems(m).map(i=>i.a)).filter(a=>a.length>3));
+  const half=Math.ceil(terms.length/2), row=t=>t.map(x=>`<span>${esc(x)}</span>`).join("");
+  const a=terms.slice(0,half), b=terms.slice(half);
+  $("#mq1").innerHTML=row(a)+row(a); $("#mq2").innerHTML=row(b)+row(b);})();
+
+// ---------- Herói: jogo rodando sozinho ----------
+const hs=$("#hero-svg");
+const HSEQ=[["esqueleto","p:femur","fêmur"],["orgaos","p:coracao","coração"],["musculos","p:deltoide","deltoide"],["esqueleto","p:cranio","crânio"],["orgaos","p:pulmoes","pulmões"],["musculos","p:quadriceps","quadríceps"],["esqueleto","p:umero","úmero"],["orgaos","p:figado","fígado"],["musculos","p:biceps","bíceps braquial"]];
+(()=>{const kb=$("#h-kb");kb.innerHTML=["qwertyuiop","asdfghjkl","zxcvbnm"].map(r=>`<div class="r">${[...r].map(c=>`<span data-k="${c}">${c}</span>`).join("")}</div>`).join("");})();
+async function heroLoop(){
+  let i=0, xp=1240, view=null; const w=$("#h-word"), screen=document.querySelector(".scr-stage");
+  while(true){
+    const [v,h,name]=HSEQ[i%HSEQ.length];
+    if(v!==view){buildView(hs,v,false);view=v;}
+    highlight(hs,[h]); $("#h-sys").textContent=NAMES[v]+" · MÉDIO"; $("#h-hint").textContent="QUE PEÇA É ESSA?";
+    if(reduce){w.textContent=name;await sleep(2600);i++;continue;}
+    w.classList.remove("win"); w.innerHTML=`<span class="caret"></span>`;
+    await sleep(900);
+    let typed="";
+    for(const ch of name){
+      typed+=ch; w.innerHTML=`${esc(typed)}<span class="caret"></span>`;
+      const k=document.querySelector(`#h-kb span[data-k="${CSS.escape(norm(ch))}"]`);
+      if(k){k.classList.add("hit");setTimeout(()=>k.classList.remove("hit"),140);}
+      await sleep(85+Math.random()*95);
+    }
+    w.classList.add("win"); w.textContent=name; $("#h-hint").textContent="CERTO! +20 XP";
+    const pop=document.createElement("div");pop.className="xp-pop";pop.textContent="+20 XP";screen.appendChild(pop);setTimeout(()=>pop.remove(),1000);
+    const from=xp; xp+=20; countTo($("#h-xp"),xp,{dur:500}); void from;
+    await sleep(1500); i++;
+  }
+}
+heroLoop();
+
+// ---------- Passo 1: osso acendendo ----------
+(()=>{const s=$("#step-svg");buildView(s,"esqueleto",false);const seq=["p:femur","p:cranio","p:umero","p:pelve","p:tibia","p:costelas"];let i=0;
+  const t=()=>{highlight(s,[seq[i%seq.length]]);i++;};t();if(!reduce)setInterval(t,1600);})();
+
+// ---------- Demonstração jogável ----------
+const DEMO_N=6;
+const D={mod:"esqueleto",items:[],idx:0,typed:0,miss:{},keys:0,good:0,chars:0,t0:0,busy:false,active:false};
+const gsvg=$("#game-svg");
+$("#sys").innerHTML=MODULES.map(m=>`<button type="button" data-sys="${m.id}" aria-pressed="${m.id===D.mod}">${m.name}<small>${allItems(m).length} estruturas</small></button>`).join("");
+(()=>{const kb=$("#kb");
+  ["qwertyuiop","asdfghjkl","zxcvbnm","1234567890"].forEach(r=>{const row=document.createElement("div");row.className="row";
+    [...r].forEach(ch=>{const b=document.createElement("button");b.type="button";b.textContent=ch;b.dataset.k=ch;row.appendChild(b);});kb.appendChild(row);});
+  const row=document.createElement("div");row.className="row";const sp=document.createElement("button");sp.type="button";sp.className="space";sp.dataset.k=" ";sp.textContent="espaço";row.appendChild(sp);kb.appendChild(row);
+  kb.addEventListener("click",e=>{const b=e.target.closest("button");if(b)press(b.dataset.k);});})();
+function flashKey(k,cls){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(k))}"]`);if(!b)return;b.classList.add(cls);setTimeout(()=>b.classList.remove(cls),220);}
+function setupSys(id){
+  D.mod=id; const M=modById(id);
+  document.querySelectorAll("#sys button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.sys===id)));
+  buildView(gsvg,M.view,true);
+  $("#g-chip").textContent=`${M.name} · Médio`;
+}
+function startDemo(){
+  const M=modById(D.mod);
+  Object.assign(D,{items:shuffle(allItems(M)).slice(0,DEMO_N),idx:0,typed:0,miss:{},keys:0,good:0,chars:0,t0:0,busy:false,active:true});
+  $("#ov").hidden=true; ac(); renderDemo(); updDemo();
+}
+function cur(){return D.items[D.idx];}
+function renderDemo(){
+  const it=cur(), a=it.a, n=D.typed, m=D.miss[D.idx]||0, reveal=m>=2;
+  highlight(gsvg,it.hl);
+  const rest=reveal?`<span class="ghost">${esc(a.slice(n))}</span>`:"";
+  const ph=(!n&&!reveal)?`<span class="ph">digite o nome</span>`:"";
+  $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,n))}</span><span class="caret"></span>${rest}${ph}`;
+  $("#g-clue").textContent=it.clue.replace(new RegExp(norm(a),"ig"),"___");
+  $("#g-q").textContent=`PEÇA ${D.idx+1} DE ${D.items.length}`;
+  document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
+  if(reveal&&n<a.length){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+}
+function updDemo(){
+  const mins=D.t0?(Date.now()-D.t0)/60000:0;
+  $("#s-wpm").textContent=mins>0.03?Math.round(D.chars/5/mins):0;
+  $("#s-acc").textContent=D.keys?Math.round(D.good/D.keys*100)+"%":"100%";
+  $("#s-prog").textContent=`${D.idx}/${D.items.length||DEMO_N}`;
+}
+function press(k){
+  if(!D.active||D.busy)return;
+  if(!D.t0)D.t0=Date.now();
+  const a=cur().a, exp=a[D.typed]; D.keys++;
+  if(norm(k)===norm(exp)){D.good++;D.typed++;D.chars++;flashKey(k,"hit");if(D.typed<a.length)sfx.key();}
+  else{D.miss[D.idx]=(D.miss[D.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
+  renderDemo();
+  if(D.typed>=a.length){
+    D.busy=true; sfx.right(); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
+    const pop=document.createElement("div");pop.className="xp-pop";pop.style.top="10px";pop.textContent=`+${15+(D.miss[D.idx]?0:5)} XP`;document.querySelector("#game .prompt").appendChild(pop);setTimeout(()=>pop.remove(),1000);
+    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");
+      D.idx++;D.typed=0;D.busy=false;updDemo();
+      if(D.idx>=D.items.length){sfx.level();finishDemo();}else renderDemo();},650);
+  }
+  updDemo();
+}
+function finishDemo(){
+  D.active=false;
+  const mins=(Date.now()-D.t0)/60000, wpm=Math.round(D.chars/5/Math.max(mins,.01)), acc=Math.round(D.good/Math.max(D.keys,1)*100);
+  const firsts=D.items.filter((_,i)=>!D.miss[i]).length, xp=D.items.length*15+firsts*5+(acc===100?50:0)+100+25;
+  const M=modById(D.mod), next=MODULES[(MODULES.indexOf(M)+1)%MODULES.length];
+  $("#ov").innerHTML=`<div class="ov-card">
+    <span class="eyebrow">Demonstração concluída</span>
+    <h3>${firsts===D.items.length?"Perfeito. Todas de primeira.":firsts>=D.items.length/2?"Mandou bem.":"Começo é assim mesmo."}</h3>
+    <div class="res-stats"><div><b>${wpm}</b><span>PPM</span></div><div><b>${acc}%</b><span>PRECISÃO</span></div><div><b>${firsts}/${D.items.length}</b><span>DE PRIMEIRA</span></div></div>
+    <p class="res-xp">Com uma conta, essa rodada valeria +${xp} XP.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="app.html#criar-conta">Criar conta e continuar</a>
+      <button class="btn btn-ghost" type="button" data-sys-go="${next.id}">Jogar ${next.name}</button>
+    </div></div>`;
+  $("#ov").hidden=false;
+}
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-sys]"); if(s){setupSys(s.dataset.sys);startDemo();return;}
+  const g=e.target.closest("[data-sys-go]"); if(g){setupSys(g.dataset.sysGo);startDemo();return;}
+  if(e.target.closest("#ov-start"))startDemo();
+});
+document.addEventListener("keydown",e=>{
+  if(!D.active||e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target; if(t&&(t.tagName==="INPUT"||t.tagName==="TEXTAREA"))return;
+  if(e.key.length===1){e.preventDefault();press(e.key);}
+});
+setInterval(()=>{if(D.active)updDemo();},1000);
+function setMute(m){muted=m;save({...load(),muted:m});const b=$("#g-sound");b.textContent=m?"Som: desligado":"Som: ligado";b.setAttribute("aria-pressed",String(!m));}
+$("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
+setMute(muted);
+setupSys("esqueleto"); highlight(gsvg,["p:cranio"]);
+$("#g-word").innerHTML=`<span class="ph">digite o nome</span>`;
+
+// ---------- Sistemas ----------
+(()=>{
+  const box=$("#systems");
+  box.innerHTML=MODULES.map(m=>{const it=allItems(m);return `<article class="sc rv"><div class="fig"><svg data-fig="${m.id}" aria-hidden="true"></svg></div>
+    <div><h3>${m.name}</h3><div class="meta">${m.levels.length} níveis · ${it.length} estruturas</div></div>
+    <div class="tags">${it.slice(0,6).map(i=>`<span>${esc(i.a)}</span>`).join("")}<span>+${Math.max(0,it.length-6)}</span></div></article>`;}).join("");
+  MODULES.forEach((m,k)=>{
+    const svg=box.querySelector(`[data-fig="${m.id}"]`); buildView(svg,m.view,false);
+    const it=allItems(m); let i=k;
+    const t=()=>{highlight(svg,it[i%it.length].hl);i++;}; t(); if(!reduce)setInterval(t,1700+k*230);
+  });
+  if("IntersectionObserver" in window && !reduce){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove("pre");io.unobserve(e.target);}}),{threshold:.12});
+    box.querySelectorAll(".rv").forEach((el,i)=>{el.style.transitionDelay=(i*.08)+"s";if(el.getBoundingClientRect().top>innerHeight*.92){el.classList.add("pre");io.observe(el);}});
+  }
+})();
+
+// ---------- Recompensas ----------
+const RANKS=[[0,"Calouro"],[300,"Monitor"],[900,"Dissecador"],[2000,"Anatomista"],[4000,"Professor"],[8000,"Mestre do Corpo"]];
+$("#ladder").innerHTML=RANKS.map(([x,n])=>`<li><span class="dot"></span><span class="nm">${n}</span><span class="xp">${fmtN(x)} XP</span></li>`).join("");
+onView($("#ladder"),async()=>{const lis=[...document.querySelectorAll("#ladder li")];for(let i=0;i<4;i++){lis[i].classList.add("lit");await sleep(reduce?0:380);}});
+const DAYS=["seg","ter","qua","qui","sex","sáb","dom"];
+$("#streak").innerHTML=DAYS.map(d=>`<div><i>${FLAME}</i>${d}</div>`).join("");
+onView($("#streak"),async()=>{const ds=[...document.querySelectorAll("#streak div")];for(let i=0;i<5;i++){ds[i].classList.add("lit");await sleep(reduce?0:260);}});
+$("#bgrid").innerHTML=[["Primeiro osso","Conclua seu primeiro nível."],["Mão firme","Nível sem nenhum erro de tecla."],["Dedo ligeiro","40 PPM ou mais num nível."],["Sangue frio","Conclua um nível no Difícil."]].map(([n,d])=>`<div class="bd">${MEDAL}<div><b>${n}</b><small>${d}</small></div></div>`).join("");
+onView($("#xp-count"),()=>countTo($("#xp-count"),6*15+6*5+50+100+25,{dur:1500,pre:"+",suf:" XP"}));
+
+// ---------- Preços ----------
+document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".toggle button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  const an=b.dataset.per==="a";
+  countTo($("#pro-amt"),an?297:37,{dur:500});
+  $("#pro-per").textContent=an?"/ano":"/mês";
+  $("#pro-sub").textContent=an?"Equivale a R$ 24,75 por mês. Você economiza R$ 147.":"Cobrança mensal. Cancele quando quiser.";
+}));
+
+// ---------- Chamada final ----------
+(()=>{const s=$("#final-svg");buildView(s,"esqueleto",false);const seq=["p:cranio","p:costelas","p:pelve","p:femur"];let i=0;const t=()=>{highlight(s,[seq[i%seq.length]]);i++;};t();if(!reduce)setInterval(t,2200);})();
+$("#yr").textContent=new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
