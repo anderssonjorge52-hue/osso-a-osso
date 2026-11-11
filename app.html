@@ -100,7 +100,74 @@ button.mod{text-align:left;width:100%}
 .prompt{position:relative}
 .xpfloat{position:absolute;left:50%;top:20px;transform:translateX(-50%);font:600 15px var(--f-mono);color:var(--amber);pointer-events:none;animation:xpup .9s ease-out forwards}
 @keyframes xpup{0%{opacity:0;transform:translate(-50%,8px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
-@media (max-width:760px){.rw-grid{grid-template-columns:1fr}.acct .who{display:none}}
+/* ---------- conta e perfil ---------- */
+.me{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--bone);border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 3px;background:var(--film-2);transition:border-color .2s}
+.me:hover{border-color:var(--amber)}
+.me .who{font-size:13px;color:var(--bone)}
+.av{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;font:600 12px var(--f-mono);color:#1b1208;background:linear-gradient(135deg,#ffd29a,var(--amber));text-decoration:none;flex:none}
+.av-lg{width:64px;height:64px;font-size:22px;box-shadow:0 0 0 4px var(--film-2),0 0 0 5px rgba(242,166,90,.5)}
+.av-xl{width:104px;height:104px;font-size:36px;box-shadow:0 0 0 6px var(--film),0 0 0 7px rgba(242,166,90,.55),0 20px 40px -10px rgba(242,166,90,.4)}
+.pill-rank{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--f-mono);letter-spacing:.04em;color:#1b1208;background:var(--amber);border-radius:999px;padding:4px 10px}
+.pill-soft{display:inline-flex;align-items:center;gap:6px;font:600 12px var(--f-mono);color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.pill-soft svg{width:10px;height:13px}.pill-soft.hot{color:var(--amber);border-color:rgba(242,166,90,.5)}
+.dash{display:grid;grid-template-columns:1.25fr 1.2fr .95fr;gap:12px;margin-top:6px;padding:16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(135deg,rgba(242,166,90,.07),transparent 40%),var(--film-2)}
+.dash-me{display:flex;gap:16px;align-items:center;min-width:0}
+.dash-hi{display:grid;gap:5px;min-width:0;flex:1}
+.dash-hi h2{font-size:28px;line-height:1.1}
+.dash-hi .pill-rank{justify-self:start}
+.dash-hi .rk-bar{margin:4px 0 0}
+.dash-tiles{display:grid;gap:8px;align-content:center}
+.tile{display:flex;gap:12px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--film-3)}
+.tile b{display:block;font:600 18px var(--f-mono);line-height:1.1}.tile b small{font-size:12px;color:var(--dim);font-weight:400}
+.tile span:not(.flame):not(.ti){font-size:12px;color:var(--dim)}
+.tile .flame{width:34px;height:34px}.tile .flame svg{width:13px;height:17px}
+.ti{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--amber-soft);color:var(--amber);flex:none}
+.ti svg{width:16px;height:16px}
+.dash-go{display:grid;gap:6px;align-content:center;padding:14px;border-radius:12px;border:1px solid rgba(242,166,90,.35);background:var(--film-3)}
+.go-t{font-family:var(--f-display);font-size:21px;line-height:1.15}.go-d{font-size:13px;color:var(--dim)}
+.dash-go .btn{justify-self:start;margin-top:4px}
+.dash-note{font-size:13px;color:var(--dim);margin:8px 2px 0}
+.perfil{max-width:960px;margin:0 auto;padding-block:8px 40px;display:grid;gap:14px}
+.pf-head{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--film-2)}
+.pf-cover{height:150px;background:radial-gradient(ellipse 60% 120% at 80% 0%,rgba(242,166,90,.28),transparent 60%),radial-gradient(ellipse 70% 120% at 10% 0%,rgba(80,130,190,.3),transparent 65%),linear-gradient(180deg,#1b2b3d,var(--film-2));position:relative;overflow:hidden}
+.pf-cover svg{position:absolute;right:30px;top:-40px;height:420px;opacity:.35;transform:rotate(-8deg)}
+.pf-id{display:flex;gap:22px;align-items:flex-end;padding:0 26px 22px;margin-top:-52px;position:relative}
+.pf-txt{display:grid;gap:6px;min-width:0;padding-bottom:4px}
+.pf-txt h1{font-size:clamp(28px,4vw,40px);line-height:1.05;overflow-wrap:anywhere}
+.pf-sub{font-size:14px;color:var(--dim);overflow-wrap:anywhere}
+.pf-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.pf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.st{display:grid;gap:4px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--film-2);min-width:0}
+.st b{font:600 26px var(--f-mono);line-height:1.1;font-variant-numeric:tabular-nums}.st b small{font-size:13px;color:var(--dim);font-weight:400}
+.st > span:last-child{font-size:13px;color:var(--dim)}
+.st .ti,.st .flame{width:36px;height:36px;margin-bottom:4px}
+.pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pf-card{border:1px solid var(--line);border-radius:16px;background:var(--film-2);padding:20px;min-width:0}
+.pf-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.pf-h h2{font-size:24px}
+.rk-bar.big{height:12px;margin:0 0 14px}
+.ladder{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.ladder li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;color:var(--faint)}
+.ladder li b{font-weight:500;color:var(--dim)}.ladder li small{font:12px var(--f-mono)}
+.lad-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--line);justify-self:center}
+.ladder li.past .lad-dot{background:var(--amber);border-color:var(--amber)}.ladder li.past b{color:var(--bone)}
+.ladder li.cur{background:var(--amber-soft);color:var(--amber)}.ladder li.cur b{color:var(--bone);font-weight:600}
+.ladder li.cur .lad-dot{background:var(--amber);border-color:var(--amber);box-shadow:0 0 10px rgba(242,166,90,.8)}
+.sysrows{display:grid;gap:14px}
+.sys-top{display:flex;justify-content:space-between;gap:10px;font-size:14px}.sys-top span{color:var(--dim);font:12px var(--f-mono)}
+.sysrow .rk-bar{margin:6px 0}
+.sys-d{display:flex;gap:6px;flex-wrap:wrap}
+.sys-d span{font:11px var(--f-mono);color:var(--faint);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.sys-d span.some{color:var(--dim);border-color:var(--faint)}.sys-d span.full{color:var(--ok);border-color:rgba(134,205,176,.5)}
+.pf-forms{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pf-form{display:grid;gap:10px;align-content:start;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--film-3)}
+.pf-form h3{font-family:var(--f-body);font-size:15px;font-weight:600}
+.pf-form .fld input{width:100%;box-sizing:border-box}
+.pf-form .btn{justify-self:start}
+.pf-out{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.pf-out b{display:block;font-weight:600}.pf-out span{font-size:13px;color:var(--dim)}
+@media (max-width:860px){.dash{grid-template-columns:1fr}.pf-stats{grid-template-columns:repeat(2,1fr)}.pf-grid,.pf-forms{grid-template-columns:1fr}}
+@media (max-width:760px){.rw-grid{grid-template-columns:1fr}.me .who{display:none}.me{padding:3px}.pf-id{flex-direction:column;align-items:flex-start;gap:12px;margin-top:-56px;padding:0 18px 18px}.av-xl{width:88px;height:88px;font-size:30px}.pf-cover svg{right:-20px}}
 .acct .who{font-size:13px;color:var(--dim);max-width:22ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .btn.sm{padding:7px 14px;font-size:13px}
 .auth{display:flex;justify-content:center;padding-block:24px 60px}
@@ -360,6 +427,7 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
     </div>
    </div>
   </main>
+  <main id="v-perfil" class="perfil" hidden></main>
   <div class="toast" id="toast" role="status" hidden></div>
 
   
@@ -973,16 +1041,6 @@ function rankBar(r){
 function badgeTile(b,got,isNew){
   return `<div class="bd${got?" got":""}${isNew?" new":""}" title="${esc(b.d)}"><svg viewBox="0 0 24 28" aria-hidden="true"><path d="M7 1h10l-2 8H9z" fill="currentColor" opacity=".55"/><circle cx="12" cy="17" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1-2.3-2.2 3.1-.4z" fill="currentColor"/></svg><div><div class="bd-n">${b.n}</div><div class="bd-d">${got?b.d:"Bloqueada · "+b.d}</div></div></div>`;
 }
-function renderRewards(){
-  const box=$("#rewards"); if(!USER){box.hidden=true;return;}
-  box.hidden=false; const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq);
-  box.innerHTML=`<div class="section-h"><h2>Seu progresso</h2><span class="eyebrow">${got.size} de ${BADGES.length} conquistas</span></div>
-    <div class="rw-grid">
-      <div class="rw-card">${rankBar(r)}</div>
-      <div class="rw-card rw-streak"><span class="flame ${s?"on":""}">${FLAME}</span><div><div class="rw-big">${s} dia${s===1?"":"s"}</div><div class="rw-sub">de ofensiva · recorde ${REW.melhor}</div><div class="rw-sub">${REW.ultimo===today()?"Você já estudou hoje.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a ofensiva."}</div></div></div>
-    </div>
-    <div class="badges">${BADGES.map(b=>badgeTile(b,got.has(b.id))).join("")}</div>`;
-}
 function xpFloat(n){
   const f=document.createElement("div"); f.className="xpfloat"; f.textContent=`+${n} XP`;
   $("#v-jogo .prompt").appendChild(f); setTimeout(()=>f.remove(),900);
@@ -1009,7 +1067,7 @@ async function saveProgress(key,rec){
 function displayName(){return (USER&&(USER.user_metadata&&USER.user_metadata.nome||USER.email))||"";}
 function renderAcct(){
   const a=$("#acct");
-  if(USER) a.innerHTML=`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span><span class="who" title="${esc(USER.email||"")}">${esc(displayName())}</span><button class="chip" id="logout" type="button">Sair da conta</button>`;
+  if(USER) a.innerHTML=`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span><a class="me" href="#perfil" title="Minha conta"><span class="av">${esc(initials(displayName()))}</span><span class="who">${esc(firstName())}</span></a>`;
   else a.innerHTML=`<button class="chip" data-auth="login" type="button">Entrar</button><button class="btn sm" data-auth="signup" type="button">Criar conta</button>`;
 }
 const MODES={
@@ -1082,11 +1140,11 @@ $("#au-form").addEventListener("submit",async e=>{
   }catch(err){msg(tr(err));}
   btn.disabled=false; btn.textContent=label;
 });
-async function logout(){if(sb)await sb.auth.signOut();USER=null;PROG={};REW=emptyRew();G=null;renderAcct();route();toast("Você saiu da conta.");}
+async function logout(){if(sb)await sb.auth.signOut();if(location.hash==="#perfil")history.replaceState(null,"","#jogar");USER=null;PROG={};REW=emptyRew();G=null;renderAcct();route();toast("Você saiu da conta.");}
 function afterLogin(){
   if(pendingStart){const [m,i]=pendingStart.split(":");pendingStart=null;startLevel(m,+i);window.scrollTo(0,0);}
   else if(!$("#v-auth").hidden)route();
-  else if(!$("#v-trilha").hidden){renderLevels();renderRewards();}
+  else if(!$("#v-trilha").hidden||!$("#v-perfil").hidden)route();
 }
 async function initAuth(){
   if(!sb){renderAcct();return;}
@@ -1103,9 +1161,138 @@ async function initAuth(){
   });
 }
 
+// ---------- Perfil ----------
+const initials=n=>(n||"?").replace(/@.*/,"").split(/[\s._-]+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
+const firstName=()=>{const n=USER&&USER.user_metadata&&USER.user_metadata.nome;return n?n.trim().split(/\s+/)[0]:(USER?USER.email.split("@")[0]:"");};
+const TOTAL_LEVELS=MODULES.reduce((s,m)=>s+m.levels.length,0);
+function levelsDone(){return new Set(Object.keys(PROG).map(k=>k.replace(/-[a-z]+$/,"")));}
+function bestPPM(){return Object.values(PROG).reduce((m,r)=>Math.max(m,r.wpm||0),0);}
+function nextLevel(){
+  const order=[modById(curMod),...MODULES.filter(m=>m.id!==curMod)];
+  for(const m of order)for(let i=0;i<m.levels.length;i++)if(!PROG[`${m.id}-${i}-${curDiff}`])return {m,i};
+  return null;
+}
+const PERF_ICON={
+  xp:`<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l2.4 5 5.4.6-4 3.7 1.1 5.4L10 14l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z"/></svg>`,
+  lvl:`<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg>`,
+  ppm:`<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 14a7 7 0 1 1 14 0"/><path d="M10 14l3.5-4.5"/></svg>`
+};
+function renderRewards(){
+  const box=$("#rewards"), hero=document.querySelector("#v-trilha .hero"); if(hero)hero.hidden=!!USER;
+  if(!USER){box.hidden=true;return;}
+  box.hidden=false; const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq), done=levelsDone(), nx=nextLevel();
+  box.innerHTML=`<div class="dash">
+    <div class="dash-me">
+      <a class="av av-lg" href="#perfil" aria-label="Abrir meu perfil">${esc(initials(displayName()))}</a>
+      <div class="dash-hi">
+        <div class="eyebrow">Bem-vindo de volta</div>
+        <h2>Olá, ${esc(firstName())}</h2>
+        <div class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</div>
+        <div class="rk-bar"><i style="width:${Math.round(r.pct*100)}%"></i></div>
+        <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div>
+      </div>
+    </div>
+    <div class="dash-tiles">
+      <div class="tile"><span class="flame ${s?"on":""}">${FLAME}</span><div><b>${s}</b><span>dia${s===1?"":"s"} de ofensiva</span></div></div>
+      <div class="tile"><span class="ti">${PERF_ICON.lvl}</span><div><b>${done.size}<small>/${TOTAL_LEVELS}</small></b><span>níveis concluídos</span></div></div>
+      <div class="tile"><span class="ti">${PERF_ICON.xp}</span><div><b>${got.size}<small>/${BADGES.length}</small></b><span>conquistas</span></div></div>
+    </div>
+    <div class="dash-go">
+      ${nx?`<div class="eyebrow">Continuar</div><div class="go-t">${nx.m.name} · Nível ${nx.i+1}</div><div class="go-d">${esc(nx.m.levels[nx.i].title)} · ${DIFFS[curDiff].name}</div><button class="btn" type="button" data-start="${nx.m.id}:${nx.i}">Jogar agora</button>`
+        :`<div class="eyebrow">Tudo concluído</div><div class="go-t">Você fechou o ${DIFFS[curDiff].name}</div><div class="go-d">Tente outra dificuldade.</div>`}
+      <a class="linkbtn" href="#perfil">Ver meu perfil</a>
+    </div>
+  </div>
+  <p class="dash-note">${REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>`;
+}
+function renderProfile(){
+  const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq), done=levelsDone(), ppm=bestPPM();
+  const since=USER.created_at?new Date(USER.created_at).toLocaleDateString("pt-BR",{month:"long",year:"numeric"}):"";
+  const ladder=RANKS.map(([x,n],i)=>`<li class="${i<r.i?"past":i===r.i?"cur":""}"><span class="lad-dot"></span><b>${n}</b><small>${fmtN(x)} XP</small></li>`).join("");
+  const sys=MODULES.map(m=>{
+    const any=m.levels.filter((_,i)=>done.has(`${m.id}-${i}`)).length;
+    const per=Object.entries(DIFFS).map(([k,d])=>{const n=m.levels.filter((_,i)=>PROG[`${m.id}-${i}-${k}`]).length;return `<span class="${n===m.levels.length?"full":n?"some":""}">${d.name} ${n}/${m.levels.length}</span>`;}).join("");
+    return `<div class="sysrow"><div class="sys-top"><b>${m.name}</b><span>${any}/${m.levels.length} níveis</span></div><div class="rk-bar"><i style="width:${Math.round(any/m.levels.length*100)}%"></i></div><div class="sys-d">${per}</div></div>`;
+  }).join("");
+  $("#v-perfil").innerHTML=`
+  <section class="pf-head">
+    <div class="pf-cover"><svg id="pf-svg" viewBox="60 10 280 810" aria-hidden="true"></svg></div>
+    <div class="pf-id">
+      <div class="av av-xl">${esc(initials(displayName()))}</div>
+      <div class="pf-txt">
+        <h1>${esc(displayName())}</h1>
+        <div class="pf-sub">${esc(USER.email||"")}${since?` · aluno desde ${since}`:""}</div>
+        <div class="pf-badges"><span class="pill-rank">${r.name}</span><span class="pill-soft ${s?"hot":""}">${FLAME} ${s} dia${s===1?"":"s"} de ofensiva</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pf-stats">
+    <div class="st"><span class="ti">${PERF_ICON.xp}</span><b>${fmtN(REW.xp)}</b><span>XP total</span></div>
+    <div class="st"><span class="flame ${s?"on":""}">${FLAME}</span><b>${s}<small> · recorde ${REW.melhor}</small></b><span>dias de ofensiva</span></div>
+    <div class="st"><span class="ti">${PERF_ICON.lvl}</span><b>${done.size}<small>/${TOTAL_LEVELS}</small></b><span>níveis concluídos</span></div>
+    <div class="st"><span class="ti">${PERF_ICON.ppm}</span><b>${ppm}</b><span>melhor PPM</span></div>
+  </section>
+
+  <div class="pf-grid">
+    <section class="pf-card">
+      <div class="pf-h"><h2>Patente</h2><span class="eyebrow">${r.next!==null?`${fmtN(r.next-REW.xp)} XP para ${r.nextName}`:"Máxima"}</span></div>
+      <div class="rk-bar big"><i style="width:${Math.round(r.pct*100)}%"></i></div>
+      <ol class="ladder">${ladder}</ol>
+    </section>
+    <section class="pf-card">
+      <div class="pf-h"><h2>Progresso por sistema</h2><span class="eyebrow">${done.size} de ${TOTAL_LEVELS} níveis</span></div>
+      <div class="sysrows">${sys}</div>
+    </section>
+  </div>
+
+  <section class="pf-card">
+    <div class="pf-h"><h2>Conquistas</h2><span class="eyebrow">${got.size} de ${BADGES.length}</span></div>
+    <div class="badges">${[...BADGES].sort((a,b)=>got.has(b.id)-got.has(a.id)).map(b=>badgeTile(b,got.has(b.id))).join("")}</div>
+  </section>
+
+  <section class="pf-card">
+    <div class="pf-h"><h2>Configurações da conta</h2></div>
+    <div class="pf-forms">
+      <form id="pf-nome-form" class="pf-form" novalidate>
+        <h3>Seu nome</h3>
+        <label class="fld">Como você quer ser chamado<input id="pf-nome" maxlength="60" autocomplete="name" value="${esc((USER.user_metadata&&USER.user_metadata.nome)||"")}"></label>
+        <div class="au-msg" id="pf-nome-msg" hidden></div>
+        <button class="btn" type="submit">Salvar nome</button>
+      </form>
+      <form id="pf-senha-form" class="pf-form" novalidate>
+        <h3>Trocar senha</h3>
+        <label class="fld">Senha nova<input id="pf-s1" type="password" autocomplete="new-password"></label>
+        <label class="fld">Confirme a senha nova<input id="pf-s2" type="password" autocomplete="new-password"></label>
+        <div class="au-msg" id="pf-senha-msg" hidden></div>
+        <button class="btn" type="submit">Salvar senha</button>
+      </form>
+    </div>
+    <div class="pf-out"><div><b>Sair desta conta</b><span>Seu progresso continua salvo na nuvem.</span></div><button class="btn ghost" id="logout" type="button">Sair da conta</button></div>
+  </section>
+  <p class="foot"><a class="linkbtn" href="#jogar">← Voltar para a trilha</a></p>`;
+  const svg=$("#pf-svg"); buildView(svg,"esqueleto",false); highlight(svg,["p:cranio"]);
+  const pmsg=(id,t,ok)=>{const m=$(id);m.textContent=t;m.classList.toggle("info",!!ok);m.hidden=!t;};
+  $("#pf-nome-form").addEventListener("submit",async e=>{
+    e.preventDefault(); const nome=$("#pf-nome").value.trim();
+    if(!nome)return pmsg("#pf-nome-msg","Digite seu nome.");
+    const {data,error}=await sb.auth.updateUser({data:{nome}});
+    if(error)return pmsg("#pf-nome-msg",tr(error));
+    if(data&&data.user)USER=data.user; renderAcct(); renderProfile(); toast("Nome atualizado.");
+  });
+  $("#pf-senha-form").addEventListener("submit",async e=>{
+    e.preventDefault(); const a=$("#pf-s1").value,b=$("#pf-s2").value;
+    if(a.length<8)return pmsg("#pf-senha-msg","A senha precisa ter pelo menos 8 caracteres.");
+    if(a!==b)return pmsg("#pf-senha-msg","As duas senhas não são iguais.");
+    const {error}=await sb.auth.updateUser({password:a});
+    if(error)return pmsg("#pf-senha-msg",tr(error));
+    $("#pf-s1").value=$("#pf-s2").value=""; pmsg("#pf-senha-msg","Senha alterada.",true);
+  });
+}
+
 // ---------- Navegação ----------
-function show(v){["trilha","jogo","result","auth"].forEach(x=>$("#v-"+x).hidden=x!==v);}
-function route(){renderLevels();renderRewards();show("trilha");}
+function show(v){["trilha","jogo","result","auth","perfil"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+function route(){if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
 document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
