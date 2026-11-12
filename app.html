@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Osso a Osso</title>
+<title>Osso a Osso · Jogar</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0b121a">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Osso a Osso"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="Osso a Osso · Jogar"><meta property="og:description" content="Aprenda anatomia digitando: uma estrutura acende e você digita o nome. Crie sua conta grátis."><meta property="og:url" content="https://osso-a-osso.vercel.app/jogar"><meta property="og:image" content="https://osso-a-osso.vercel.app/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://osso-a-osso.vercel.app/og.jpg">
 <meta name="description" content="Aprenda anatomia digitando: uma estrutura acende e você digita o nome.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -1153,7 +1155,7 @@ async function saveProgress(key,rec){
 function displayName(){return (USER&&(USER.user_metadata&&USER.user_metadata.nome||USER.email))||"";}
 function renderAcct(){
   const a=$("#acct");
-  if(USER) a.innerHTML=`${FREE()?`<button class="rw-chip" type="button" data-upgrade title="XP, patentes e ofensiva são do Pro">${LOCK} Free</button>`:`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span>`}<a class="me" href="#perfil" title="Minha conta"><span class="av">${esc(initials(displayName()))}</span><span class="who">${esc(firstName())}</span></a>`;
+  if(USER) a.innerHTML=`${FREE()?`<button class="rw-chip" type="button" data-upgrade title="XP, patentes e ofensiva são do Pro">${LOCK} Grátis</button>`:`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span>`}<a class="me" href="#perfil" title="Minha conta"><span class="av">${esc(initials(displayName()))}</span><span class="who">${esc(firstName())}</span></a>`;
   else a.innerHTML=`<button class="chip" data-auth="login" type="button">Entrar</button><button class="btn sm" data-auth="signup" type="button">Criar conta</button>`;
 }
 const MODES={
@@ -1320,8 +1322,8 @@ function renderRewards(){
       <div class="dash-hi">
         <div class="eyebrow">Bem-vindo de volta</div>
         <h2>Olá, ${esc(firstName())}</h2>
-        ${FREE()?`<div class="pill-row"><span class="pill-rank">Plano Free</span><button class="pill-up" type="button" data-upgrade>Assinar o Pro</button></div>
-        <div class="rk-next">No Free você joga o Fácil no 1º nível de cada sistema. No Pro libera tudo, com XP, patentes, ofensiva e conquistas.</div>`
+        ${FREE()?`<div class="pill-row"><span class="pill-rank">Plano Grátis</span><button class="pill-up" type="button" data-upgrade>Assinar o Pro</button></div>
+        <div class="rk-next">No Grátis você joga o Fácil no 1º nível de cada sistema. No Pro libera tudo, com XP, patentes, ofensiva e conquistas.</div>`
         :`<div class="pill-row"><span class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</span>${isPro()?`<span class="pill-pro">PRO</span>`:""}</div>
         <div class="rk-bar"><i style="width:${Math.round(r.pct*100)}%"></i></div>
         <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div>`}
