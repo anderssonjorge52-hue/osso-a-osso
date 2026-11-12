@@ -259,6 +259,10 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 /* ---------- Jogo ---------- */
 .game{padding-block:6px 30px}
 .gbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.gleft{display:flex;align-items:center;gap:8px;min-width:0}
+.g-back{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px 0 9px;border-radius:999px;border:1px solid var(--line);background:var(--film-3);color:var(--bone);font:500 13px var(--f-body,inherit);cursor:pointer;transition:border-color .15s,color .15s;flex:none}
+.g-back:hover{border-color:var(--amber);color:var(--amber)}
+@media (max-width:560px){.g-back span{display:none}.g-back{padding:0;width:34px;justify-content:center}}
 .chip{font:12px var(--f-mono);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--dim);background:var(--film-2)}
 .chip b{color:var(--bone);font-weight:600}
 .stats{display:flex;gap:18px;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
@@ -406,7 +410,7 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
 
   <main id="v-jogo" class="game" hidden>
     <div class="gbar">
-      <span class="chip" id="g-chip">Coluna · Nível 1</span>
+      <span class="gleft"><button class="g-back" id="g-back" type="button" aria-label="Voltar para a trilha" title="Voltar para a trilha"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5"/></svg><span>Voltar</span></button><span class="chip" id="g-chip">Coluna · Nível 1</span></span>
       <div class="stats" aria-live="off">
         <div><b id="s-wpm">0</b><span>PPM</span></div>
         <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
@@ -1444,6 +1448,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#logout")){e.preventDefault();logout();}
 });
 $("#g-quit").addEventListener("click",()=>{G=null;route();});
+$("#g-back").addEventListener("click",()=>{clearInterval(TT);G=null;if(location.hash!=="#jogar")location.hash="#jogar";route();window.scrollTo(0,0);});
 $("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
 $("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp(false);});
 window.addEventListener("hashchange",()=>{G=null;route();});
