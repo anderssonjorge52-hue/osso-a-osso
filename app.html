@@ -286,7 +286,7 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .x3d-view{position:relative;height:min(66vh,640px);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 45%,#1d2f44,#0b121a 75%)}
 .x3d-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
 .x3d-info{border:1px solid var(--line);border-radius:14px;background:var(--film-2);padding:14px 16px;min-height:64px;text-align:center;color:var(--dim)}
-.x3d-info b{display:block;color:var(--bone);font:500 24px var(--f-display);text-transform:capitalize}.x3d-info span{font-size:14px}
+.x3d-info b{display:block;color:var(--bone);font:500 24px var(--f-display)}.x3d-info span{font-size:14px}
 .x3d-cred{font:11px var(--f-mono);color:var(--faint);text-align:center;margin-top:14px}.x3d-cred a{color:var(--dim)}
 .card3d{display:flex;align-items:center;gap:14px;margin:14px 0 0;padding:14px 16px;border:1px solid rgba(242,166,90,.4);border-radius:16px;background:linear-gradient(100deg,rgba(242,166,90,.12),rgba(18,28,39,.6));color:var(--bone);text-decoration:none}
 .card3d:hover{border-color:var(--amber)}.card3d .c3-ic{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--amber);color:#1b1208;font:800 16px var(--f-mono)}
@@ -1355,7 +1355,8 @@ function pick3d(p){
   if(!$("#v-jogo").hidden&&G){G.last3d=null;sync3d();return;} // no jogo, tocar não revela o nome
   const box=$("#x3d-info"); if(!p){box.innerHTML="Toque em um osso para ver o nome.";return;}
   let clue="";if(p.estrutura){for(const m of MODULES)for(const L of m.levels)for(const it of L.items)if(!clue&&norm(it.a)===norm(p.estrutura))clue=it.clue;}
-  box.innerHTML=`<b>${esc(p.nome)}</b>${p.estrutura&&norm(p.estrutura)!==norm(p.nome)?`<span>Faz parte de: ${esc(p.estrutura)}</span><br>`:""}${clue?`<span>${esc(clue)}</span>`:""}`;
+  const nm=p.nome.charAt(0).toUpperCase()+p.nome.slice(1), parte=p.estrutura&&!norm(p.nome).startsWith(norm(p.estrutura));
+  box.innerHTML=`<b>${esc(nm)}</b>${parte?`<span>Faz parte de: ${esc(p.estrutura)}</span><br>`:""}${clue?`<span>${esc(clue)}</span>`:""}`;
 }
 function card3dHTML(){return `<a class="card3d" href="#3d"${FREE()?" data-upgrade":""}><span class="c3-ic">3D</span><span><b>Anatomia 3D ${FREE()?`<small style="color:var(--amber)">${LOCK} Pro</small>`:"<i>NOVO</i>"}</b><small>Gire o esqueleto, veja de lado e de costas e toque num osso para ver o nome.</small></span><span class="c3-go">→</span></a>`;}
 
