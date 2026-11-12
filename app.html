@@ -1187,7 +1187,7 @@ function tr(err){
   if(c==="email_not_confirmed"||/not confirmed/i.test(m))return "Você ainda não confirmou seu e-mail. Procure o link que mandamos (olhe também no spam).";
   if(c==="user_already_exists"||/already registered/i.test(m))return "Já existe uma conta com esse e-mail. Entre ou recupere a senha.";
   if(c==="weak_password"||/password should/i.test(m))return "Senha fraca. Use pelo menos 8 caracteres, misturando letras e números.";
-  if(c==="email_address_not_authorized"||/not authorized/i.test(m))return "Não conseguimos enviar o e-mail de confirmação agora. Tente de novo mais tarde ou fale com anderssonjorge52@gmail.com.";
+  if(c==="email_address_not_authorized"||/not authorized/i.test(m))return "Não conseguimos enviar o e-mail de confirmação agora. Tente de novo mais tarde ou fale com clubedamateriaa@gmail.com.";
   if(/rate limit/i.test(c+m))return "Muitos e-mails enviados agora. Espere alguns minutos e tente de novo.";
   if(c==="same_password")return "A senha nova precisa ser diferente da atual.";
   if(/fetch|network/i.test(m))return "Sem conexão com o servidor. Confira sua internet.";
@@ -1399,7 +1399,7 @@ function renderProfile(){
         <button class="btn" type="submit">Salvar senha</button>
       </form>
     </div>
-    ${PAYWALL?`<div class="pf-out pf-plan"><div><b>${isPro()?"Plano Pro":"Plano Grátis"}</b><span>${isPro()?(SUB.status==="cancelada"?"Assinatura cancelada. Seu acesso Pro vai até ":SUB.status==="atrasada"?"Pagamento em atraso. Seu acesso Pro vai até ":"Ativo. Próxima renovação por volta de ")+new Date(SUB.pro_ate).toLocaleDateString("pt-BR")+". Para cancelar, use o link no e-mail de compra da Kiwify ou fale com "+esc("anderssonjorge52@gmail.com")+".":"Coluna vertebral completa e o nível 1 de cada sistema. Assine para liberar tudo."}</span></div>${isPro()?`<span class="pill-pro">PRO</span>`:`<button class="btn" type="button" data-upgrade>Assinar o Pro</button>`}</div>`:""}
+    ${PAYWALL?`<div class="pf-out pf-plan"><div><b>${isPro()?"Plano Pro":"Plano Grátis"}</b><span>${isPro()?(SUB.status==="cancelada"?"Assinatura cancelada. Seu acesso Pro vai até ":SUB.status==="atrasada"?"Pagamento em atraso. Seu acesso Pro vai até ":"Ativo. Próxima renovação por volta de ")+new Date(SUB.pro_ate).toLocaleDateString("pt-BR")+". Para cancelar, use o link no e-mail de compra da Kiwify ou fale com "+esc("clubedamateriaa@gmail.com")+".":"Coluna vertebral completa e o nível 1 de cada sistema. Assine para liberar tudo."}</span></div>${isPro()?`<span class="pill-pro">PRO</span>`:`<button class="btn" type="button" data-upgrade>Assinar o Pro</button>`}</div>`:""}
     <div class="pf-out"><div><b>Sair desta conta</b><span>Seu progresso continua salvo na nuvem.</span></div><button class="btn ghost" id="logout" type="button">Sair da conta</button></div>
   </section>
   <p class="foot"><a class="linkbtn" href="#jogar">← Voltar para a trilha</a></p>`;
