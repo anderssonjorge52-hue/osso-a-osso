@@ -145,6 +145,7 @@ button.mod{text-align:left;width:100%}
 .dash-hi .rk-bar{margin:4px 0 0}
 .dash-tiles{display:grid;gap:8px;align-content:center}
 .tile{display:flex;gap:12px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--film-3)}
+button.tile{font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}button.tile:hover{border-color:var(--amber)}button.tile .flame{color:var(--amber)}
 .tile b{display:block;font:600 18px var(--f-mono);line-height:1.1}.tile b small{font-size:12px;color:var(--dim);font-weight:400}
 .tile span:not(.flame):not(.ti){font-size:12px;color:var(--dim)}
 .tile .flame{width:34px;height:34px}.tile .flame svg{width:13px;height:17px}
@@ -278,6 +279,15 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .word.win .typed{color:var(--ok)}
 .clue{color:var(--dim);font-size:14px;max-width:60ch;margin:4px auto 0}
+.word .hint{color:var(--amber);opacity:.8}
+.word .ans{color:var(--miss)}
+.help{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.hbtn{font:500 12px var(--f-mono);letter-spacing:.03em;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;transition:color .15s,border-color .15s}
+.hbtn:hover:not(:disabled){color:var(--bone);border-color:var(--amber)}
+.hbtn:disabled{opacity:.4;cursor:default}
+.rw-lock{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.rw-lock p{margin:0;color:var(--dim);font-size:15px}.rw-lock p b{color:var(--amber)}
+.free-note{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 16px;color:var(--dim);font-size:14px}
 .kb{max-width:560px;margin:14px auto 0;display:grid;gap:5px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--film-2)}
 .kb .row{display:flex;gap:5px;justify-content:center}
 .kb button{flex:1 1 0;max-width:44px;height:38px;border-radius:6px;border:1px solid var(--line);background:var(--film-3);font:500 13px var(--f-mono);color:var(--dim);transition:background .15s,color .15s}
@@ -410,6 +420,7 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
       <div class="word" id="g-word" aria-live="polite"></div>
       <div class="clue" id="g-clue"></div>
       <div class="timer" id="g-timer" hidden><i></i></div>
+      <div class="help"><button class="hbtn" id="g-hint" type="button" title="Revela a próxima letra">Dica</button><button class="hbtn" id="g-show" type="button" title="Mostra o nome e passa para a próxima peça">Não sei: ver resposta</button></div>
     </div>
     <div class="kb" id="kb"></div>
     <div class="kb-note">Digite no seu teclado ou toque nas teclas. Acentos são opcionais.</div>
@@ -832,15 +843,15 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 
 // ---------- Trilha ----------
 const DIFFS={
-  facil:{name:"Fácil",ghost:1,clue:true,shape:true,timed:false,desc:"Dica, tamanho da palavra e a 1ª letra. A resposta aparece depois de 1 erro."},
-  medio:{name:"Médio",ghost:2,clue:true,shape:false,timed:false,desc:"Dica visível. A resposta aparece depois de 2 erros."},
-  dificil:{name:"Difícil",ghost:3,clue:false,shape:false,timed:true,desc:"Sem dica e com tempo por peça. Se o tempo acabar, a resposta aparece e conta como erro."}
+  facil:{name:"Fácil",clue:true,shape:true,timed:false,desc:"Pista, tamanho da palavra e a 1ª letra. Travou? Use Dica para revelar letras ou Ver resposta."},
+  medio:{name:"Médio",clue:true,shape:false,timed:false,desc:"Só a pista. A resposta nunca aparece sozinha: use Dica ou Ver resposta se travar."},
+  dificil:{name:"Difícil",clue:false,shape:false,timed:true,desc:"Sem pista e com tempo por peça. A Dica mostra a pista e depois letras. Se o tempo acabar, conta como erro."}
 };
 let curMod=modById(load().mod).id;
 let curDiff=DIFFS[load().diff]?load().diff:"medio";
 function renderLevels(){
   const M=modById(curMod), prog=PROG;
-  if(lockedDiff(curDiff))curDiff="medio";
+  if(lockedDiff(curDiff))curDiff="facil";
   $("#diff").innerHTML=Object.entries(DIFFS).map(([k,d])=>`<button type="button" data-diff="${k}" aria-pressed="${k===curDiff}">${lockedDiff(k)?LOCK+" ":""}${d.name}</button>`).join("");
   $("#diff-desc").textContent=DIFFS[curDiff].desc;
   $("#modules").innerHTML=MODULES.map(m=>{
@@ -886,14 +897,14 @@ function startTimer(){
     if(G.busy)return;
     const left=G.deadline-Date.now(), f=Math.max(0,left/G.total);
     t.firstElementChild.style.width=(f*100)+"%"; t.classList.toggle("low",f<0.3);
-    if(left<=0&&!G.timeout[G.idx]){G.timeout[G.idx]=true;G.miss[G.idx]=Math.max(G.miss[G.idx]||0,DIFFS[G.diff].ghost);sfx.wrong();renderItem();}
+    if(left<=0&&!G.timeout[G.idx])giveUp(true);
   },100);
 }
 function startLevel(modId,i){
   if(lockedLevel(modId,i)){route();openUpgrade();return;}
-  if(lockedDiff(curDiff))curDiff="medio";
+  if(lockedDiff(curDiff))curDiff="facil";
   const M=modById(modId), L=M.levels[i];
-  G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},keys:0,good:0,chars:0,t0:0,busy:false};
+  G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false};
   buildView($("#game-svg"),M.view,true);
   $("#game-svg").setAttribute("aria-label",M.view==="coluna"?"Coluna vertebral em vista lateral e anterior":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
   $("#g-chip").innerHTML=`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
@@ -901,17 +912,51 @@ function startLevel(modId,i){
 }
 function cur(){return G.items[G.idx];}
 function renderItem(){
-  const it=cur(), a=it.a, n=G.typed, m=G.miss[G.idx]||0, D=DIFFS[G.diff], reveal=m>=D.ghost;
+  const it=cur(), a=it.a, n=G.typed, D=DIFFS[G.diff];
+  const h=Math.max(n,G.hintTo[G.idx]||0), clueOn=D.clue||G.clueOn[G.idx];
   highlight($("#game-svg"),it.hl);
   const typed=esc(a.slice(0,n));
-  const shape=[...a.slice(n)].map((ch,i)=>i===0&&n===0?ch:(ch===" "?" ":"_")).join("");
-  const rest=reveal?`<span class="ghost">${esc(a.slice(n))}</span>`:(D.shape?`<span class="ghost">${esc(shape)}</span>`:"");
-  const ph=(!n&&!reveal&&!D.shape)?`<span class="ph">digite o nome</span>`:"";
-  $("#g-word").innerHTML=`<span class="typed">${typed}</span><span class="caret"></span>${rest}${ph}`;
-  $("#g-clue").textContent=(D.clue||reveal)?it.clue.replace(new RegExp(norm(a),"ig"),"___"):"Sem dica no modo difícil. Olhe a peça acesa.";
+  const hint=h>n?`<span class="hint">${esc(a.slice(n,h))}</span>`:"";
+  const shape=D.shape?[...a.slice(h)].map((ch,i)=>i===0&&h===0?ch:(ch===" "?" ":"_")).join(""):"";
+  const rest=shape?`<span class="ghost">${esc(shape)}</span>`:"";
+  const ph=(!n&&h===0&&!D.shape)?`<span class="ph">digite o nome</span>`:"";
+  $("#g-word").innerHTML=`<span class="typed">${typed}</span><span class="caret"></span>${hint}${rest}${ph}`;
+  $("#g-clue").textContent=clueOn?it.clue.replace(new RegExp(norm(a),"ig"),"___"):"Sem pista no modo difícil. Olhe a peça acesa.";
   $("#g-q").textContent=`PEÇA ${G.idx+1} DE ${G.items.length}`;
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
-  if(reveal&&n<a.length){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+  if(h>n){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+  helpState();
+}
+function helpState(){
+  const off=!G||G.busy, a=G?cur().a:"";
+  $("#g-hint").disabled=off||(G&&hintFloor()>=a.length-1&&(DIFFS[G.diff].clue||G.clueOn[G.idx]));
+  $("#g-show").disabled=off;
+}
+// Até onde a palavra já está visível (no Fácil a 1ª letra já aparece).
+function hintFloor(){return Math.max(G.typed,G.hintTo[G.idx]||0,DIFFS[G.diff].shape?1:0);}
+// Dica: no Difícil a 1ª dica mostra a pista; depois cada dica revela a próxima letra.
+function useHint(){
+  if(!G||G.busy)return; if(!G.t0)G.t0=Date.now();
+  const a=cur().a, D=DIFFS[G.diff];
+  G.hints[G.idx]=(G.hints[G.idx]||0)+1;
+  if(!D.clue&&!G.clueOn[G.idx])G.clueOn[G.idx]=true;
+  else G.hintTo[G.idx]=Math.min(a.length-1,hintFloor()+1);
+  renderItem();
+}
+// Não sei: mostra a resposta, conta como erro e passa para a próxima peça.
+function giveUp(timeout){
+  if(!G||G.busy)return; if(!G.t0)G.t0=Date.now();
+  const it=cur(), a=it.a;
+  G.busy=true; G.shown[G.idx]=true; if(timeout)G.timeout[G.idx]=true;
+  sfx.wrong(); helpState();
+  document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
+  $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,G.typed))}</span><span class="ans">${esc(a.slice(G.typed))}</span>`;
+  $("#g-clue").textContent=`${timeout?"Tempo esgotado. ":""}${it.clue}`;
+  setTimeout(nextPiece,timeout?2000:2400);
+}
+function nextPiece(){
+  G.idx++;G.typed=0;G.busy=false;updStats();
+  if(G.idx>=G.items.length){sfx.level();finish();}else{renderItem();startTimer();}
 }
 function updStats(){
   const mins=G.t0?(Date.now()-G.t0)/60000:0;
@@ -948,10 +993,8 @@ function press(k){
   else{G.miss[G.idx]=(G.miss[G.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
   renderItem();
   if(G.typed>=a.length){
-    G.busy=true; sfx.right(); if(USER)xpFloat(XP_PECA[G.diff]+(G.miss[G.idx]?0:5)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
-    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");
-      G.idx++;G.typed=0;G.busy=false;updStats();
-      if(G.idx>=G.items.length){sfx.level();finish();}else{renderItem();startTimer();}},650);
+    G.busy=true; helpState(); sfx.right(); if(USER&&!FREE())xpFloat(XP_PECA[G.diff]+(clean(G.idx)?5:0)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
+    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");nextPiece();},650);
   }
   updStats();
 }
@@ -965,23 +1008,27 @@ function finish(){
   clearInterval(TT);
   const M=modById(G.mod), L=M.levels[G.lvl], D=DIFFS[G.diff], mins=(Date.now()-G.t0)/60000;
   const wpm=Math.round(G.chars/5/Math.max(mins,0.01)), acc=Math.round(G.good/Math.max(G.keys,1)*100);
-  const firsts=G.items.filter((_,i)=>!G.miss[i]).length, first=Math.round(firsts/G.items.length*100);
+  const firsts=G.items.filter((_,i)=>clean(i)).length, first=Math.round(firsts/G.items.length*100);
+  const solved=G.items.filter((_,i)=>!G.shown[i]).length, perfect=acc===100&&G.items.every((_,i)=>!G.shown[i]&&!G.hints[i]);
   const due=new Date(Date.now()+3*864e5);
   const key=`${M.id}-${G.lvl}-${G.diff}`, prev=PROG[key];
   saveProgress(key,{wpm:Math.max(wpm,prev?prev.wpm:0),first:Math.max(first,prev?prev.first:0),due:due.toISOString()});
-  const RW=USER?applyRewards({diff:G.diff,pieces:G.items.length,firsts,acc,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&!G.miss[i])}):null;
-  const rwHtml=RW?`<section class="rw-result">
+  const run={diff:G.diff,pieces:solved,firsts,acc,perfect,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&clean(i))};
+  const RW=USER&&!FREE()?applyRewards(run):null;
+  const lockHtml=USER&&FREE()?`<section class="rw-result rw-lock"><p>${LOCK} No Pro, esta rodada valeria <b>+${fmtN(baseXP(run))} XP</b> e contaria para patentes, ofensiva e conquistas.</p><button class="btn sm" type="button" data-upgrade>Assinar o Pro</button></section>`:"";
+  const rwHtml=!RW?lockHtml:`<section class="rw-result">
       <div class="rw-gain"><span class="rw-plus">+${fmtN(RW.gained)} XP</span><ul>${RW.lines.map(([t,v])=>`<li><span>${esc(t)}</span><b>+${v}</b></li>`).join("")}</ul></div>
       ${RW.levelUp?`<div class="rw-up">Nova patente: <b>${RW.levelUp}</b></div>`:""}
       ${rankBar(RW.rank)}
       ${RW.newBadges.length?`<div class="eyebrow" style="margin:14px 0 8px">Conquista${RW.newBadges.length>1?"s":""} desbloqueada${RW.newBadges.length>1?"s":""}</div><div class="badges">${RW.newBadges.map(b=>badgeTile(b,true,true)).join("")}</div>`:""}
-    </section>`:"";
+    </section>`;
   if(RW&&(RW.levelUp||RW.newBadges.length))setTimeout(()=>sfx.badge(),650);
   const today=new Date().toLocaleDateString("pt-BR");
-  const cards=G.items.map((it,i)=>{const m=G.miss[i]||0;
-    const lab=G.timeout[i]?"tempo esgotado":m?`${m} erro${m>1?"s":""} de tecla`:"de primeira";
-    return `<div class="card"><div class="n">${esc(it.a)}</div><p>${esc(it.clue)}</p><div class="s ${m?"miss":"ok"}">${lab}</div></div>`;}).join("");
-  const goals=[[true,"Concluir o nível"],[acc===100,"Terminar sem nenhum erro de tecla"],[false,`Revisar em outro dia (revisão em ${fmtDate(due)})`]];
+  const cards=G.items.map((it,i)=>{const m=G.miss[i]||0, h=G.hints[i]||0;
+    const parts=[]; if(h)parts.push(`${h} dica${h>1?"s":""}`); if(m)parts.push(`${m} erro${m>1?"s":""} de tecla`);
+    const lab=G.timeout[i]?"tempo esgotado":G.shown[i]?"não sabia · reveja":parts.length?parts.join(" · "):"de primeira";
+    return `<div class="card"><div class="n">${esc(it.a)}</div><p>${esc(it.clue)}</p><div class="s ${clean(i)?"ok":"miss"}">${lab}</div></div>`;}).join("");
+  const goals=[[true,"Concluir o nível"],[perfect,"Terminar sem erro, sem dica e sem ver resposta"],[false,`Revisar em outro dia (revisão em ${fmtDate(due)})`]];
   $("#v-result").innerHTML=`
     <div class="eyebrow">${M.name} · ${D.name} · Nível ${G.lvl+1} concluído · ${today}</div>
     <h1>${L.win}</h1>
@@ -1000,6 +1047,9 @@ function finish(){
 
 // ---------- Recompensas: XP, patentes, ofensiva e conquistas ----------
 const XP_PECA={facil:10,medio:15,dificil:25};
+// "De primeira": sem erro de tecla, sem dica e sem ver a resposta.
+const clean=i=>!(G.miss[i]||G.hints[i]||G.shown[i]);
+const baseXP=r=>r.pieces*XP_PECA[r.diff]+r.firsts*5+(r.perfect?50:0)+(r.firstTime?100:0);
 const RANKS=[[0,"Calouro"],[300,"Monitor"],[900,"Dissecador"],[2000,"Anatomista"],[4000,"Professor"],[8000,"Mestre do Corpo"]];
 const BADGES=[
   {id:"primeiro",n:"Primeiro osso",d:"Conclua seu primeiro nível."},
@@ -1039,9 +1089,9 @@ async function saveRewards(){
 }
 function applyRewards(run){
   const D=DIFFS[run.diff], lines=[];
-  lines.push([`${run.pieces} peças no ${D.name}`,run.pieces*XP_PECA[run.diff]]);
+  if(run.pieces)lines.push([`${run.pieces} peça${run.pieces>1?"s":""} no ${D.name}`,run.pieces*XP_PECA[run.diff]]);
   if(run.firsts)lines.push([`${run.firsts} de primeira`,run.firsts*5]);
-  if(run.acc===100)lines.push(["Nível sem nenhum erro",50]);
+  if(run.perfect)lines.push(["Nível sem nenhum erro",50]);
   if(run.firstTime)lines.push(["Nível concluído pela primeira vez",100]);
   if(REW.ultimo!==today()){
     REW.ofensiva=REW.ultimo===yesterday()?REW.ofensiva+1:1; REW.ultimo=today(); REW.melhor=Math.max(REW.melhor,REW.ofensiva);
@@ -1052,7 +1102,7 @@ function applyRewards(run){
   const has=new Set(REW.conq), neu=[], add=id=>{if(!has.has(id)){has.add(id);neu.push(id);}};
   const done=new Set(Object.keys(PROG).map(k=>k.replace(/-[a-z]+$/,"")));
   add("primeiro");
-  if(run.acc===100)add("semerro");
+  if(run.perfect)add("semerro");
   if(run.wpm>=40)add("rapido");
   if(run.diff==="dificil")add("dificil");
   if(run.ecmFirst)add("ecm");
@@ -1099,7 +1149,7 @@ async function saveProgress(key,rec){
 function displayName(){return (USER&&(USER.user_metadata&&USER.user_metadata.nome||USER.email))||"";}
 function renderAcct(){
   const a=$("#acct");
-  if(USER) a.innerHTML=`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span><a class="me" href="#perfil" title="Minha conta"><span class="av">${esc(initials(displayName()))}</span><span class="who">${esc(firstName())}</span></a>`;
+  if(USER) a.innerHTML=`${FREE()?`<button class="rw-chip" type="button" data-upgrade title="XP, patentes e ofensiva são do Pro">${LOCK} Free</button>`:`<span class="rw-chip ${streakNow()?"hot":""}" title="Ofensiva: dias seguidos estudando">${FLAME}${streakNow()}</span><span class="rw-chip" title="${rankOf(REW.xp).name}">${fmtN(REW.xp)} XP</span>`}<a class="me" href="#perfil" title="Minha conta"><span class="av">${esc(initials(displayName()))}</span><span class="who">${esc(firstName())}</span></a>`;
   else a.innerHTML=`<button class="chip" data-auth="login" type="button">Entrar</button><button class="btn sm" data-auth="signup" type="button">Criar conta</button>`;
 }
 const MODES={
@@ -1199,8 +1249,10 @@ async function initAuth(){
 let SUB=null, pendingUpgrade=false, upgradeAberto=false;
 const PAYWALL=!!(CFG.KIWIFY_MENSAL&&CFG.KIWIFY_ANUAL);
 const isPro=()=>!!(SUB&&SUB.status!=="reembolsada"&&SUB.pro_ate&&new Date(SUB.pro_ate)>new Date());
-const lockedLevel=(modId,i)=>PAYWALL&&!isPro()&&modId!=="coluna"&&i>0;
-const lockedDiff=k=>PAYWALL&&!isPro()&&k==="dificil";
+// Plano Free: só o Fácil, só o 1º nível de cada sistema, sem XP/patentes/ofensiva/conquistas.
+const FREE=()=>PAYWALL&&!isPro();
+const lockedLevel=(modId,i)=>FREE()&&i>0;
+const lockedDiff=k=>FREE()&&k!=="facil";
 const LOCK=`<svg viewBox="0 0 14 16" width="11" height="13" aria-hidden="true"><rect x="1.5" y="7" width="11" height="8" rx="2" fill="currentColor"/><path d="M4 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
 async function loadSub(){
   SUB=null; if(!sb||!USER)return;
@@ -1216,8 +1268,9 @@ function openUpgrade(){
     <span class="eyebrow">Osso a Osso Pro</span>
     <h2 id="up-t">Libere o corpo inteiro</h2>
     <ul class="up-list">
-      <li>Todos os níveis de esqueleto, órgãos e músculos</li>
-      <li>Modo Difícil, sem dica e com cronômetro</li>
+      <li>Todos os níveis de esqueleto, órgãos, músculos e coluna</li>
+      <li>Modos Médio e Difícil, com cronômetro</li>
+      <li>XP, patentes, ofensiva e conquistas</li>
       <li>Novos módulos sem custo extra</li>
     </ul>
     <div class="up-plans">
@@ -1263,15 +1316,17 @@ function renderRewards(){
       <div class="dash-hi">
         <div class="eyebrow">Bem-vindo de volta</div>
         <h2>Olá, ${esc(firstName())}</h2>
-        <div class="pill-row"><span class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</span>${isPro()?`<span class="pill-pro">PRO</span>`:PAYWALL?`<button class="pill-up" type="button" data-upgrade>Assinar o Pro</button>`:""}</div>
+        ${FREE()?`<div class="pill-row"><span class="pill-rank">Plano Free</span><button class="pill-up" type="button" data-upgrade>Assinar o Pro</button></div>
+        <div class="rk-next">No Free você joga o Fácil no 1º nível de cada sistema. No Pro libera tudo, com XP, patentes, ofensiva e conquistas.</div>`
+        :`<div class="pill-row"><span class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</span>${isPro()?`<span class="pill-pro">PRO</span>`:""}</div>
         <div class="rk-bar"><i style="width:${Math.round(r.pct*100)}%"></i></div>
-        <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div>
+        <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div>`}
       </div>
     </div>
     <div class="dash-tiles">
-      <div class="tile"><span class="flame ${s?"on":""}">${FLAME}</span><div><b>${s}</b><span>dia${s===1?"":"s"} de ofensiva</span></div></div>
+      ${FREE()?`<button class="tile" type="button" data-upgrade><span class="flame">${LOCK}</span><div><b>Pro</b><span>ofensiva diária</span></div></button>`:`<div class="tile"><span class="flame ${s?"on":""}">${FLAME}</span><div><b>${s}</b><span>dia${s===1?"":"s"} de ofensiva</span></div></div>`}
       <div class="tile"><span class="ti">${PERF_ICON.lvl}</span><div><b>${done.size}<small>/${TOTAL_LEVELS}</small></b><span>níveis concluídos</span></div></div>
-      <div class="tile"><span class="ti">${PERF_ICON.xp}</span><div><b>${got.size}<small>/${BADGES.length}</small></b><span>conquistas</span></div></div>
+      ${FREE()?`<button class="tile" type="button" data-upgrade><span class="ti">${LOCK}</span><div><b>${BADGES.length}</b><span>conquistas no Pro</span></div></button>`:`<div class="tile"><span class="ti">${PERF_ICON.xp}</span><div><b>${got.size}<small>/${BADGES.length}</small></b><span>conquistas</span></div></div>`}
     </div>
     <div class="dash-go">
       ${nx?`<div class="eyebrow">Continuar</div><div class="go-t">${nx.m.name} · Nível ${nx.i+1}</div><div class="go-d">${esc(nx.m.levels[nx.i].title)} · ${DIFFS[curDiff].name}</div><button class="btn" type="button" data-start="${nx.m.id}:${nx.i}">Jogar agora</button>`
@@ -1279,7 +1334,7 @@ function renderRewards(){
       <a class="linkbtn" href="#perfil">Ver meu perfil</a>
     </div>
   </div>
-  <p class="dash-note">${REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>`;
+  <p class="dash-note">${FREE()?"Assine o Pro para liberar o Médio, o Difícil e todos os níveis.":REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>`;
 }
 function renderProfile(){
   const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq), done=levelsDone(), ppm=bestPPM();
@@ -1389,6 +1444,8 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#logout")){e.preventDefault();logout();}
 });
 $("#g-quit").addEventListener("click",()=>{G=null;route();});
+$("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
+$("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp(false);});
 window.addEventListener("hashchange",()=>{G=null;route();});
 
 // hero animado

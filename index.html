@@ -155,7 +155,10 @@ button.chip{cursor:pointer}
 .prompt{text-align:center;position:relative;min-height:104px}
 .q{font:11.5px var(--f-mono);color:var(--dim);letter-spacing:.1em}
 .word{font-family:var(--f-display);font-size:clamp(30px,4.6vw,46px);line-height:1.15;min-height:1.2em;white-space:pre}
-.word .ghost{color:var(--faint)} .word .ph{color:var(--faint);font-style:italic;font-size:.55em}
+.word .ghost{color:var(--faint)} .word .hint{color:var(--amber);opacity:.8} .word .ans{color:#e8636d}
+.help{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.hbtn{font:500 12px var(--f-mono);color:var(--dim);background:transparent;border:1px solid var(--line-2);border-radius:999px;padding:7px 14px;cursor:pointer}
+.hbtn:hover:not(:disabled){color:var(--bone);border-color:var(--amber)} .hbtn:disabled{opacity:.4;cursor:default} .word .ph{color:var(--faint);font-style:italic;font-size:.55em}
 .word.win .typed{color:var(--ok)}
 .word.shake{animation:shake .28s}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
@@ -466,6 +469,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
             <div class="q" id="g-q">PEÇA 1 DE 6</div>
             <div class="word" id="g-word" aria-live="polite"></div>
             <div class="clue" id="g-clue"></div>
+            <div class="help"><button class="hbtn" id="g-hint" type="button">Dica</button><button class="hbtn" id="g-show" type="button">Não sei: ver resposta</button></div>
           </div>
           <div class="kb" id="kb"></div>
           <div class="overlay" id="ov">
@@ -574,11 +578,11 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
           <div class="amount"><span class="cur">R$</span><b>0</b><small>para sempre</small></div>
           <div class="sub-amt"></div>
           <ul>
-            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Coluna vertebral completa</li>
             <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Nível 1 de cada sistema</li>
-            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Modos Fácil e Médio</li>
-            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>XP e ofensiva</li>
-            <li class="off"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9h8"/></svg>Modo Difícil e todas as conquistas</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Modo Fácil</li>
+            <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Progresso salvo na conta</li>
+            <li class="off"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9h8"/></svg>Modos Médio e Difícil</li>
+            <li class="off"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9h8"/></svg>XP, patentes, ofensiva e conquistas</li>
           </ul>
           <a class="btn btn-ghost" href="app.html#criar-conta">Criar conta grátis</a>
         </article>
@@ -1124,7 +1128,7 @@ heroLoop();
 
 // ---------- Demonstração jogável ----------
 const DEMO_N=6;
-const D={mod:"esqueleto",items:[],idx:0,typed:0,miss:{},keys:0,good:0,chars:0,t0:0,busy:false,active:false};
+const D={mod:"esqueleto",items:[],idx:0,typed:0,miss:{},hintTo:{},hints:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,active:false};
 const gsvg=$("#game-svg");
 $("#sys").innerHTML=MODULES.map(m=>`<button type="button" data-sys="${m.id}" aria-pressed="${m.id===D.mod}">${m.name}<small>${allItems(m).length} estruturas</small></button>`).join("");
 (()=>{const kb=$("#kb");
@@ -1141,21 +1145,36 @@ function setupSys(id){
 }
 function startDemo(){
   const M=modById(D.mod);
-  Object.assign(D,{items:shuffle(allItems(M)).slice(0,DEMO_N),idx:0,typed:0,miss:{},keys:0,good:0,chars:0,t0:0,busy:false,active:true});
+  Object.assign(D,{items:shuffle(allItems(M)).slice(0,DEMO_N),idx:0,typed:0,miss:{},hintTo:{},hints:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,active:true});
   $("#ov").hidden=true; ac(); renderDemo(); updDemo();
 }
 function cur(){return D.items[D.idx];}
 function renderDemo(){
-  const it=cur(), a=it.a, n=D.typed, m=D.miss[D.idx]||0, reveal=m>=2;
+  const it=cur(), a=it.a, n=D.typed, h=Math.max(n,D.hintTo[D.idx]||0);
   highlight(gsvg,it.hl);
-  const rest=reveal?`<span class="ghost">${esc(a.slice(n))}</span>`:"";
-  const ph=(!n&&!reveal)?`<span class="ph">digite o nome</span>`:"";
+  const rest=h>n?`<span class="hint">${esc(a.slice(n,h))}</span>`:"";
+  const ph=(!n&&h===0)?`<span class="ph">digite o nome</span>`:"";
   $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,n))}</span><span class="caret"></span>${rest}${ph}`;
   $("#g-clue").textContent=it.clue.replace(new RegExp(norm(a),"ig"),"___");
   $("#g-q").textContent=`PEÇA ${D.idx+1} DE ${D.items.length}`;
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
-  if(reveal&&n<a.length){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+  if(h>n){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+  helpState();
 }
+function helpState(){const off=!D.active||D.busy;$("#g-hint").disabled=off||(D.active&&Math.max(D.typed,D.hintTo[D.idx]||0)>=cur().a.length-1);$("#g-show").disabled=off;}
+function useHint(){if(!D.active||D.busy)return;if(!D.t0)D.t0=Date.now();const a=cur().a;D.hints[D.idx]=(D.hints[D.idx]||0)+1;D.hintTo[D.idx]=Math.min(a.length-1,Math.max(D.typed,D.hintTo[D.idx]||0)+1);renderDemo();}
+function giveUp(){
+  if(!D.active||D.busy)return;if(!D.t0)D.t0=Date.now();
+  const it=cur(),a=it.a;D.busy=true;D.shown[D.idx]=true;sfx.wrong();helpState();
+  document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
+  $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,D.typed))}</span><span class="ans">${esc(a.slice(D.typed))}</span>`;
+  $("#g-clue").textContent=it.clue;
+  setTimeout(nextDemo,2400);
+}
+function nextDemo(){D.idx++;D.typed=0;D.busy=false;updDemo();if(D.idx>=D.items.length){sfx.level();finishDemo();}else renderDemo();}
+const cleanD=i=>!(D.miss[i]||D.hints[i]||D.shown[i]);
+$("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
+$("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp();});
 function updDemo(){
   const mins=D.t0?(Date.now()-D.t0)/60000:0;
   $("#s-wpm").textContent=mins>0.03?Math.round(D.chars/5/mins):0;
@@ -1170,24 +1189,23 @@ function press(k){
   else{D.miss[D.idx]=(D.miss[D.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
   renderDemo();
   if(D.typed>=a.length){
-    D.busy=true; sfx.right(); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
-    const pop=document.createElement("div");pop.className="xp-pop";pop.style.top="10px";pop.textContent=`+${15+(D.miss[D.idx]?0:5)} XP`;document.querySelector("#game .prompt").appendChild(pop);setTimeout(()=>pop.remove(),1000);
+    D.busy=true; helpState(); sfx.right(); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
+    const pop=document.createElement("div");pop.className="xp-pop";pop.style.top="10px";pop.textContent=`+${15+(cleanD(D.idx)?5:0)} XP`;document.querySelector("#game .prompt").appendChild(pop);setTimeout(()=>pop.remove(),1000);
     setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");
-      D.idx++;D.typed=0;D.busy=false;updDemo();
-      if(D.idx>=D.items.length){sfx.level();finishDemo();}else renderDemo();},650);
+      nextDemo();},650);
   }
   updDemo();
 }
 function finishDemo(){
   D.active=false;
   const mins=(Date.now()-D.t0)/60000, wpm=Math.round(D.chars/5/Math.max(mins,.01)), acc=Math.round(D.good/Math.max(D.keys,1)*100);
-  const firsts=D.items.filter((_,i)=>!D.miss[i]).length, xp=D.items.length*15+firsts*5+(acc===100?50:0)+100+25;
+  const firsts=D.items.filter((_,i)=>cleanD(i)).length, xp=D.items.filter((_,i)=>!D.shown[i]).length*15+firsts*5+(acc===100?50:0)+100+25;
   const M=modById(D.mod), next=MODULES[(MODULES.indexOf(M)+1)%MODULES.length];
   $("#ov").innerHTML=`<div class="ov-card">
     <span class="eyebrow">Demonstração concluída</span>
     <h3>${firsts===D.items.length?"Perfeito. Todas de primeira.":firsts>=D.items.length/2?"Mandou bem.":"Começo é assim mesmo."}</h3>
     <div class="res-stats"><div><b>${wpm}</b><span>PPM</span></div><div><b>${acc}%</b><span>PRECISÃO</span></div><div><b>${firsts}/${D.items.length}</b><span>DE PRIMEIRA</span></div></div>
-    <p class="res-xp">Com uma conta, essa rodada valeria +${xp} XP.</p>
+    <p class="res-xp">No Pro, essa rodada valeria +${xp} XP.</p>
     <div class="cta-row" style="justify-content:center">
       <a class="btn btn-primary" href="app.html#criar-conta">Criar conta e continuar</a>
       <button class="btn btn-ghost" type="button" data-sys-go="${next.id}">Jogar ${next.name}</button>
