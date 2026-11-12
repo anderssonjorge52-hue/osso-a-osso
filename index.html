@@ -466,7 +466,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
       <div class="head rv">
         <span class="eyebrow">Demonstração</span>
         <h2>Jogue agora. <em>Sem cadastro.</em></h2>
-        <p class="lead">Escolha um sistema e responda 6 peças. É o mesmo jogo da plataforma, no modo Médio.</p>
+        <p class="lead">Escolha um sistema e responda 6 peças. Aqui o nome já aparece para você digitar por cima. Na plataforma, você digita de memória.</p>
       </div>
       <div class="demo-wrap">
         <aside class="demo-side rv">
@@ -475,7 +475,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
         </aside>
         <div class="game rv d1" id="game">
           <div class="g-top">
-            <span class="chip" id="g-chip">Esqueleto · Médio</span>
+            <span class="chip" id="g-chip">Esqueleto · Demonstração</span>
             <div class="stats">
               <div><b id="s-wpm">0</b><span>PPM</span></div>
               <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
@@ -488,14 +488,13 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
             <div class="q" id="g-q">PEÇA 1 DE 6</div>
             <div class="word" id="g-word" aria-live="polite"></div>
             <div class="clue" id="g-clue"></div>
-            <div class="help"><button class="hbtn" id="g-hint" type="button">Dica</button><button class="hbtn" id="g-show" type="button">Não sei: ver resposta</button></div>
           </div>
           <div class="kb" id="kb"></div>
           <div class="overlay" id="ov">
             <div class="ov-card">
               <span class="eyebrow">Pronto para jogar</span>
               <h3>Uma peça vai acender.<br>Digite o nome dela.</h3>
-              <p>6 peças · modo Médio · leva menos de 2 minutos</p>
+              <p>6 peças · com as respostas na tela · leva menos de 2 minutos</p>
               <button class="btn btn-primary" id="ov-start" type="button">Começar a demonstração</button>
             </div>
           </div>
@@ -1160,7 +1159,7 @@ function setupSys(id){
   D.mod=id; const M=modById(id);
   document.querySelectorAll("#sys button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.sys===id)));
   buildView(gsvg,M.view,true);
-  $("#g-chip").textContent=`${M.name} · Médio`;
+  $("#g-chip").textContent=`${M.name} · Demonstração`;
 }
 function startDemo(){
   const M=modById(D.mod);
@@ -1169,31 +1168,19 @@ function startDemo(){
 }
 function cur(){return D.items[D.idx];}
 function renderDemo(){
-  const it=cur(), a=it.a, n=D.typed, h=Math.max(n,D.hintTo[D.idx]||0);
+  // Demonstração: a resposta já aparece; a pessoa só digita por cima.
+  const it=cur(), a=it.a, n=D.typed;
   highlight(gsvg,it.hl);
-  const rest=h>n?`<span class="hint">${esc(a.slice(n,h))}</span>`:"";
-  const ph=(!n&&h===0)?`<span class="ph">digite o nome</span>`:"";
+  const rest=`<span class="ghost">${esc(a.slice(n))}</span>`, ph="";
   $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,n))}</span><span class="caret"></span>${rest}${ph}`;
   $("#g-clue").textContent=it.clue.replace(new RegExp(norm(a),"ig"),"___");
   $("#g-q").textContent=`PEÇA ${D.idx+1} DE ${D.items.length}`;
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
-  if(h>n){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
-  helpState();
-}
-function helpState(){const off=!D.active||D.busy;$("#g-hint").disabled=off||(D.active&&Math.max(D.typed,D.hintTo[D.idx]||0)>=cur().a.length-1);$("#g-show").disabled=off;}
-function useHint(){if(!D.active||D.busy)return;if(!D.t0)D.t0=Date.now();const a=cur().a;D.hints[D.idx]=(D.hints[D.idx]||0)+1;D.hintTo[D.idx]=Math.min(a.length-1,Math.max(D.typed,D.hintTo[D.idx]||0)+1);renderDemo();}
-function giveUp(){
-  if(!D.active||D.busy)return;if(!D.t0)D.t0=Date.now();
-  const it=cur(),a=it.a;D.busy=true;D.shown[D.idx]=true;sfx.wrong();helpState();
-  document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
-  $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,D.typed))}</span><span class="ans">${esc(a.slice(D.typed))}</span>`;
-  $("#g-clue").textContent=it.clue;
-  setTimeout(nextDemo,2400);
+  if(n<a.length){const b=document.querySelector(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
 }
 function nextDemo(){D.idx++;D.typed=0;D.busy=false;updDemo();if(D.idx>=D.items.length){sfx.level();finishDemo();}else renderDemo();}
 const cleanD=i=>!(D.miss[i]||D.hints[i]||D.shown[i]);
-$("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
-$("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp();});
+
 function updDemo(){
   const mins=D.t0?(Date.now()-D.t0)/60000:0;
   $("#s-wpm").textContent=mins>0.03?Math.round(D.chars/5/mins):0;
@@ -1208,7 +1195,7 @@ function press(k){
   else{D.miss[D.idx]=(D.miss[D.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
   renderDemo();
   if(D.typed>=a.length){
-    D.busy=true; helpState(); sfx.right(); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
+    D.busy=true; sfx.right(); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
     const pop=document.createElement("div");pop.className="xp-pop";pop.style.top="10px";pop.textContent=`+${15+(cleanD(D.idx)?5:0)} XP`;document.querySelector("#game .prompt").appendChild(pop);setTimeout(()=>pop.remove(),1000);
     setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");
       nextDemo();},650);
