@@ -274,24 +274,6 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .stats b{font-size:18px;font-weight:600}
 .stats span{font-size:11px;color:var(--dim);letter-spacing:.06em}
 .stage{position:relative;margin-top:6px}
-#stage3d{position:absolute;inset:0;display:none}
-.stage.is3d #game-svg{visibility:hidden}.stage.is3d #stage3d{display:block}
-.load3d{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font:12px var(--f-mono);letter-spacing:.06em;text-align:center;padding:20px}
-.v3btns{position:absolute;right:8px;bottom:8px;display:none;gap:5px;z-index:2}.stage.is3d .v3btns{display:flex}
-.v3btns button{font:500 11px var(--f-mono);color:var(--dim);background:rgba(11,18,26,.78);border:1px solid var(--line);border-radius:999px;padding:5px 10px;cursor:pointer}
-.v3btns button:hover{color:var(--amber);border-color:var(--amber)}
-.chip.g3d{font-weight:700;letter-spacing:.04em}.chip.g3d.on{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,.1)}
-.x3d{max-width:1000px;margin:0 auto;padding:18px 20px 40px}
-.x3d-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}.x3d-head h1{font:500 clamp(30px,5vw,44px)/1.05 var(--f-display);margin:4px 0 6px}.x3d-head p{margin:0;color:var(--dim);font-size:15px}
-.x3d-view{position:relative;height:min(66vh,640px);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 45%,#1d2f44,#0b121a 75%)}
-.x3d-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}
-.x3d-info{border:1px solid var(--line);border-radius:14px;background:var(--film-2);padding:14px 16px;min-height:64px;text-align:center;color:var(--dim)}
-.x3d-info b{display:block;color:var(--bone);font:500 24px var(--f-display)}.x3d-info span{font-size:14px}
-.x3d-cred{font:11px var(--f-mono);color:var(--faint);text-align:center;margin-top:14px}.x3d-cred a{color:var(--dim)}
-.card3d{display:flex;align-items:center;gap:14px;margin:14px 0 0;padding:14px 16px;border:1px solid rgba(242,166,90,.4);border-radius:16px;background:linear-gradient(100deg,rgba(242,166,90,.12),rgba(18,28,39,.6));color:var(--bone);text-decoration:none}
-.card3d:hover{border-color:var(--amber)}.card3d .c3-ic{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--amber);color:#1b1208;font:800 16px var(--f-mono)}
-.card3d b{display:block;font-size:16px}.card3d b i{font-style:normal;font:700 10px var(--f-mono);letter-spacing:.1em;color:#1b1208;background:var(--amber);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:2px}
-.card3d small{color:var(--dim);font-size:13.5px}.card3d .c3-go{margin-left:auto;color:var(--amber);font-size:20px}
 .stage svg{display:block;width:100%;height:min(54vh,520px)}
 .prompt{text-align:center;margin-top:4px;min-height:118px}
 .prompt .q{font:12px var(--f-mono);color:var(--dim);letter-spacing:.08em}
@@ -441,9 +423,9 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
         <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
         <div><b id="s-prog">0/0</b><span>PEÇAS</span></div>
       </div>
-      <span style="display:flex;gap:6px"><button class="chip g3d" id="g-3d" type="button" title="Ver em 3D (Pro)" hidden>3D</button><button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button><button class="chip" id="g-quit" type="button">Sair</button></span>
+      <span style="display:flex;gap:6px"><button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button><button class="chip" id="g-quit" type="button">Sair</button></span>
     </div>
-    <div class="stage" id="stage"><svg id="game-svg" viewBox="0 20 520 700" aria-label="Coluna vertebral em vista lateral e anterior"></svg><div id="stage3d"><div class="load3d">Carregando o esqueleto 3D…</div></div><div class="v3btns"><button type="button" data-v3="frente">Frente</button><button type="button" data-v3="lado">Lado</button><button type="button" data-v3="costas">Costas</button></div></div>
+    <div class="stage" id="stage"><svg id="game-svg" viewBox="0 20 520 700" aria-label="Coluna vertebral em vista lateral e anterior"></svg></div>
     <div class="prompt">
       <div class="q" id="g-q">QUE PEÇA É ESSA?</div>
       <div class="word" id="g-word" aria-live="polite"></div>
@@ -495,15 +477,6 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
    </div>
   </main>
   <main id="v-perfil" class="perfil" hidden></main>
-
-  <main id="v-3d" class="x3d" hidden>
-    <div class="x3d-head"><a class="g-back" href="#jogar" aria-label="Voltar para a trilha"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5"/></svg><span>Voltar</span></a>
-      <div><div class="eyebrow">Pro · Novo</div><h1>Anatomia 3D</h1><p>Arraste para girar, use dois dedos (ou a rodinha) para aproximar e toque num osso para ver o nome.</p></div></div>
-    <div class="x3d-view" id="x3d-view"><div class="load3d">Carregando o esqueleto 3D…</div></div>
-    <div class="x3d-bar"><button class="chip" type="button" data-x3="frente">Frente</button><button class="chip" type="button" data-x3="lado">Lado</button><button class="chip" type="button" data-x3="costas">Costas</button><button class="chip" type="button" data-x3="centro">Centralizar</button></div>
-    <div class="x3d-info" id="x3d-info">Toque em um osso para ver o nome.</div>
-    <p class="x3d-cred">Modelos 3D: BodyParts3D © DBCLS, licença CC BY-SA · <a href="3d/LICENCA-MODELOS.txt" target="_blank" rel="noopener">créditos e licença</a></p>
-  </main>
   <div class="upgrade" id="upgrade" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
@@ -511,7 +484,6 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
-<script type="importmap">{"imports":{"three":"./3d/lib/three.module.min.js"}}</script>
 <script src="config.js"></script>
 <script>
 (() => {
@@ -965,7 +937,6 @@ function renderItem(){
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
   if(h>n){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
   helpState();
-  sync3d();
 }
 function helpState(){
   const off=!G||G.busy, a=G?cur().a:"";
@@ -1033,7 +1004,7 @@ function press(k){
   else{G.miss[G.idx]=(G.miss[G.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
   renderItem();
   if(G.typed>=a.length){
-    G.busy=true; helpState(); sfx.right(); if(USER&&!FREE())xpFloat(XP_PECA[G.diff]+(clean(G.idx)?5:0)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash"); sync3d("win");
+    G.busy=true; helpState(); sfx.right(); if(USER&&!FREE())xpFloat(XP_PECA[G.diff]+(clean(G.idx)?5:0)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
     setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");nextPiece();},650);
   }
   updStats();
@@ -1310,7 +1281,6 @@ function openUpgrade(){
     <ul class="up-list">
       <li>Todos os níveis de esqueleto, órgãos, músculos e coluna</li>
       <li>Modos Médio e Difícil, com cronômetro</li>
-      <li>Esqueleto e coluna em 3D: gire, aproxime e veja de costas</li>
       <li>XP, patentes, ofensiva e conquistas</li>
       <li>Novos módulos sem custo extra</li>
     </ul>
@@ -1330,35 +1300,6 @@ async function checkSub(avisar){
   else if(avisar)toast(isPro()?"Seu Pro já está ativo.":"Ainda não encontramos o pagamento. Pode levar alguns minutos; confira se usou o mesmo e-mail.");
 }
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&upgradeAberto&&USER)checkSub(false);});
-
-// ---------- Anatomia 3D (só Pro) ----------
-const MOD3D=new Set(["esqueleto","coluna"]);
-let V3=null,V3P=null,M3D=null;
-const want3d=()=>load().modo3d!==false;
-const active3d=()=>!!(G&&!FREE()&&want3d()&&MOD3D.has(G.mod));
-function get3D(){
-  if(!V3P)V3P=import("./3d/osso3d.js").then(async m=>{M3D=m;V3=await m.criar($("#stage3d"),{onPick:pick3d});document.querySelectorAll(".load3d").forEach(e=>e.remove());return V3;})
-    .catch(e=>{console.error(e);V3P=null;toast("Não foi possível abrir o 3D neste aparelho.");throw e;});
-  return V3P;
-}
-function sync3d(estado){
-  if(!G)return; const st=$("#stage"),btn=$("#g-3d"),it=cur();
-  btn.hidden=!MOD3D.has(G.mod); btn.classList.toggle("on",active3d()); btn.setAttribute("aria-pressed",String(active3d()));
-  let on=active3d(); if(on&&M3D&&!M3D.tem3D(it.a))on=false;
-  st.classList.toggle("is3d",on); if(!on)return;
-  const chave=G.idx+":"+(estado||"on"); if(G.last3d===chave&&V3)return; G.last3d=chave;
-  get3D().then(v=>{if(!G||cur()!==it)return;if(!M3D.tem3D(it.a)){st.classList.remove("is3d");return;}
-    v.anexar($("#stage3d"));v.destacar(it.a,estado||"on",{enquadrar:estado!=="win"});}).catch(()=>st.classList.remove("is3d"));
-}
-function abrir3D(){get3D().then(v=>{v.anexar($("#x3d-view"));v.limpar();v.vista("frente");$("#x3d-info").innerHTML="Toque em um osso para ver o nome.";}).catch(()=>{});}
-function pick3d(p){
-  if(!$("#v-jogo").hidden&&G){G.last3d=null;sync3d();return;} // no jogo, tocar não revela o nome
-  const box=$("#x3d-info"); if(!p){box.innerHTML="Toque em um osso para ver o nome.";return;}
-  let clue="";if(p.estrutura){for(const m of MODULES)for(const L of m.levels)for(const it of L.items)if(!clue&&norm(it.a)===norm(p.estrutura))clue=it.clue;}
-  const nm=p.nome.charAt(0).toUpperCase()+p.nome.slice(1), parte=p.estrutura&&!norm(p.nome).startsWith(norm(p.estrutura));
-  box.innerHTML=`<b>${esc(nm)}</b>${parte?`<span>Faz parte de: ${esc(p.estrutura)}</span><br>`:""}${clue?`<span>${esc(clue)}</span>`:""}`;
-}
-function card3dHTML(){return `<a class="card3d" href="#3d"${FREE()?" data-upgrade":""}><span class="c3-ic">3D</span><span><b>Anatomia 3D ${FREE()?`<small style="color:var(--amber)">${LOCK} Pro</small>`:"<i>NOVO</i>"}</b><small>Gire o esqueleto, veja de lado e de costas e toque num osso para ver o nome.</small></span><span class="c3-go">→</span></a>`;}
 
 // ---------- Perfil ----------
 const initials=n=>(n||"?").replace(/@.*/,"").split(/[\s._-]+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
@@ -1404,7 +1345,6 @@ function renderRewards(){
       <a class="linkbtn" href="#perfil">Ver meu perfil</a>
     </div>
   </div>
-  ${card3dHTML()}
   <p class="dash-note">${FREE()?"Assine o Pro para liberar o Médio, o Difícil e todos os níveis.":REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>`;
 }
 function renderProfile(){
@@ -1494,9 +1434,8 @@ function renderProfile(){
 }
 
 // ---------- Navegação ----------
-function show(v){["trilha","jogo","result","auth","perfil","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);}
-function route(){if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}
-  if(location.hash==="#3d"&&USER){if(FREE()){renderLevels();renderRewards();show("trilha");openUpgrade();return;}show("3d");window.scrollTo(0,0);abrir3D();return;}renderLevels();renderRewards();show("trilha");}
+function show(v){["trilha","jogo","result","auth","perfil"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+function route(){if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
 document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
@@ -1516,9 +1455,6 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#logout")){e.preventDefault();logout();}
 });
 $("#g-quit").addEventListener("click",()=>{G=null;route();});
-$("#g-3d").addEventListener("click",()=>{if(FREE()){openUpgrade();return;}const st=load();st.modo3d=!want3d();save(st);if(G)G.last3d=null;sync3d();});
-document.addEventListener("click",e=>{const b=e.target.closest("[data-v3]");if(b&&V3){V3.vista(b.dataset.v3);return;}
-  const x=e.target.closest("[data-x3]");if(x&&V3){x.dataset.x3==="centro"?(V3.limpar(),V3.centralizar(),$("#x3d-info").innerHTML="Toque em um osso para ver o nome."):V3.vista(x.dataset.x3);}});
 $("#g-back").addEventListener("click",()=>{clearInterval(TT);G=null;if(location.hash!=="#jogar")location.hash="#jogar";route();window.scrollTo(0,0);});
 $("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
 $("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp(false);});
