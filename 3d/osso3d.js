@@ -121,7 +121,7 @@ export async function criar(container, { onPick, onReady } = {}) {
     if (anim) { const u = Math.min(1, (performance.now() - anim.ini) / anim.ms), e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
       camera.position.lerpVectors(anim.p0, anim.p1, e); controls.target.lerpVectors(anim.t0, anim.t1, e); if (u >= 1) anim = null; dirty = true; }
     if (controls.update()) dirty = true;
-    if (dirty && host && host.offsetParent !== null) { renderer.render(scene, camera); dirty = false; }
+    if (dirty && host && host.isConnected && host.getClientRects().length) { renderer.render(scene, camera); dirty = false; }
   })();
 
   const api = {
