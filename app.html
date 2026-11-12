@@ -314,6 +314,9 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .disc.on{fill:var(--amber);filter:url(#glow)}
 .proc.on{stroke:var(--amber);stroke-opacity:1}
 .vlabel{font:10px var(--f-mono);fill:var(--faint);letter-spacing:.12em}
+.bone.ctx{opacity:.35}
+.hole{fill:#070b10;stroke:var(--bone);stroke-opacity:.35;stroke-width:1}
+.tag-novo{display:inline-block;font:700 9.5px var(--f-mono);letter-spacing:.08em;color:#1b1208;background:var(--amber);border-radius:999px;padding:2px 7px;vertical-align:3px;margin-left:4px}.tag-novo svg{width:8px;height:9px;vertical-align:-1px}
 .done-flash .on .bone,.done-flash .bone.on,.done-flash .disc.on{fill:var(--ok);stroke:var(--ok)}
 
 /* ---------- Resultado ---------- */
@@ -586,6 +589,49 @@ const MU={
   gastro:{a:"gastrocnêmio",hl:["p:gastro"],clue:"A panturrilha; fica atrás, mas aparece pelos lados. Põe você na ponta do pé."}
 };
 const pick=(o,ks)=>ks.map(k=>o[k]);
+// ---- Regiões osso por osso (só Pro): mão, pé e crânio ----
+const MAO={
+  escafoide:{a:"escafoide",hl:["p:m-escafoide"],clue:"Maior osso da fileira proximal do carpo, do lado do polegar; é o que mais fratura no punho."},
+  semilunar:{a:"semilunar",hl:["p:m-semilunar"],clue:"Tem forma de meia-lua e fica no meio da fileira proximal, entre o escafoide e o piramidal."},
+  piramidal:{a:"piramidal",hl:["p:m-piramidal"],clue:"Fileira proximal, do lado do dedo mínimo; o pisiforme se apoia na frente dele."},
+  pisiforme:{a:"pisiforme",hl:["p:m-pisiforme"],clue:"O menor osso do carpo, do tamanho de uma ervilha, na frente do piramidal."},
+  trapezio:{a:"trapézio",hl:["p:m-trapezio"],clue:"Fileira distal, na base do polegar; articula com o 1º metacarpo."},
+  trapezoide:{a:"trapezoide",hl:["p:m-trapezoide"],clue:"Pequeno, na fileira distal, entre o trapézio e o capitato, na base do indicador."},
+  capitato:{a:"capitato",hl:["p:m-capitato"],clue:"O maior osso do carpo, no centro da fileira distal, na base do dedo médio."},
+  hamato:{a:"hamato",hl:["p:m-hamato"],clue:"Fileira distal, do lado do dedo mínimo; tem um gancho (hâmulo) virado para a palma."},
+  metacarpos:{a:"metacarpos",hl:["p:m-metacarpos"],clue:"Os 5 ossos longos da palma, numerados do polegar (I) ao dedo mínimo (V)."},
+  fprox:{a:"falanges proximais",hl:["p:m-fprox"],clue:"A primeira fileira de ossos dos dedos, logo depois dos metacarpos."},
+  fmed:{a:"falanges médias",hl:["p:m-fmed"],clue:"A fileira do meio dos dedos; o polegar não tem."},
+  fdist:{a:"falanges distais",hl:["p:m-fdist"],clue:"As pontas dos dedos, onde ficam as unhas."}
+};
+const PE={
+  talus:{a:"tálus",hl:["p:p-talus"],clue:"Fica em cima do calcâneo e encaixa na tíbia e na fíbula, formando o tornozelo."},
+  calcaneo:{a:"calcâneo",hl:["p:p-calcaneo"],clue:"O osso do calcanhar, o maior do pé; nele se prende o tendão de Aquiles."},
+  navicular:{a:"navicular",hl:["p:p-navicular"],clue:"Tem forma de barco; fica na frente do tálus, do lado do hálux."},
+  cuboide:{a:"cuboide",hl:["p:p-cuboide"],clue:"Tem forma de cubo; fica no lado de fora do pé, na frente do calcâneo."},
+  cmed:{a:"cuneiforme medial",hl:["p:p-cmed"],clue:"O maior dos três cuneiformes, na base do hálux (1º metatarso)."},
+  cint:{a:"cuneiforme intermédio",hl:["p:p-cint"],clue:"O menor dos cuneiformes, no meio, na base do 2º metatarso."},
+  clat:{a:"cuneiforme lateral",hl:["p:p-clat"],clue:"O cuneiforme de fora, ao lado do cuboide, na base do 3º metatarso."},
+  metatarsos:{a:"metatarsos",hl:["p:p-metatarsos"],clue:"Os 5 ossos longos do meio do pé, do hálux (I) ao dedo mínimo (V)."},
+  fprox:{a:"falanges proximais",hl:["p:p-fprox"],clue:"A primeira fileira de ossos dos dedos do pé."},
+  fmed:{a:"falanges médias",hl:["p:p-fmed"],clue:"A fileira do meio dos dedos do pé; o hálux não tem."},
+  fdist:{a:"falanges distais",hl:["p:p-fdist"],clue:"As pontas dos dedos do pé."}
+};
+const CRA={
+  frontal:{a:"frontal",hl:["p:c-frontal"],clue:"Forma a testa e o teto das órbitas."},
+  parietal:{a:"parietal",hl:["p:c-parietal"],clue:"Par de ossos que forma o topo e as laterais da caixa craniana."},
+  temporal:{a:"temporal",hl:["p:c-temporal"],clue:"Na lateral, em volta da orelha; abriga o ouvido médio e o interno."},
+  occipital:{a:"occipital",hl:["p:c-occipital"],clue:"Forma a nuca e a base do crânio; tem o forame magno, por onde passa a medula."},
+  esfenoide:{a:"esfenoide",hl:["p:c-esfenoide"],clue:"Osso em forma de borboleta no meio da base do crânio; aparece na têmpora."},
+  etmoide:{a:"etmoide",hl:["p:c-etmoide"],clue:"Fica entre as órbitas, atrás do nariz; forma parte da cavidade nasal."},
+  maxila:{a:"maxila",hl:["p:c-maxila"],clue:"Forma o maxilar superior e segura os dentes de cima."},
+  mandibula:{a:"mandíbula",hl:["p:c-mandibula"],clue:"O único osso móvel do crânio; segura os dentes de baixo."},
+  zigomatico:{a:"zigomático",hl:["p:c-zigomatico"],clue:"O osso da maçã do rosto."},
+  nasal:{a:"nasal",hl:["p:c-nasal"],clue:"Par de ossinhos que forma a ponte do nariz."},
+  lacrimal:{a:"lacrimal",hl:["p:c-lacrimal"],clue:"O menor osso da face, na parede interna da órbita."},
+  vomer:{a:"vômer",hl:["p:c-vomer"],clue:"Lâmina fina que forma a parte de baixo do septo nasal."},
+  concha:{a:"concha nasal inferior",hl:["p:c-concha"],clue:"Osso curvo e enrolado na parede lateral da cavidade nasal."}
+};
 const MODULES=[
   {id:"coluna",name:"Coluna vertebral",view:"coluna",levels:SPINE_LEVELS},
   {id:"esqueleto",name:"Esqueleto",view:"esqueleto",levels:[
@@ -604,6 +650,21 @@ const MODULES=[
     {title:"Pescoço e tronco",desc:"Esternocleidomastoideo, trapézio, peitoral e abdome.",win:"Você já lê os músculos do tronco.",items:pick(MU,["ecm","trapezio","peitoral","reto","obliquo"])},
     {title:"Braços e pernas",desc:"Deltoide, bíceps, coxa e perna.",win:"Você já lê os músculos dos membros.",items:pick(MU,["deltoide","biceps","quadriceps","sartorio","adutores","tibialant","gastro"])},
     {title:"Todos os músculos",desc:"Os 12 músculos, misturados.",win:"Você já lê a musculatura da frente do corpo inteira.",items:Object.values(MU)}
+  ]}
+  ,{id:"mao",name:"Mão",view:"mao",pro:true,levels:[
+    {title:"Ossos do carpo",desc:"Os 8 ossinhos do punho, um por um.",win:"Você já sabe os 8 ossos do carpo de cor.",items:pick(MAO,["escafoide","semilunar","piramidal","pisiforme","trapezio","trapezoide","capitato","hamato"])},
+    {title:"Metacarpos e falanges",desc:"A palma e os dedos.",win:"Você já lê a palma e os dedos da mão.",items:pick(MAO,["metacarpos","fprox","fmed","fdist"])},
+    {title:"Mão inteira",desc:"Todos os ossos da mão, misturados.",win:"Você já lê uma mão inteira, osso por osso.",items:Object.values(MAO)}
+  ]}
+  ,{id:"pe",name:"Pé",view:"pe",pro:true,levels:[
+    {title:"Ossos do tarso",desc:"Tálus, calcâneo, navicular, cuboide e cuneiformes.",win:"Você já sabe os 7 ossos do tarso.",items:pick(PE,["talus","calcaneo","navicular","cuboide","cmed","cint","clat"])},
+    {title:"Metatarsos e falanges",desc:"O meio do pé e os dedos.",win:"Você já lê o meio do pé e os dedos.",items:pick(PE,["metatarsos","fprox","fmed","fdist"])},
+    {title:"Pé inteiro",desc:"Todos os ossos do pé, misturados.",win:"Você já lê um pé inteiro, osso por osso.",items:Object.values(PE)}
+  ]}
+  ,{id:"cranio",name:"Crânio",view:"cranio",pro:true,levels:[
+    {title:"Neurocrânio",desc:"Frontal, parietal, temporal, occipital, esfenoide e etmoide.",win:"Você já monta a caixa do crânio.",items:pick(CRA,["frontal","parietal","temporal","occipital","esfenoide","etmoide"])},
+    {title:"Ossos da face",desc:"Maxila, mandíbula, zigomático, nasal e companhia.",win:"Você já lê os ossos da face.",items:pick(CRA,["maxila","mandibula","zigomatico","nasal","lacrimal","vomer","concha"])},
+    {title:"Crânio inteiro",desc:"Todos os ossos do crânio, misturados.",win:"Você já lê um crânio inteiro, osso por osso.",items:Object.values(CRA)}
   ]}
 ];
 const modById=id=>MODULES.find(m=>m.id===id)||MODULES[0];
@@ -835,7 +896,103 @@ function buildBody(svg,view){
   if(view==="esqueleto") drawSkeleton(svg,false);
   else { drawSkeleton(svg,true); view==="orgaos"?drawOrgans(svg):drawMuscles(svg); }
 }
+// ---------- Regiões em 2D: mão, pé e crânio, osso por osso ----------
+// Forma orgânica fechada passando pelos pontos (Catmull-Rom -> Bézier)
+function blob(p,cls,pts){
+  const n=pts.length;let d=`M${pts[0][0]} ${pts[0][1]}`;
+  for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0]} ${p2[1]}`;}
+  return el("path",{class:cls,d:d+"Z"},p);
+}
+const mir=(pts,cx)=>pts.map(([x,y])=>[2*cx-x,y]);
+function hole(g,pts){return blob(g,"hole",pts);}
+
+// Mão direita, vista palmar (polegar à esquerda de quem olha)
+function drawMao(svg){
+  const g=el("g",{},svg);
+  // contexto: rádio e ulna (não entram no jogo)
+  blob(g,"bone ctx",[[100,640],[96,592],[108,566],[140,554],[178,559],[188,574],[186,640]]);
+  blob(g,"bone ctx",[[206,640],[204,590],[214,574],[236,570],[256,580],[262,600],[252,640]]);
+  let p;
+  p=part(g,"m-escafoide");blob(p,"bone",[[104,552],[110,524],[130,496],[154,482],[170,490],[166,510],[150,532],[130,550],[112,558]]);
+  p=part(g,"m-semilunar");blob(p,"bone",[[172,540],[168,514],[178,494],[198,488],[214,498],[216,520],[204,540],[186,546]]);
+  p=part(g,"m-piramidal");blob(p,"bone",[[216,524],[220,500],[234,488],[254,490],[266,504],[260,524],[240,532]]);
+  p=part(g,"m-pisiforme");blob(p,"bone",[[250,532],[248,516],[258,507],[272,511],[277,526],[266,538]]);
+  p=part(g,"m-trapezio");blob(p,"bone",[[98,476],[104,452],[122,438],[143,444],[148,464],[137,484],[114,490]]);
+  p=part(g,"m-trapezoide");blob(p,"bone",[[146,460],[150,438],[166,430],[180,436],[180,458],[166,470],[152,470]]);
+  p=part(g,"m-capitato");blob(p,"bone",[[180,478],[178,446],[184,426],[202,420],[218,430],[220,458],[212,484],[196,494],[184,490]]);
+  p=part(g,"m-hamato");blob(p,"bone",[[222,478],[224,448],[236,432],[257,434],[270,452],[268,476],[252,492],[234,492]]);blob(p,"bone",[[240,470],[246,458],[257,462],[254,476]]);
+  // metacarpos (I a V)
+  p=part(g,"m-metacarpos");cap(p,"bone",116,436,82,356,18);cap(p,"bone",161,430,153,292,14);cap(p,"bone",201,420,201,276,15);cap(p,"bone",242,432,248,294,13);cap(p,"bone",264,446,290,316,12);
+  // falanges
+  const pr=part(g,"m-fprox"),md=part(g,"m-fmed"),ds=part(g,"m-fdist");
+  cap(pr,"bone",79,346,62,290,15);cap(ds,"bone",60,282,51,246,13);                       // polegar (sem falange média)
+  cap(pr,"bone",153,282,149,212,13);cap(md,"bone",149,204,147,164,12);cap(ds,"bone",147,156,146,126,10);
+  cap(pr,"bone",201,266,201,190,13);cap(md,"bone",201,182,201,138,12);cap(ds,"bone",201,130,201,98,10);
+  cap(pr,"bone",248,284,254,210,12);cap(md,"bone",255,202,258,162,11);cap(ds,"bone",258,154,260,126,9);
+  cap(pr,"bone",291,306,304,248,11);cap(md,"bone",305,240,311,206,10);cap(ds,"bone",312,198,315,176,8);
+  el("text",{class:"vlabel",x:60,y:84},g).textContent="MÃO DIREITA · VISTA PALMAR";
+}
+
+// Pé direito, vista de cima (hálux à esquerda de quem olha)
+function drawPe(svg){
+  const g=el("g",{},svg);let p;
+  p=part(g,"p-calcaneo");blob(p,"bone",[[176,600],[168,572],[176,540],[200,520],[236,512],[264,528],[272,560],[264,596],[230,614],[196,614]]);
+  p=part(g,"p-talus");blob(p,"bone",[[150,522],[146,492],[156,464],[172,448],[196,446],[214,458],[220,486],[212,514],[190,530],[166,532]]);
+  p=part(g,"p-navicular");blob(p,"bone",[[132,452],[138,432],[158,422],[184,424],[200,436],[192,450],[166,454],[146,460]]);
+  p=part(g,"p-cuboide");blob(p,"bone",[[214,450],[210,424],[222,400],[248,396],[268,410],[270,440],[258,460],[232,462]]);
+  p=part(g,"p-cmed");blob(p,"bone",[[112,422],[116,392],[130,376],[148,378],[152,402],[146,424],[128,432]]);
+  p=part(g,"p-cint");blob(p,"bone",[[152,414],[154,388],[166,380],[178,388],[178,410],[166,418]]);
+  p=part(g,"p-clat");blob(p,"bone",[[182,420],[182,388],[196,378],[210,384],[210,412],[200,424]]);
+  p=part(g,"p-metatarsos");cap(p,"bone",130,372,116,260,21);cap(p,"bone",165,378,160,240,13);cap(p,"bone",196,376,202,246,13);cap(p,"bone",232,394,243,264,12);cap(p,"bone",258,404,285,288,12);
+  blob(p,"bone",[[262,412],[268,396],[282,398],[284,414],[272,420]]); // tuberosidade do 5º
+  const pr=part(g,"p-fprox"),md=part(g,"p-fmed"),ds=part(g,"p-fdist");
+  cap(pr,"bone",114,250,108,200,19);cap(ds,"bone",107,192,104,154,17);                   // hálux (sem falange média)
+  cap(pr,"bone",160,230,160,190,11);cap(md,"bone",160,182,160,164,10);cap(ds,"bone",160,157,160,140,9);
+  cap(pr,"bone",203,236,207,198,11);cap(md,"bone",207,190,209,174,10);cap(ds,"bone",209,167,210,152,9);
+  cap(pr,"bone",244,254,251,220,10);cap(md,"bone",252,212,255,198,9);cap(ds,"bone",255,191,257,178,8);
+  cap(pr,"bone",286,278,295,248,10);cap(md,"bone",296,240,299,228,9);cap(ds,"bone",300,221,302,210,8);
+  el("text",{class:"vlabel",x:60,y:118},g).textContent="PÉ DIREITO · VISTA DE CIMA";
+}
+
+// Crânio: vista anterior (esquerda) e lateral (direita, face para a esquerda)
+function drawCranio(svg){
+  const g=el("g",{},svg);let p;const C=190;const both=(pp,pts)=>{blob(pp,"bone",pts);blob(pp,"bone",mir(pts,C));};
+  // ----- anterior -----
+  p=part(g,"c-temporal");both(p,[[72,232],[80,212],[92,214],[96,252],[82,266]]);
+  p=part(g,"c-esfenoide");both(p,[[84,214],[102,208],[108,238],[94,250]]);
+  p=part(g,"c-frontal");blob(p,"bone",[[190,40],[250,52],[290,90],[302,150],[298,206],[270,200],[240,190],[214,198],[190,208],[166,198],[140,190],[110,200],[82,206],[78,150],[90,90],[130,52]]);
+  p=part(g,"c-zigomatico");both(p,[[86,252],[106,262],[118,288],[106,312],[88,302],[80,274]]);
+  p=part(g,"c-maxila");both(p,[[104,278],[150,284],[168,296],[168,342],[190,352],[190,384],[150,384],[118,364],[106,332]]);
+  hole(g,[[96,240],[110,214],[140,204],[170,212],[182,236],[176,264],[150,278],[118,276],[100,262]]);
+  hole(g,mir([[96,240],[110,214],[140,204],[170,212],[182,236],[176,264],[150,278],[118,276],[100,262]],C));
+  p=part(g,"c-etmoide");both(p,[[166,234],[176,230],[178,256],[168,260]]);blob(p,"bone",[[187,292],[193,292],[194,312],[186,312]]);
+  p=part(g,"c-lacrimal");both(p,[[156,250],[164,246],[168,256],[160,262]]);
+  p=part(g,"c-nasal");both(p,[[180,222],[189,220],[189,286],[176,288],[178,254]]);
+  hole(g,[[190,286],[205,296],[215,320],[212,342],[190,348],[168,342],[165,320],[175,296]]);
+  p=part(g,"c-vomer");blob(p,"bone",[[187,314],[193,314],[194,344],[186,344]]);
+  p=part(g,"c-concha");both(p,[[170,324],[182,322],[182,338],[170,340]]);
+  p=part(g,"c-mandibula");blob(p,"bone",[[112,392],[150,400],[190,404],[230,400],[268,392],[282,420],[266,462],[228,490],[190,498],[152,490],[114,462],[98,420]]);
+  both(p,[[86,312],[100,310],[106,386],[96,414],[84,386]]);
+  // ----- lateral -----
+  p=part(g,"c-parietal");blob(p,"bone",[[560,56],[620,62],[668,100],[680,160],[640,200],[590,206],[556,190],[548,170],[566,110]]);
+  p=part(g,"c-frontal");blob(p,"bone",[[470,190],[468,140],[488,92],[530,62],[560,56],[566,110],[548,170],[520,200],[490,206]]);
+  p=part(g,"c-occipital");blob(p,"bone",[[668,100],[700,150],[706,210],[690,262],[660,292],[640,272],[656,232],[680,160]]);
+  p=part(g,"c-temporal");blob(p,"bone",[[556,190],[590,206],[640,200],[680,160],[656,232],[640,272],[612,292],[584,284],[568,252],[552,222]]);
+  p=part(g,"c-esfenoide");blob(p,"bone",[[520,200],[548,170],[556,190],[552,222],[536,238],[516,228]]);
+  p=part(g,"c-zigomatico");blob(p,"bone",[[476,252],[500,238],[530,242],[566,254],[568,268],[532,270],[506,282],[484,278]]);
+  p=part(g,"c-nasal");blob(p,"bone",[[454,214],[466,206],[470,234],[452,264],[446,256]]);
+  p=part(g,"c-maxila");blob(p,"bone",[[446,264],[470,236],[480,248],[500,246],[508,282],[522,302],[508,332],[470,336],[450,322],[444,292]]);
+  p=part(g,"c-mandibula");blob(p,"bone",[[454,340],[506,338],[560,332],[584,284],[600,292],[598,332],[582,362],[548,394],[500,406],[462,398],[448,372]]);
+  hole(g,[[604,252],[612,244],[621,252],[612,261]]);                                           // meato acústico
+  el("text",{class:"vlabel",x:118,y:540},g).textContent="VISTA ANTERIOR";
+  el("text",{class:"vlabel",x:528,y:540},g).textContent="VISTA LATERAL";
+}
+
+const REGIAO_VB={mao:"40 70 320 580",pe:"40 100 320 540",cranio:"40 20 700 540"};
 function buildView(svg,view,big){
+  if(REGIAO_VB[view]){svg.setAttribute("viewBox",REGIAO_VB[view]);svg.innerHTML="";addGlow(svg);({mao:drawMao,pe:drawPe,cranio:drawCranio})[view](svg);return;}
   if(view==="coluna"){ svg.setAttribute("viewBox",big?"0 20 520 700":"190 20 280 700"); buildSpine(svg,{lateral:big,cx:330}); }
   else { svg.setAttribute("viewBox","60 10 280 810"); buildBody(svg,view); }
 }
@@ -868,7 +1025,7 @@ function renderLevels(){
   $("#modules").innerHTML=MODULES.map(m=>{
     const done=m.levels.filter((_,i)=>prog[`${m.id}-${i}-${curDiff}`]).length;
     const n=new Set(m.levels.flatMap(L=>L.items.map(it=>it.a))).size;
-    return `<button class="mod${m.id===curMod?" active":""}" data-mod="${m.id}" type="button" aria-pressed="${m.id===curMod}"><div class="n">${m.name}</div><div class="s">${m.levels.length} níveis · ${n} estruturas${done?` · ${done} feito${done>1?"s":""}`:""}</div></button>`;
+    return `<button class="mod${m.id===curMod?" active":""}" data-mod="${m.id}" type="button" aria-pressed="${m.id===curMod}"><div class="n">${m.name}${m.pro?` <span class="tag-novo">${FREE()?LOCK+" PRO":"NOVO"}</span>`:""}</div><div class="s">${m.levels.length} níveis · ${n} estruturas${done?` · ${done} feito${done>1?"s":""}`:""}</div></button>`;
   }).join("");
   $("#mod-title").textContent=M.name;
   $("#levels").innerHTML=M.levels.map((L,i)=>{
@@ -1262,7 +1419,8 @@ const PAYWALL=!!(CFG.KIWIFY_MENSAL&&CFG.KIWIFY_ANUAL);
 const isPro=()=>!!(SUB&&SUB.status!=="reembolsada"&&SUB.pro_ate&&new Date(SUB.pro_ate)>new Date());
 // Plano Free: só o Fácil, só o 1º nível de cada sistema, sem XP/patentes/ofensiva/conquistas.
 const FREE=()=>PAYWALL&&!isPro();
-const lockedLevel=(modId,i)=>FREE()&&i>0;
+const PRO_MOD=new Set(["mao","pe","cranio"]); // módulos só do Pro
+const lockedLevel=(modId,i)=>FREE()&&(i>0||PRO_MOD.has(modId));
 const lockedDiff=k=>FREE()&&k!=="facil";
 const LOCK=`<svg viewBox="0 0 14 16" width="11" height="13" aria-hidden="true"><rect x="1.5" y="7" width="11" height="8" rx="2" fill="currentColor"/><path d="M4 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
 async function loadSub(){
@@ -1281,6 +1439,7 @@ function openUpgrade(){
     <ul class="up-list">
       <li>Todos os níveis de esqueleto, órgãos, músculos e coluna</li>
       <li>Modos Médio e Difícil, com cronômetro</li>
+      <li>Mão, pé e crânio osso por osso</li>
       <li>XP, patentes, ofensiva e conquistas</li>
       <li>Novos módulos sem custo extra</li>
     </ul>
@@ -1410,7 +1569,7 @@ function renderProfile(){
         <button class="btn" type="submit">Salvar senha</button>
       </form>
     </div>
-    ${PAYWALL?`<div class="pf-out pf-plan"><div><b>${isPro()?"Plano Pro":"Plano Grátis"}</b><span>${isPro()?(SUB.status==="cancelada"?"Assinatura cancelada. Seu acesso Pro vai até ":SUB.status==="atrasada"?"Pagamento em atraso. Seu acesso Pro vai até ":"Ativo. Próxima renovação por volta de ")+new Date(SUB.pro_ate).toLocaleDateString("pt-BR")+". Para cancelar, use o link no e-mail de compra da Kiwify ou fale com "+esc("clubedamateriaa@gmail.com")+".":"Coluna vertebral completa e o nível 1 de cada sistema. Assine para liberar tudo."}</span></div>${isPro()?`<span class="pill-pro">PRO</span>`:`<button class="btn" type="button" data-upgrade>Assinar o Pro</button>`}</div>`:""}
+    ${PAYWALL?`<div class="pf-out pf-plan"><div><b>${isPro()?"Plano Pro":"Plano Grátis"}</b><span>${isPro()?(SUB.status==="cancelada"?"Assinatura cancelada. Seu acesso Pro vai até ":SUB.status==="atrasada"?"Pagamento em atraso. Seu acesso Pro vai até ":"Ativo. Próxima renovação por volta de ")+new Date(SUB.pro_ate).toLocaleDateString("pt-BR")+". Para cancelar, use o link no e-mail de compra da Kiwify ou fale com "+esc("clubedamateriaa@gmail.com")+".":"Coluna vertebral completa e o nível 1 de esqueleto, órgãos e músculos. Assine para liberar tudo, incluindo mão, pé e crânio."}</span></div>${isPro()?`<span class="pill-pro">PRO</span>`:`<button class="btn" type="button" data-upgrade>Assinar o Pro</button>`}</div>`:""}
     <div class="pf-out"><div><b>Sair desta conta</b><span>Seu progresso continua salvo na nuvem.</span></div><button class="btn ghost" id="logout" type="button">Sair da conta</button></div>
   </section>
   <p class="foot"><a class="linkbtn" href="#jogar">← Voltar para a trilha</a></p>`;
