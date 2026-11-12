@@ -100,6 +100,33 @@ button.mod{text-align:left;width:100%}
 .prompt{position:relative}
 .xpfloat{position:absolute;left:50%;top:20px;transform:translateX(-50%);font:600 15px var(--f-mono);color:var(--amber);pointer-events:none;animation:xpup .9s ease-out forwards}
 @keyframes xpup{0%{opacity:0;transform:translate(-50%,8px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+/* ---------- Pro ---------- */
+.lvl.locked .t,.lvl.locked .d,.lvl.locked .num{opacity:.55}
+.lvl .st.pro{color:var(--amber);border:1px solid rgba(242,166,90,.5);border-radius:999px;padding:4px 10px;display:inline-flex;gap:6px;align-items:center}
+.seg button svg{vertical-align:-1px;opacity:.8}
+.pill-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill-pro{font:700 11px var(--f-mono);letter-spacing:.12em;color:#1b1208;background:linear-gradient(135deg,#ffe2b8,var(--amber));border-radius:999px;padding:4px 10px;box-shadow:0 0 14px rgba(242,166,90,.5)}
+.pill-up{font:600 12px var(--f-body);color:var(--amber);background:transparent;border:1px solid rgba(242,166,90,.6);border-radius:999px;padding:3px 10px}
+.pill-up:hover{background:var(--amber-soft)}
+.pf-plan{margin-top:0;padding-top:0;border-top:0;padding-bottom:16px}
+.upgrade{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(7,12,18,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:auto}
+.up-card{position:relative;width:100%;max-width:520px;border:1px solid rgba(242,166,90,.45);border-radius:20px;background:linear-gradient(180deg,#1c2a3a,var(--film-2));padding:28px 26px;display:grid;gap:14px;box-shadow:0 40px 90px -30px rgba(242,166,90,.35)}
+.up-card h2{font-size:32px;line-height:1.05}
+.up-x{position:absolute;top:10px;right:12px;background:none;border:0;color:var(--dim);font-size:26px;line-height:1;padding:6px}
+.up-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:var(--dim);font-size:15px}
+.up-list li::before{content:"✓";color:var(--amber);font-weight:700;margin-right:9px}
+.up-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.up-plan{position:relative;display:grid;gap:4px;padding:16px 14px;border:1px solid var(--line);border-radius:14px;background:var(--film-3);text-decoration:none;color:var(--bone);transition:border-color .2s,transform .2s}
+.up-plan:hover{border-color:var(--amber);transform:translateY(-2px)}
+.up-plan.best{border-color:var(--amber)}
+.up-plan i{position:absolute;top:-10px;left:12px;font:600 10px var(--f-mono);font-style:normal;letter-spacing:.06em;background:var(--amber);color:#1b1208;border-radius:999px;padding:2px 8px}
+.up-plan b{font-size:14px;font-weight:600;color:var(--dim)}
+.up-price{font:600 28px var(--f-mono);line-height:1.1}.up-price small{font-size:13px;color:var(--dim);font-weight:400}
+.up-cta{margin-top:8px;text-align:center;font-weight:600;font-size:14px;color:#1b1208;background:var(--amber);border-radius:8px;padding:9px}
+.up-mail{font-size:13px;color:var(--dim);margin:0;padding:10px 12px;border:1px dashed var(--line);border-radius:10px}
+.up-mail b{color:var(--bone)}.up-mail span{color:var(--amber);overflow-wrap:anywhere}
+.up-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--faint)}
+@media (max-width:480px){.up-plans{grid-template-columns:1fr}}
 /* ---------- conta e perfil ---------- */
 .me{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--bone);border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 3px;background:var(--film-2);transition:border-color .2s}
 .me:hover{border-color:var(--amber)}
@@ -428,6 +455,7 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
    </div>
   </main>
   <main id="v-perfil" class="perfil" hidden></main>
+  <div class="upgrade" id="upgrade" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
 
   
@@ -812,7 +840,8 @@ let curMod=modById(load().mod).id;
 let curDiff=DIFFS[load().diff]?load().diff:"medio";
 function renderLevels(){
   const M=modById(curMod), prog=PROG;
-  $("#diff").innerHTML=Object.entries(DIFFS).map(([k,d])=>`<button type="button" data-diff="${k}" aria-pressed="${k===curDiff}">${d.name}</button>`).join("");
+  if(lockedDiff(curDiff))curDiff="medio";
+  $("#diff").innerHTML=Object.entries(DIFFS).map(([k,d])=>`<button type="button" data-diff="${k}" aria-pressed="${k===curDiff}">${lockedDiff(k)?LOCK+" ":""}${d.name}</button>`).join("");
   $("#diff-desc").textContent=DIFFS[curDiff].desc;
   $("#modules").innerHTML=MODULES.map(m=>{
     const done=m.levels.filter((_,i)=>prog[`${m.id}-${i}-${curDiff}`]).length;
@@ -822,8 +851,9 @@ function renderLevels(){
   $("#mod-title").textContent=M.name;
   $("#levels").innerHTML=M.levels.map((L,i)=>{
     const r=prog[`${M.id}-${i}-${curDiff}`];
-    const s=r?`<span class="st done">✓ ${r.wpm} ppm · ${r.first}% de primeira</span>`:`<span class="st">${L.items.length} peças</span>`;
-    return `<button class="lvl" data-start="${M.id}:${i}" type="button"><span class="num">NÍVEL ${i+1}</span><span><span class="t">${L.title}</span><br><span class="d">${L.desc}</span></span>${s}</button>`;
+    const lk=lockedLevel(M.id,i);
+    const s=lk?`<span class="st pro">${LOCK} Pro</span>`:r?`<span class="st done">✓ ${r.wpm} ppm · ${r.first}% de primeira</span>`:`<span class="st">${L.items.length} peças</span>`;
+    return `<button class="lvl${lk?" locked":""}" data-start="${M.id}:${i}" type="button"><span class="num">NÍVEL ${i+1}</span><span><span class="t">${L.title}</span><br><span class="d">${L.desc}</span></span>${s}</button>`;
   }).join("");
   const dues=Object.values(prog).map(r=>r.due).filter(Boolean).sort();
   $("#due-line").textContent=dues.length?`Próxima revisão: ${fmtDate(new Date(dues[0]))}`:`${M.levels.length} níveis`;
@@ -860,6 +890,8 @@ function startTimer(){
   },100);
 }
 function startLevel(modId,i){
+  if(lockedLevel(modId,i)){route();openUpgrade();return;}
+  if(lockedDiff(curDiff))curDiff="medio";
   const M=modById(modId), L=M.levels[i];
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},keys:0,good:0,chars:0,t0:0,busy:false};
   buildView($("#game-svg"),M.view,true);
@@ -1141,8 +1173,9 @@ $("#au-form").addEventListener("submit",async e=>{
   }catch(err){msg(tr(err));}
   btn.disabled=false; btn.textContent=label;
 });
-async function logout(){if(sb)await sb.auth.signOut();if(location.hash==="#perfil")history.replaceState(null,"","#jogar");USER=null;PROG={};REW=emptyRew();G=null;renderAcct();route();toast("Você saiu da conta.");}
+async function logout(){if(sb)await sb.auth.signOut();if(location.hash==="#perfil")history.replaceState(null,"","#jogar");USER=null;PROG={};REW=emptyRew();SUB=null;closeUpgrade();G=null;renderAcct();route();toast("Você saiu da conta.");}
 function afterLogin(){
+  if(pendingUpgrade||location.hash==="#assinar"){pendingUpgrade=false;pendingStart=null;if(location.hash==="#assinar")history.replaceState(null,"","#jogar");route();if(PAYWALL&&!isPro())openUpgrade();return;}
   if(pendingStart){const [m,i]=pendingStart.split(":");pendingStart=null;startLevel(m,+i);window.scrollTo(0,0);}
   else if(!$("#v-auth").hidden)route();
   else if(!$("#v-trilha").hidden||!$("#v-perfil").hidden)route();
@@ -1155,12 +1188,54 @@ async function initAuth(){
     setTimeout(async()=>{
       if(ev==="PASSWORD_RECOVERY"){renderAcct();openAuth("newpass");return;}
       if((USER&&USER.id)!==was){
-        await Promise.all([loadProgress(),loadRewards()]); renderAcct();
+        await Promise.all([loadProgress(),loadRewards(),loadSub()]); renderAcct();
         if(USER)afterLogin(); else if(!$("#v-trilha").hidden){renderLevels();renderRewards();}
       } else renderAcct();
     },0);
   });
 }
+
+// ---------- Assinatura Pro (Kiwify) ----------
+let SUB=null, pendingUpgrade=false, upgradeAberto=false;
+const PAYWALL=!!(CFG.KIWIFY_MENSAL&&CFG.KIWIFY_ANUAL);
+const isPro=()=>!!(SUB&&SUB.status!=="reembolsada"&&SUB.pro_ate&&new Date(SUB.pro_ate)>new Date());
+const lockedLevel=(modId,i)=>PAYWALL&&!isPro()&&modId!=="coluna"&&i>0;
+const lockedDiff=k=>PAYWALL&&!isPro()&&k==="dificil";
+const LOCK=`<svg viewBox="0 0 14 16" width="11" height="13" aria-hidden="true"><rect x="1.5" y="7" width="11" height="8" rx="2" fill="currentColor"/><path d="M4 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
+async function loadSub(){
+  SUB=null; if(!sb||!USER)return;
+  const {data,error}=await sb.from("assinaturas").select("status,plano,pro_ate").maybeSingle();
+  if(error){console.error(error);return;}
+  SUB=data||null;
+}
+function openUpgrade(){
+  if(!USER){pendingUpgrade=true;openAuth(sb?"signup":"setup");return;}
+  const el=$("#upgrade"); upgradeAberto=true;
+  el.innerHTML=`<div class="up-card" role="dialog" aria-modal="true" aria-labelledby="up-t">
+    <button class="up-x" type="button" data-up-close aria-label="Fechar">×</button>
+    <span class="eyebrow">Osso a Osso Pro</span>
+    <h2 id="up-t">Libere o corpo inteiro</h2>
+    <ul class="up-list">
+      <li>Todos os níveis de esqueleto, órgãos e músculos</li>
+      <li>Modo Difícil, sem dica e com cronômetro</li>
+      <li>Novos módulos sem custo extra</li>
+    </ul>
+    <div class="up-plans">
+      <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
+      <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 147</i><b>Anual</b><span class="up-price">R$ 297<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
+    </div>
+    <p class="up-mail">Na compra, use o <b>mesmo e-mail da sua conta</b>: <span>${esc(USER.email||"")}</span>. É por ele que o Pro é liberado.</p>
+    <div class="up-foot"><button class="btn ghost" type="button" id="up-check">Já paguei: atualizar</button><span>Pagamento seguro pela Kiwify. 7 dias de garantia.</span></div>
+  </div>`;
+  el.hidden=false;
+}
+function closeUpgrade(){$("#upgrade").hidden=true;upgradeAberto=false;}
+async function checkSub(avisar){
+  const antes=isPro(); await loadSub();
+  if(isPro()&&!antes){closeUpgrade();toast("Pro liberado. Bom estudo!");route();}
+  else if(avisar)toast(isPro()?"Seu Pro já está ativo.":"Ainda não encontramos o pagamento. Pode levar alguns minutos; confira se usou o mesmo e-mail.");
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&upgradeAberto&&USER)checkSub(false);});
 
 // ---------- Perfil ----------
 const initials=n=>(n||"?").replace(/@.*/,"").split(/[\s._-]+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join("")||"?";
@@ -1170,7 +1245,7 @@ function levelsDone(){return new Set(Object.keys(PROG).map(k=>k.replace(/-[a-z]+
 function bestPPM(){return Object.values(PROG).reduce((m,r)=>Math.max(m,r.wpm||0),0);}
 function nextLevel(){
   const order=[modById(curMod),...MODULES.filter(m=>m.id!==curMod)];
-  for(const m of order)for(let i=0;i<m.levels.length;i++)if(!PROG[`${m.id}-${i}-${curDiff}`])return {m,i};
+  for(const m of order)for(let i=0;i<m.levels.length;i++)if(!lockedLevel(m.id,i)&&!PROG[`${m.id}-${i}-${curDiff}`])return {m,i};
   return null;
 }
 const PERF_ICON={
@@ -1188,7 +1263,7 @@ function renderRewards(){
       <div class="dash-hi">
         <div class="eyebrow">Bem-vindo de volta</div>
         <h2>Olá, ${esc(firstName())}</h2>
-        <div class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</div>
+        <div class="pill-row"><span class="pill-rank">${r.name} · ${fmtN(REW.xp)} XP</span>${isPro()?`<span class="pill-pro">PRO</span>`:PAYWALL?`<button class="pill-up" type="button" data-upgrade>Assinar o Pro</button>`:""}</div>
         <div class="rk-bar"><i style="width:${Math.round(r.pct*100)}%"></i></div>
         <div class="rk-next">${r.next!==null?`Faltam ${fmtN(r.next-REW.xp)} XP para <b>${r.nextName}</b>`:"Patente máxima"}</div>
       </div>
@@ -1223,7 +1298,7 @@ function renderProfile(){
       <div class="pf-txt">
         <h1>${esc(displayName())}</h1>
         <div class="pf-sub">${esc(USER.email||"")}${since?` · aluno desde ${since}`:""}</div>
-        <div class="pf-badges"><span class="pill-rank">${r.name}</span><span class="pill-soft ${s?"hot":""}">${FLAME} ${s} dia${s===1?"":"s"} de ofensiva</span></div>
+        <div class="pf-badges"><span class="pill-rank">${r.name}</span>${isPro()?`<span class="pill-pro">PRO</span>`:""}<span class="pill-soft ${s?"hot":""}">${FLAME} ${s} dia${s===1?"":"s"} de ofensiva</span></div>
       </div>
     </div>
   </section>
@@ -1269,6 +1344,7 @@ function renderProfile(){
         <button class="btn" type="submit">Salvar senha</button>
       </form>
     </div>
+    ${PAYWALL?`<div class="pf-out pf-plan"><div><b>${isPro()?"Plano Pro":"Plano Grátis"}</b><span>${isPro()?(SUB.status==="cancelada"?"Assinatura cancelada. Seu acesso Pro vai até ":SUB.status==="atrasada"?"Pagamento em atraso. Seu acesso Pro vai até ":"Ativo. Próxima renovação por volta de ")+new Date(SUB.pro_ate).toLocaleDateString("pt-BR")+". Para cancelar, use o link no e-mail de compra da Kiwify ou fale com "+esc("anderssonjorge52@gmail.com")+".":"Coluna vertebral completa e o nível 1 de cada sistema. Assine para liberar tudo."}</span></div>${isPro()?`<span class="pill-pro">PRO</span>`:`<button class="btn" type="button" data-upgrade>Assinar o Pro</button>`}</div>`:""}
     <div class="pf-out"><div><b>Sair desta conta</b><span>Seu progresso continua salvo na nuvem.</span></div><button class="btn ghost" id="logout" type="button">Sair da conta</button></div>
   </section>
   <p class="foot"><a class="linkbtn" href="#jogar">← Voltar para a trilha</a></p>`;
@@ -1298,11 +1374,16 @@ document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
   const d=e.target.closest("[data-diff]");
-  if(d){curDiff=d.dataset.diff;const st=load();st.diff=curDiff;save(st);renderLevels();return;}
+  if(d){if(lockedDiff(d.dataset.diff)){openUpgrade();return;}curDiff=d.dataset.diff;const st=load();st.diff=curDiff;save(st);renderLevels();renderRewards();return;}
+  if(e.target.closest("[data-up-close]")||e.target.id==="upgrade"){closeUpgrade();return;}
+  if(e.target.closest("#up-check")){checkSub(true);return;}
+  if(e.target.closest("[data-upgrade]")){e.preventDefault();openUpgrade();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
     if(!USER){pendingStart=b.dataset.start;openAuth(sb?"signup":"setup");return;}
-    const [mid,i]=b.dataset.start.split(":");startLevel(mid,+i);window.scrollTo(0,0);}
+    const [mid,i]=b.dataset.start.split(":");
+    if(lockedLevel(mid,+i)){openUpgrade();return;}
+    startLevel(mid,+i);window.scrollTo(0,0);return;}
   const au=e.target.closest("[data-auth]");
   if(au){e.preventDefault();openAuth(au.dataset.auth);return;}
   if(e.target.closest("#logout")){e.preventDefault();logout();}
@@ -1319,7 +1400,7 @@ tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(
 $("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
 setMute(muted);
 buildKb(); route(); initAuth();
-if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");
+if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");else if(location.hash==="#assinar"){pendingUpgrade=true;openAuth("signup");}
 })();
 </script>
 

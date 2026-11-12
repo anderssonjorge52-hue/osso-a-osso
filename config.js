@@ -4,5 +4,11 @@
 // NUNCA coloque aqui a "secret key" nem a "service_role key".
 window.OSSO_CONFIG = {
   SUPABASE_URL: "https://chskjmsmqvwpkyppbrrx.supabase.co",        // ex.: https://abcdefghijk.supabase.co
-  SUPABASE_KEY: "sb_publishable_xPjh7vh6WZ1UpGDDT7sR6A_jT0jRUgs"     // ex.: sb_publishable_... (ou a anon key)
+  SUPABASE_KEY: "sb_publishable_xPjh7vh6WZ1UpGDDT7sR6A_jT0jRUgs",    // ex.: sb_publishable_... (ou a anon key)
+
+  // Links de pagamento da Kiwify (produto "Osso a Osso Pro").
+  // Com os dois preenchidos, o app passa a bloquear o conteúdo Pro para quem não assinou.
+  // Para desligar o bloqueio, deixe os dois vazios ("").
+  KIWIFY_MENSAL: "https://pay.kiwify.com.br/e84LalF",
+  KIWIFY_ANUAL: "https://pay.kiwify.com.br/xaVLyEU"
 };
