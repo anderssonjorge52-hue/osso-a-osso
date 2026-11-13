@@ -10,5 +10,5 @@ window.OSSO_CONFIG = {
   // Com os dois preenchidos, o app passa a bloquear o conteúdo Pro para quem não assinou.
   // Para desligar o bloqueio, deixe os dois vazios ("").
   KIWIFY_MENSAL: "https://pay.kiwify.com.br/e84LalF",
-  KIWIFY_ANUAL: "https://pay.kiwify.com.br/xaVLyEU"
+  KIWIFY_ANUAL: "https://pay.kiwify.com.br/75qBJeq"
 };

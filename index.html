@@ -594,7 +594,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
         <h2>Menos que um livro de anatomia. <em>Todo mês.</em></h2>
         <div class="toggle" role="group" aria-label="Período de cobrança">
           <button type="button" data-per="m" aria-pressed="true">Mensal</button>
-          <button type="button" data-per="a" aria-pressed="false">Anual <em>−33%</em></button>
+          <button type="button" data-per="a" aria-pressed="false">Anual <em>−78%</em></button>
         </div>
       </div>
       <div class="prices">
@@ -656,7 +656,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
         <details><summary>Serve para qual curso?<i></i></summary><p class="ans">Para qualquer curso com anatomia humana no currículo: Medicina, Fisioterapia, Enfermagem, Odontologia, Educação Física, Biomedicina e outros. Também ajuda quem está revisando para residência ou Revalida.</p></details>
         <details><summary>Preciso digitar os acentos?<i></i></summary><p class="ans">Não. "Fêmur" e "femur" valem igual. O foco é você lembrar a estrutura e a grafia das letras.</p></details>
         <details><summary>Meu progresso fica salvo?<i></i></summary><p class="ans">Sim. Com a conta, seus níveis e revisões ficam salvos na nuvem e aparecem em qualquer aparelho em que você entrar. No Pro, o seu XP, a ofensiva, a patente e as conquistas também.</p></details>
-        <details><summary>Como funciona a assinatura?<i></i></summary><p class="ans">O Pro custa R$ 37 por mês ou R$ 297 por ano. Você paga por Pix, cartão ou boleto e pode cancelar quando quiser, sem multa. Tem 7 dias de garantia: se não gostar, devolvemos 100% do valor. O plano Grátis continua disponível para sempre.</p></details>
+        <details><summary>Como funciona a assinatura?<i></i></summary><p class="ans">O Pro custa R$ 37 por mês ou R$ 97 por ano. Você paga por Pix, cartão ou boleto e pode cancelar quando quiser, sem multa. Tem 7 dias de garantia: se não gostar, devolvemos 100% do valor. O plano Grátis continua disponível para sempre.</p></details>
         <details><summary>Já comprei. Como libero o Pro?<i></i></summary><p class="ans">Entre no app com o <b>mesmo e-mail que você usou na compra</b> (ou crie a conta com ele). No cartão e no Pix o Pro libera sozinho em poucos minutos; no boleto, depois que o banco compensar. Se ainda aparecer "Grátis", toque em "Assinar o Pro" e depois em "Já paguei: atualizar".</p></details>
         <details><summary>O conteúdo substitui o livro e as aulas?<i></i></summary><p class="ans">Não. O Osso a Osso é um treino de memorização e reconhecimento. Ele funciona melhor junto com as aulas, as peças do laboratório e o seu atlas de referência.</p></details>
       </div>
@@ -1284,9 +1284,9 @@ onView($("#xp-count"),()=>countTo($("#xp-count"),6*15+6*5+50+100+25,{dur:1500,pr
 document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click",()=>{
   document.querySelectorAll(".toggle button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
   const an=b.dataset.per==="a";
-  countTo($("#pro-amt"),an?297:37,{dur:500});
+  countTo($("#pro-amt"),an?97:37,{dur:500});
   $("#pro-per").textContent=an?"/ano":"/mês";
-  $("#pro-sub").textContent=an?"Equivale a R$ 24,75 por mês. Você economiza R$ 147.":"Cobrança mensal. Cancele quando quiser.";
+  $("#pro-sub").textContent=an?"Equivale a R$ 8,08 por mês. Você economiza R$ 347.":"Cobrança mensal. Cancele quando quiser.";
 }));
 
 // ---------- Chamada final ----------
