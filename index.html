@@ -626,7 +626,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--bone)}
             <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Todas as patentes e conquistas</li>
             <li><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9.5l3.2 3L14 5.5"/></svg>Novos módulos sem custo extra</li>
           </ul>
-          <a class="btn btn-primary" href="app.html#assinar" id="pro-cta">Assinar o Pro</a>
+          <a class="btn btn-primary" href="https://pay.kiwify.com.br/e84LalF" id="pro-cta">Assinar o Pro</a>
         </article>
         <article class="price rv d2">
           <h3>Turmas</h3>
@@ -1286,6 +1286,7 @@ document.querySelectorAll(".toggle button").forEach(b=>b.addEventListener("click
   const an=b.dataset.per==="a";
   countTo($("#pro-amt"),an?97:37,{dur:500});
   $("#pro-per").textContent=an?"/ano":"/mês";
+  $("#pro-cta").href=an?"https://pay.kiwify.com.br/75qBJeq":"https://pay.kiwify.com.br/e84LalF"; // vai direto para o pagamento
   $("#pro-sub").textContent=an?"Equivale a R$ 8,08 por mês. Você economiza R$ 347.":"Cobrança mensal. Cancele quando quiser.";
 }));
 

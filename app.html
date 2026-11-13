@@ -1188,7 +1188,8 @@ function finish(){
   const run={diff:G.diff,pieces:solved,firsts,acc,perfect,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&clean(i))};
   const RW=USER&&!FREE()?applyRewards(run):null;
   const lockHtml=USER&&FREE()?`<section class="rw-result rw-lock"><p>${LOCK} No Pro, esta rodada valeria <b>+${fmtN(baseXP(run))} XP</b> e contaria para patentes, ofensiva e conquistas.</p><button class="btn sm" type="button" data-upgrade>Assinar o Pro</button></section>`:"";
-  const rwHtml=!RW?lockHtml:`<section class="rw-result">
+  const guestHtml=!USER?`<section class="rw-result rw-lock"><p>Mandou bem! Crie sua conta grátis para <b>salvar este resultado</b> e continuar de onde parou, em qualquer aparelho.</p><button class="btn sm" type="button" data-auth="signup">Criar conta grátis</button></section>`:"";
+  const rwHtml=!RW?(guestHtml||lockHtml):`<section class="rw-result">
       <div class="rw-gain"><span class="rw-plus">+${fmtN(RW.gained)} XP</span><ul>${RW.lines.map(([t,v])=>`<li><span>${esc(t)}</span><b>+${v}</b></li>`).join("")}</ul></div>
       ${RW.levelUp?`<div class="rw-up">Nova patente: <b>${RW.levelUp}</b></div>`:""}
       ${rankBar(RW.rank)}
@@ -1314,9 +1315,14 @@ async function loadProgress(){
   data.forEach(r=>PROG[r.chave]={wpm:r.ppm,first:r.acerto_primeira,due:r.revisao_em});
 }
 async function saveProgress(key,rec){
-  PROG[key]=rec; if(!sb||!USER)return;
+  PROG[key]=rec; if(!USER){const st=load();st.guest=Object.assign(st.guest||{},{[key]:rec});save(st);} if(!sb||!USER)return;
   const {error}=await sb.from("progresso").upsert({user_id:USER.id,chave:key,ppm:rec.wpm,acerto_primeira:rec.first,revisao_em:rec.due,atualizado_em:new Date().toISOString()},{onConflict:"user_id,chave"});
   if(error){console.error(error);toast("Seu resultado não foi salvo. Confira a internet e jogue o nível de novo.");}
+}
+async function migrateGuest(){
+  const st=load(), g=st.guest; if(!g||!USER)return;
+  for(const [k,r] of Object.entries(g)){const p=PROG[k];if(!p||r.wpm>p.wpm||r.first>p.first)await saveProgress(k,{wpm:Math.max(r.wpm||0,p?p.wpm:0),first:Math.max(r.first||0,p?p.first:0),due:r.due});}
+  delete st.guest; save(st); if(!$("#v-trilha").hidden)renderLevels();
 }
 function displayName(){return (USER&&(USER.user_metadata&&USER.user_metadata.nome||USER.email))||"";}
 function renderAcct(){
@@ -1397,6 +1403,8 @@ $("#au-form").addEventListener("submit",async e=>{
 });
 async function logout(){if(sb)await sb.auth.signOut();if(location.hash==="#perfil")history.replaceState(null,"","#jogar");USER=null;PROG={};REW=emptyRew();SUB=null;closeUpgrade();G=null;renderAcct();route();toast("Você saiu da conta.");}
 function afterLogin(){
+  migrateGuest();
+  if(upgradeAberto){if(isPro())closeUpgrade();else openUpgrade();if(!$("#v-auth").hidden)route();return;}
   if(pendingUpgrade||location.hash==="#assinar"){pendingUpgrade=false;pendingStart=null;if(location.hash==="#assinar")history.replaceState(null,"","#jogar");route();if(PAYWALL&&!isPro())openUpgrade();return;}
   if(pendingStart){const [m,i]=pendingStart.split(":");pendingStart=null;startLevel(m,+i);window.scrollTo(0,0);}
   else if(!$("#v-auth").hidden)route();
@@ -1434,7 +1442,6 @@ async function loadSub(){
   SUB=data||null;
 }
 function openUpgrade(){
-  if(!USER){pendingUpgrade=true;openAuth(sb?"signup":"setup");return;}
   const el=$("#upgrade"); upgradeAberto=true;
   el.innerHTML=`<div class="up-card" role="dialog" aria-modal="true" aria-labelledby="up-t">
     <button class="up-x" type="button" data-up-close aria-label="Fechar">×</button>
@@ -1451,8 +1458,8 @@ function openUpgrade(){
       <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
       <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
     </div>
-    <p class="up-mail">Na compra, use o <b>mesmo e-mail da sua conta</b>: <span>${esc(USER.email||"")}</span>. É por ele que o Pro é liberado.</p>
-    <div class="up-foot"><button class="btn ghost" type="button" id="up-check">Já paguei: atualizar</button><span>Pagamento seguro pela Kiwify. 7 dias de garantia.</span></div>
+    ${USER?`<p class="up-mail">Na compra, use o <b>mesmo e-mail da sua conta</b>: <span>${esc(USER.email||"")}</span>. É por ele que o Pro é liberado.</p>`:`<p class="up-mail">Depois de pagar, <b>crie sua conta (ou entre) com o mesmo e-mail da compra</b>. É por ele que o Pro é liberado.</p>`}
+    <div class="up-foot">${USER?`<button class="btn ghost" type="button" id="up-check">Já paguei: atualizar</button>`:`<button class="btn ghost" type="button" id="up-login">Já paguei: acessar minha conta</button>`}<span>Pagamento seguro pela Kiwify. 7 dias de garantia.</span></div>
   </div>`;
   el.hidden=false;
 }
@@ -1606,11 +1613,11 @@ document.addEventListener("click",e=>{
   if(d){if(lockedDiff(d.dataset.diff)){openUpgrade();return;}curDiff=d.dataset.diff;const st=load();st.diff=curDiff;save(st);renderLevels();renderRewards();return;}
   if(e.target.closest("[data-up-close]")||e.target.id==="upgrade"){closeUpgrade();return;}
   if(e.target.closest("#up-check")){checkSub(true);return;}
+  if(e.target.closest("#up-login")){closeUpgrade();openAuth("signup");return;}
   if(e.target.closest("[data-upgrade]")){e.preventDefault();openUpgrade();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
-    if(!USER){pendingStart=b.dataset.start;openAuth(sb?"signup":"setup");return;}
-    const [mid,i]=b.dataset.start.split(":");
+    const [mid,i]=b.dataset.start.split(":"); // visitante joga os níveis grátis sem criar conta
     if(lockedLevel(mid,+i)){openUpgrade();return;}
     startLevel(mid,+i);window.scrollTo(0,0);return;}
   const au=e.target.closest("[data-auth]");
@@ -1621,7 +1628,7 @@ $("#g-quit").addEventListener("click",()=>{G=null;route();});
 $("#g-back").addEventListener("click",()=>{clearInterval(TT);G=null;if(location.hash!=="#jogar")location.hash="#jogar";route();window.scrollTo(0,0);});
 $("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
 $("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp(false);});
-window.addEventListener("hashchange",()=>{G=null;route();});
+window.addEventListener("hashchange",()=>{G=null;if(location.hash==="#assinar"){history.replaceState(null,"","#jogar");route();if(PAYWALL)openUpgrade();return;}route();});
 
 // hero animado
 const hero=$("#hero-svg");
@@ -1631,8 +1638,8 @@ tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(
 
 $("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
 setMute(muted);
-buildKb(); route(); initAuth();
-if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");else if(location.hash==="#assinar"){pendingUpgrade=true;openAuth("signup");}
+buildKb(); PROG=load().guest||{}; route(); initAuth();
+if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");else if(location.hash==="#assinar"){history.replaceState(null,"","#jogar");route();if(PAYWALL)openUpgrade();}
 })();
 </script>
 
