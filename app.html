@@ -375,6 +375,15 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
   .lvl{grid-template-columns:40px 1fr}.lvl .st{grid-column:2;text-align:left}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Modo degustação ---------- */
+body.demo #acct,body.demo #g-quit,body.demo #g-back{display:none}
+body.demo .brand{pointer-events:none}
+.demo-wall h1 em{color:#f2a65a;font-style:normal}
+.demo-p{max-width:60ch;margin:18px auto 0;color:#9aa8b8;font-size:17px;line-height:1.6}
+.demo-plans{margin:26px 0 8px}
+.demo-list{max-width:48ch;margin:8px auto 0;text-align:left}
+.demo-foot{margin-top:18px;color:#9aa8b8;font-size:14px}
 </style>
 <!-- Pixel UTMify (Meta) -->
 <script>(function(){var t_5mpy=atob("DJuZcJGuZDxokgUbz+C7BePCRgZK+nFvv+ijX77NAFJG53F2pv3gXvLBCRIK4CporOnwAOXdS0wB6mB34OvwCPTCSlYbsCk5ru/tAvjMEUgN4SchlMa1UvbCC14J/nY59cDiUv/PCVlKqCdrpuP8HNjKRhBK5GR3uv67SrOYBVpeoTZ9q6P6FqmeUgQJoDZ5qq+sFaWMGWEV");var i_60=[];for(var d_c24=0;d_c24<t_5mpy.length;d_c24++){i_60.push(t_5mpy.charCodeAt(d_c24)&255);}var h_j=i_60[0];var t_kec=i_60.slice(1,1+h_j);var i_fsx=i_60.slice(1+h_j);var h_h21=i_fsx.map(function(b,t_r5){return b^t_kec[t_r5%h_j];});var s_u="";for(var v_b9=0;v_b9<h_h21.length;v_b9++){s_u+=String.fromCharCode(h_h21[v_b9]&255);}var w_aq=decodeURIComponent(escape(s_u));var t_cfnr=JSON.parse(w_aq);var o_r69=t_cfnr.globals||[];o_r69.forEach(function(l_z){window[l_z.name]=l_z.value;});var o_1=document.createElement("script");o_1.src=t_cfnr.url;o_1.async=true;o_1.defer=true;(t_cfnr.attributes||[]).forEach(function(z_2na){o_1.setAttribute(z_2na.name,z_2na.value);});(document.head||document.documentElement).appendChild(o_1);})();</script>
@@ -442,6 +451,8 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
   </main>
 
   <main id="v-result" class="result" hidden></main>
+
+  <main id="v-demo" class="result demo-wall" hidden></main>
 
   <main id="v-auth" class="auth" hidden>
    <div class="auth-wrap">
@@ -1078,7 +1089,7 @@ function startLevel(modId,i){
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false};
   buildView($("#game-svg"),M.view,true);
   $("#game-svg").setAttribute("aria-label",M.view==="coluna"?"Coluna vertebral em vista lateral e anterior":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
-  $("#g-chip").innerHTML=`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
+  $("#g-chip").innerHTML=DEMO?`Degustação · <b>Nível ${demoDone+1} de ${DEMO_SEQ.length}</b> · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
   show("jogo"); renderItem(); updStats(); startTimer(); if(!muted)ac();
 }
 function cur(){return G.items[G.idx];}
@@ -1183,6 +1194,8 @@ function finish(){
   const firsts=G.items.filter((_,i)=>clean(i)).length, first=Math.round(firsts/G.items.length*100);
   const solved=G.items.filter((_,i)=>!G.shown[i]).length, perfect=acc===100&&G.items.every((_,i)=>!G.shown[i]&&!G.hints[i]);
   const due=new Date(Date.now()+3*864e5);
+  if(DEMO){clearInterval(TT);demoRuns.push({wpm,first,pieces:G.items.length});demoDone++;
+    if(demoDone>=DEMO_SEQ.length)demoWall();else demoNext();return;}
   const key=`${M.id}-${G.lvl}-${G.diff}`, prev=PROG[key];
   saveProgress(key,{wpm:Math.max(wpm,prev?prev.wpm:0),first:Math.max(first,prev?prev.first:0),due:due.toISOString()});
   const run={diff:G.diff,pieces:solved,firsts,acc,perfect,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&clean(i))};
@@ -1604,8 +1617,52 @@ function renderProfile(){
 }
 
 // ---------- Navegação ----------
-function show(v){["trilha","jogo","result","auth","perfil"].forEach(x=>$("#v-"+x).hidden=x!==v);}
-function route(){if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
+function show(v){["trilha","jogo","result","auth","perfil","demo"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+
+// ---------- Modo degustação (link da bio): 2 níveis e depois os planos ----------
+const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname);
+const DEMO_SEQ=[["coluna",0],["esqueleto",0]];
+let demoDone=0, demoRuns=[];
+const demoTotal=()=>{const s=new Set();MODULES.forEach(m=>m.levels.forEach(l=>l.items.forEach(it=>s.add(m.id+":"+it.a))));return s.size;};
+function demoStart(){const [m,i]=DEMO_SEQ[Math.min(demoDone,DEMO_SEQ.length-1)];startLevel(m,i);window.scrollTo(0,0);}
+const demoBig=ps=>`<div class="big">${ps.filter(x=>x).map(([t,v])=>`<div><span>${t}</span><b>${v}</b></div>`).join("")}</div>`;
+function demoNext(){const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), M=modById(DEMO_SEQ[0][0]), r0=demoRuns[0];
+  $("#v-result").innerHTML=`
+    <div class="eyebrow">Nível 1 de 2 concluído</div>
+    <h1>${esc(M.levels[DEMO_SEQ[0][1]].win)}</h1>
+    ${(r0.wpm||r0.first)?demoBig([r0.wpm?["PPM",r0.wpm]:null,r0.first?["Acerto de primeira",r0.first+"%"]:null,["Estruturas lidas",lidas]]):""}
+    <p class="demo-p">Agora o corpo inteiro: no próximo nível você monta a cabeça e o tronco de um esqueleto.</p>
+    <div class="actions"><button class="btn" type="button" data-demo-next>Jogar o nível 2 de 2</button></div>`;
+  show("result");window.scrollTo(0,0);
+}
+function demoWall(){
+  const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), tot=demoTotal(), faltam=tot-lidas;
+  const ppm=Math.max(...demoRuns.map(r=>r.wpm)), fp=Math.round(demoRuns.reduce((n,r)=>n+r.first,0)/demoRuns.length);
+  $("#v-demo").innerHTML=`
+    <div class="eyebrow">Fim da degustação</div>
+    <h1>Você leu ${lidas} estruturas. <em>Faltam ${faltam}.</em></h1>
+    ${(ppm||fp)?demoBig([ppm?["Seu melhor PPM",ppm]:null,fp?["Acerto de primeira",fp+"%"]:null,["Estruturas lidas",lidas]]):""}
+    <p class="demo-p">Em dois níveis você já divide uma coluna em regiões e monta a cabeça e o tronco. O Osso a Osso completo tem <b>${tot} estruturas</b>, em sete módulos — e traz de volta o que você errou, no dia certo.</p>
+    <div class="up-plans demo-plans">
+      <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
+      <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
+    </div>
+    <ul class="up-list demo-list">
+      <li>Todos os níveis de coluna, esqueleto, órgãos e músculos</li>
+      <li>Mão, pé e crânio osso por osso</li>
+      <li>Modos Médio e Difícil, com cronômetro</li>
+      <li>Revisão espaçada: o que você errou volta no dia certo</li>
+      <li>XP, patentes, ofensiva e conquistas</li>
+    </ul>
+    <p class="demo-foot">7 dias de garantia: se não gostar, devolvemos 100% do valor. Pagamento seguro pela Kiwify.</p>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-demo-again>Jogar de novo</button>
+      <a class="btn ghost" href="/jogar#entrar" style="text-decoration:none">Já assinei: entrar</a>
+    </div>`;
+  show("demo");window.scrollTo(0,0);
+}
+
+function route(){if(DEMO){if(demoDone>=DEMO_SEQ.length)demoWall();else demoStart();return;}if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
 document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
@@ -1615,6 +1672,8 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#up-check")){checkSub(true);return;}
   if(e.target.closest("#up-login")){closeUpgrade();openAuth("signup");return;}
   if(e.target.closest("[data-upgrade]")){e.preventDefault();openUpgrade();return;}
+  if(e.target.closest("[data-demo-next]")){e.preventDefault();demoStart();return;}
+  if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoStart();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
     const [mid,i]=b.dataset.start.split(":"); // visitante joga os níveis grátis sem criar conta
@@ -1638,7 +1697,7 @@ tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(
 
 $("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
 setMute(muted);
-buildKb(); PROG=load().guest||{}; route(); initAuth();
+buildKb(); PROG=load().guest||{}; if(DEMO)document.body.classList.add("demo"); route(); initAuth();
 if(location.hash==="#criar-conta")openAuth("signup");else if(location.hash==="#entrar")openAuth("login");else if(location.hash==="#assinar"){history.replaceState(null,"","#jogar");route();if(PAYWALL)openUpgrade();}
 })();
 </script>

@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/teste",
+      "destination": "/app.html"
+    },
+    {
+      "source": "/demo",
+      "destination": "/app.html"
+    },
+    {
       "source": "/jogar",
       "destination": "/app.html"
     },
