@@ -377,8 +377,18 @@ td.num{font-family:var(--f-mono);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* ---------- Modo degustação ---------- */
-body.demo #acct,body.demo #g-quit,body.demo #g-back{display:none}
+body.demo #acct{display:none}
 body.demo .brand{pointer-events:none}
+.demo-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin:26px 0 8px}
+.dp{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:18px 16px;border-radius:18px;
+  background:rgba(18,28,39,.95);border:2px solid #2c3d51;color:var(--bone);text-align:left;cursor:pointer;
+  transition:border-color .15s,transform .15s,background .15s}
+.dp:hover,.dp:focus-visible{border-color:var(--amber);background:rgba(28,40,54,.98);transform:translateY(-2px)}
+.dp-i{font-size:30px;line-height:1.1}
+.dp-t{font:800 22px Inter,sans-serif;letter-spacing:-.01em}
+.dp-d{font:600 13px Inter,sans-serif;color:var(--dim);letter-spacing:.02em}
+.dp-n{font:600 13px Inter,sans-serif;color:var(--amber);margin-top:2px}
+.demo-pickview h1 em{color:var(--amber);font-style:normal}
 .demo-wall h1 em{color:#f2a65a;font-style:normal}
 .demo-p{max-width:60ch;margin:18px auto 0;color:#9aa8b8;font-size:17px;line-height:1.6}
 .demo-plans{margin:26px 0 8px}
@@ -1089,7 +1099,7 @@ function startLevel(modId,i){
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false};
   buildView($("#game-svg"),M.view,true);
   $("#game-svg").setAttribute("aria-label",M.view==="coluna"?"Coluna vertebral em vista lateral e anterior":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
-  $("#g-chip").innerHTML=DEMO?`Degustação · <b>Nível ${demoDone+1} de ${DEMO_SEQ.length}</b> · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
+  $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(M.name)} · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
   show("jogo"); renderItem(); updStats(); startTimer(); if(!muted)ac();
 }
 function cur(){return G.items[G.idx];}
@@ -1194,8 +1204,8 @@ function finish(){
   const firsts=G.items.filter((_,i)=>clean(i)).length, first=Math.round(firsts/G.items.length*100);
   const solved=G.items.filter((_,i)=>!G.shown[i]).length, perfect=acc===100&&G.items.every((_,i)=>!G.shown[i]&&!G.hints[i]);
   const due=new Date(Date.now()+3*864e5);
-  if(DEMO){clearInterval(TT);demoRuns.push({wpm,first,pieces:G.items.length});demoDone++;
-    if(demoDone>=DEMO_SEQ.length)demoWall();else demoNext();return;}
+  if(DEMO){clearInterval(TT);demoRuns.push({wpm,first,pieces:G.items.length,mod:G.mod,lvl:G.lvl});demoDone++;
+    if(demoDone>=DEMO_RODADAS)demoWall();else demoNext();return;}
   const key=`${M.id}-${G.lvl}-${G.diff}`, prev=PROG[key];
   saveProgress(key,{wpm:Math.max(wpm,prev?prev.wpm:0),first:Math.max(first,prev?prev.first:0),due:due.toISOString()});
   const run={diff:G.diff,pieces:solved,firsts,acc,perfect,wpm,firstTime:!prev,ecmFirst:G.items.some((it,i)=>it.a==="esternocleidomastoideo"&&clean(i))};
@@ -1445,7 +1455,7 @@ const isPro=()=>!!(SUB&&SUB.status!=="reembolsada"&&SUB.pro_ate&&new Date(SUB.pr
 // Plano Free: só o Fácil, só o 1º nível de cada sistema, sem XP/patentes/ofensiva/conquistas.
 const FREE=()=>PAYWALL&&!isPro();
 const PRO_MOD=new Set(["mao","pe","cranio"]); // módulos só do Pro
-const lockedLevel=(modId,i)=>FREE()&&(i>0||PRO_MOD.has(modId));
+const lockedLevel=(modId,i)=>!DEMO&&FREE()&&(i>0||PRO_MOD.has(modId));
 const lockedDiff=k=>FREE()&&k!=="facil";
 const LOCK=`<svg viewBox="0 0 14 16" width="11" height="13" aria-hidden="true"><rect x="1.5" y="7" width="11" height="8" rx="2" fill="currentColor"/><path d="M4 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`;
 async function loadSub(){
@@ -1619,37 +1629,67 @@ function renderProfile(){
 // ---------- Navegação ----------
 function show(v){["trilha","jogo","result","auth","perfil","demo"].forEach(x=>$("#v-"+x).hidden=x!==v);}
 
-// ---------- Modo degustação (link da bio): 2 níveis e depois os planos ----------
+// ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname);
-const DEMO_SEQ=[["coluna",0],["esqueleto",0]];
-let demoDone=0, demoRuns=[];
-const demoTotal=()=>{const s=new Set();MODULES.forEach(m=>m.levels.forEach(l=>l.items.forEach(it=>s.add(m.id+":"+it.a))));return s.size;};
-function demoStart(){const [m,i]=DEMO_SEQ[Math.min(demoDone,DEMO_SEQ.length-1)];startLevel(m,i);window.scrollTo(0,0);}
+const DEMO_RODADAS=2;
+let demoDone=0, demoRuns=[], demoLvlOf={};
+const demoCount=m=>{const s=new Set();m.levels.forEach(l=>l.items.forEach(it=>s.add(it.a)));return s.size;};
+const demoTotal=()=>MODULES.reduce((n,m)=>n+demoCount(m),0);
+const DEMO_ICO={coluna:"🦴",esqueleto:"🩻",orgaos:"🫀",musculos:"💪",mao:"✋",pe:"🦶",cranio:"💀"};
 const demoBig=ps=>`<div class="big">${ps.filter(x=>x).map(([t,v])=>`<div><span>${t}</span><b>${v}</b></div>`).join("")}</div>`;
-function demoNext(){const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), M=modById(DEMO_SEQ[0][0]), r0=demoRuns[0];
-  $("#v-result").innerHTML=`
-    <div class="eyebrow">Nível 1 de 2 concluído</div>
-    <h1>${esc(M.levels[DEMO_SEQ[0][1]].win)}</h1>
-    ${(r0.wpm||r0.first)?demoBig([r0.wpm?["PPM",r0.wpm]:null,r0.first?["Acerto de primeira",r0.first+"%"]:null,["Estruturas lidas",lidas]]):""}
-    <p class="demo-p">Agora o corpo inteiro: no próximo nível você monta a cabeça e o tronco de um esqueleto.</p>
-    <div class="actions"><button class="btn" type="button" data-demo-next>Jogar o nível 2 de 2</button></div>`;
-  show("result");window.scrollTo(0,0);
+
+function demoHome(){
+  const resta=DEMO_RODADAS-demoDone;
+  $("#v-demo").className="result demo-pickview";
+  $("#v-demo").innerHTML=`
+    <div class="eyebrow">${demoDone?`Rodada ${demoDone+1} de ${DEMO_RODADAS}`:"Teste grátis · sem conta, sem e-mail"}</div>
+    <h1>${demoDone?"Escolha a próxima parte.":"Por onde você quer <em>começar</em>?"}</h1>
+    <p class="demo-p">Uma peça acende e você digita o nome. Você joga ${resta} ${resta>1?"rodadas":"rodada"} de graça — escolha a parte do corpo.</p>
+    <div class="demo-pick">${MODULES.map(m=>{
+      const i=demoLvlOf[m.id]||0, L=m.levels[Math.min(i,m.levels.length-1)];
+      return `<button class="dp" type="button" data-demo-pick="${m.id}">
+        <span class="dp-i" aria-hidden="true">${DEMO_ICO[m.id]||"🦴"}</span>
+        <span class="dp-t">${esc(m.name)}</span>
+        <span class="dp-d">${demoCount(m)} estruturas · ${m.levels.length} níveis</span>
+        <span class="dp-n">${i?"Nível "+(i+1)+": ":""}${esc(L.title)}</span>
+      </button>`;}).join("")}</div>`;
+  show("demo");window.scrollTo(0,0);
+}
+function demoPlay(id){
+  const M=modById(id), i=Math.min(demoLvlOf[id]||0, M.levels.length-1);
+  demoLvlOf[id]=i+1; startLevel(id,i); window.scrollTo(0,0);
+}
+function demoNext(){
+  const r=demoRuns[demoRuns.length-1], M=modById(r.mod), L=M.levels[r.lvl];
+  $("#v-demo").className="result demo-wall";
+  $("#v-demo").innerHTML=`
+    <div class="eyebrow">Rodada ${demoDone} de ${DEMO_RODADAS} concluída</div>
+    <h1>${esc(L.win)}</h1>
+    ${(r.wpm||r.first)?demoBig([r.wpm?["PPM",r.wpm]:null,r.first?["Acerto de primeira",r.first+"%"]:null,["Estruturas",r.pieces]]):""}
+    <p class="demo-p">Falta ${DEMO_RODADAS-demoDone} rodada. Continue em ${esc(M.name.toLowerCase())} ou troque de parte do corpo.</p>
+    <div class="actions">
+      ${r.lvl+1<M.levels.length?`<button class="btn" type="button" data-demo-pick="${M.id}">Nível ${r.lvl+2} de ${esc(M.name.toLowerCase())}</button>`:""}
+      <button class="btn ghost" type="button" data-demo-home>Escolher outra parte</button>
+    </div>`;
+  show("demo");window.scrollTo(0,0);
 }
 function demoWall(){
   const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), tot=demoTotal(), faltam=tot-lidas;
   const ppm=Math.max(...demoRuns.map(r=>r.wpm)), fp=Math.round(demoRuns.reduce((n,r)=>n+r.first,0)/demoRuns.length);
+  const partes=[...new Set(demoRuns.map(r=>modById(r.mod).name.toLowerCase()))];
+  $("#v-demo").className="result demo-wall";
   $("#v-demo").innerHTML=`
-    <div class="eyebrow">Fim da degustação</div>
+    <div class="eyebrow">Fim do teste grátis</div>
     <h1>Você leu ${lidas} estruturas. <em>Faltam ${faltam}.</em></h1>
     ${(ppm||fp)?demoBig([ppm?["Seu melhor PPM",ppm]:null,fp?["Acerto de primeira",fp+"%"]:null,["Estruturas lidas",lidas]]):""}
-    <p class="demo-p">Em dois níveis você já divide uma coluna em regiões e monta a cabeça e o tronco. O Osso a Osso completo tem <b>${tot} estruturas</b>, em sete módulos — e traz de volta o que você errou, no dia certo.</p>
+    <p class="demo-p">Você jogou ${partes.join(" e ")}. O Osso a Osso completo tem <b>${tot} estruturas</b> em sete partes do corpo — e traz de volta o que você errou, no dia certo.</p>
     <div class="up-plans demo-plans">
       <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
       <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
     </div>
     <ul class="up-list demo-list">
-      <li>Todos os níveis de coluna, esqueleto, órgãos e músculos</li>
-      <li>Mão, pé e crânio osso por osso</li>
+      <li>Coluna, esqueleto, órgãos, músculos, mão, pé e crânio</li>
+      <li>Todos os níveis de cada parte, osso por osso</li>
       <li>Modos Médio e Difícil, com cronômetro</li>
       <li>Revisão espaçada: o que você errou volta no dia certo</li>
       <li>XP, patentes, ofensiva e conquistas</li>
@@ -1662,7 +1702,7 @@ function demoWall(){
   show("demo");window.scrollTo(0,0);
 }
 
-function route(){if(DEMO){if(demoDone>=DEMO_SEQ.length)demoWall();else demoStart();return;}if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
+function route(){if(DEMO){if(demoDone>=DEMO_RODADAS)demoWall();else demoHome();return;}if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
 document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
@@ -1672,8 +1712,10 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#up-check")){checkSub(true);return;}
   if(e.target.closest("#up-login")){closeUpgrade();openAuth("signup");return;}
   if(e.target.closest("[data-upgrade]")){e.preventDefault();openUpgrade();return;}
-  if(e.target.closest("[data-demo-next]")){e.preventDefault();demoStart();return;}
-  if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoStart();return;}
+  const dp=e.target.closest("[data-demo-pick]");
+  if(dp){e.preventDefault();demoPlay(dp.dataset.demoPick);return;}
+  if(e.target.closest("[data-demo-home]")){e.preventDefault();demoHome();return;}
+  if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoLvlOf={};demoHome();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
     const [mid,i]=b.dataset.start.split(":"); // visitante joga os níveis grátis sem criar conta
