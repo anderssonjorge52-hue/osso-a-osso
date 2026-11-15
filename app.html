@@ -573,6 +573,13 @@ const SK={
   carpo:{a:"carpo",hl:["p:carpo"],clue:"8 ossinhos do punho, em duas fileiras."},
   metacarpo:{a:"metacarpo",hl:["p:metacarpo"],clue:"5 ossos longos da palma da mão."},
   falanges:{a:"falanges",hl:["p:falanges"],clue:"Ossos dos dedos: 14 em cada mão, e o polegar tem só 2."},
+  coluna:{a:"coluna vertebral",hl:["p:coluna"],clue:"O eixo do corpo: 33 vértebras da nuca ao cóccix."},
+  hioide:{a:"hioide",hl:["p:hioide"],clue:"Osso em U no pescoço; o único que não se articula com nenhum outro."},
+  sacro:{a:"sacro",hl:["p:sacro"],clue:"Cinco vértebras fundidas que se encaixam entre os dois ossos do quadril."},
+  coccix:{a:"cóccix",hl:["p:coccix"],clue:"A ponta final da coluna: 3 a 5 vértebras fundidas."},
+  ilio:{a:"ílio",hl:["p:ilio"],clue:"A asa larga do quadril; é a crista que você apalpa na cintura."},
+  isquio:{a:"ísquio",hl:["p:isquio"],clue:"A parte de baixo e de trás do quadril; é nele que você senta."},
+  pubis:{a:"púbis",hl:["p:pubis"],clue:"A parte da frente do quadril, onde os dois lados se encontram."},
   pelve:{a:"pelve",hl:["p:pelve"],clue:"Anel formado pelos dois ossos do quadril e o sacro; apoia o tronco."},
   femur:{a:"fêmur",hl:["p:femur"],clue:"O maior e mais longo osso do corpo, na coxa."},
   patela:{a:"patela",hl:["p:patela"],clue:"Osso do joelho que fica dentro do tendão do quadríceps."},
@@ -594,6 +601,16 @@ const OR={
   rins:{a:"rins",hl:["p:rins"],clue:"Dois órgãos em forma de feijão, atrás do abdome; filtram o sangue."},
   delgado:{a:"intestino delgado",hl:["p:delgado"],clue:"Duodeno, jejuno e íleo, com uns 6 metros; absorve os nutrientes."},
   grosso:{a:"intestino grosso",hl:["p:grosso"],clue:"Contorna o delgado como uma moldura; absorve água e forma as fezes."},
+  cerebelo:{a:"cerebelo",hl:["p:cerebelo"],clue:"Atrás e abaixo do cérebro; coordena equilíbrio e movimento fino."},
+  tronco:{a:"tronco encefálico",hl:["p:tronco"],clue:"Liga o encéfalo à medula; controla respiração e batimento."},
+  laringe:{a:"laringe",hl:["p:laringe"],clue:"Onde ficam as pregas vocais, logo acima da traqueia."},
+  tireoide:{a:"tireoide",hl:["p:tireoide"],clue:"Glândula em forma de borboleta abraçando a traqueia."},
+  esofago:{a:"esôfago",hl:["p:esofago"],clue:"Tubo que leva o alimento da faringe ao estômago, atrás da traqueia."},
+  diafragma:{a:"diafragma",hl:["p:diafragma"],clue:"Músculo em cúpula que separa o tórax do abdome e comanda a respiração."},
+  suprarrenais:{a:"suprarrenais",hl:["p:suprarrenais"],clue:"Glândulas em cima de cada rim; produzem adrenalina e cortisol."},
+  ureteres:{a:"ureteres",hl:["p:ureteres"],clue:"Levam a urina de cada rim até a bexiga."},
+  uretra:{a:"uretra",hl:["p:uretra"],clue:"Canal que leva a urina da bexiga para fora."},
+  apendice:{a:"apêndice",hl:["p:apendice"],clue:"Pequeno fundo de saco preso ao ceco, no início do intestino grosso."},
   bexiga:{a:"bexiga",hl:["p:bexiga"],clue:"Bolsa muscular na pelve que armazena a urina."}
 };
 const MU={
@@ -652,21 +669,26 @@ const CRA={
   nasal:{a:"nasal",hl:["p:c-nasal"],clue:"Par de ossinhos que forma a ponte do nariz."},
   lacrimal:{a:"lacrimal",hl:["p:c-lacrimal"],clue:"O menor osso da face, na parede interna da órbita."},
   vomer:{a:"vômer",hl:["p:c-vomer"],clue:"Lâmina fina que forma a parte de baixo do septo nasal."},
-  concha:{a:"concha nasal inferior",hl:["p:c-concha"],clue:"Osso curvo e enrolado na parede lateral da cavidade nasal."}
+  concha:{a:"concha nasal inferior",hl:["p:c-concha"],clue:"Osso curvo e enrolado na parede lateral da cavidade nasal."},
+  palatino:{a:"palatino",hl:["p:c-palatino"],clue:"Par em forma de L que fecha o fundo do palato duro e a parede da cavidade nasal."}
 };
 const MODULES=[
   {id:"coluna",name:"Coluna vertebral",view:"coluna",levels:SPINE_LEVELS},
   {id:"esqueleto",name:"Esqueleto",view:"esqueleto",levels:[
-    {title:"Cabeça e tronco",desc:"Crânio, mandíbula, clavícula, esterno, costelas e escápula.",win:"Você já monta a cabeça e o tronco de um esqueleto.",items:pick(SK,["cranio","mandibula","clavicula","esterno","costelas","escapula"])},
+    {title:"Cabeça e pescoço",desc:"Crânio, mandíbula, hioide e a coluna.",win:"Você já lê a cabeça e o pescoço de um esqueleto.",items:pick(SK,["cranio","mandibula","hioide","coluna"])},
+    {title:"Tronco",desc:"Clavícula, escápula, esterno e costelas.",win:"Você já monta o tronco de um esqueleto.",items:pick(SK,["clavicula","escapula","esterno","costelas"])},
     {title:"Membro superior",desc:"Do ombro à ponta dos dedos.",win:"Você já lê um braço inteiro, do úmero às falanges.",items:pick(SK,["umero","radio","ulna","carpo","metacarpo","falanges"])},
-    {title:"Membro inferior",desc:"Da pelve aos pés.",win:"Você já lê uma perna inteira, da pelve ao metatarso.",items:pick(SK,["pelve","femur","patela","tibia","fibula","tarso","metatarso"])},
-    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","clavicula","costelas","umero","radio","ulna","pelve","femur","patela","tibia","fibula"])}
+    {title:"Cintura pélvica",desc:"Ílio, ísquio, púbis, sacro e cóccix.",win:"Você já lê o quadril osso por osso.",items:pick(SK,["ilio","isquio","pubis","sacro","coccix"])},
+    {title:"Membro inferior",desc:"Do fêmur aos pés.",win:"Você já lê uma perna inteira, do fêmur ao metatarso.",items:pick(SK,["femur","patela","tibia","fibula","tarso","metatarso"])},
+    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","mandibula","hioide","coluna","clavicula","costelas","umero","radio","ulna","ilio","sacro","femur","patela","tibia","fibula"])}
   ]},
   {id:"orgaos",name:"Órgãos",view:"orgaos",levels:[
-    {title:"Cabeça e tórax",desc:"Encéfalo, traqueia, pulmões e coração.",win:"Você já encontra os órgãos da cabeça e do tórax.",items:pick(OR,["encefalo","traqueia","pulmoes","coracao"])},
+    {title:"Cabeça e pescoço",desc:"Encéfalo, cerebelo, tronco, laringe e tireoide.",win:"Você já lê a cabeça e o pescoço por dentro.",items:pick(OR,["encefalo","cerebelo","tronco","laringe","tireoide"])},
+    {title:"Tórax",desc:"Traqueia, esôfago, pulmões, coração e diafragma.",win:"Você já lê o tórax inteiro.",items:pick(OR,["traqueia","esofago","pulmoes","coracao","diafragma"])},
     {title:"Abdome superior",desc:"Fígado, vesícula, estômago, baço e pâncreas.",win:"Você já lê o andar de cima do abdome.",items:pick(OR,["figado","vesicula","estomago","baco","pancreas"])},
-    {title:"Abdome inferior",desc:"Rins, intestinos e bexiga.",win:"Você já lê o andar de baixo do abdome.",items:pick(OR,["rins","delgado","grosso","bexiga"])},
-    {title:"Todos os órgãos",desc:"Os 13 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)}
+    {title:"Abdome inferior",desc:"Intestinos, apêndice e suprarrenais.",win:"Você já lê o andar de baixo do abdome.",items:pick(OR,["delgado","grosso","apendice","suprarrenais"])},
+    {title:"Sistema urinário",desc:"Do rim até a saída: rins, ureteres, bexiga e uretra.",win:"Você já lê o caminho da urina inteiro.",items:pick(OR,["rins","ureteres","bexiga","uretra"])},
+    {title:"Todos os órgãos",desc:"Os 23 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)}
   ]},
   {id:"musculos",name:"Músculos",view:"musculos",levels:[
     {title:"Pescoço e tronco",desc:"Esternocleidomastoideo, trapézio, peitoral e abdome.",win:"Você já lê os músculos do tronco.",items:pick(MU,["ecm","trapezio","peitoral","reto","obliquo"])},
@@ -685,7 +707,7 @@ const MODULES=[
   ]}
   ,{id:"cranio",name:"Crânio",view:"cranio",pro:true,levels:[
     {title:"Neurocrânio",desc:"Frontal, parietal, temporal, occipital, esfenoide e etmoide.",win:"Você já monta a caixa do crânio.",items:pick(CRA,["frontal","parietal","temporal","occipital","esfenoide","etmoide"])},
-    {title:"Ossos da face",desc:"Maxila, mandíbula, zigomático, nasal e companhia.",win:"Você já lê os ossos da face.",items:pick(CRA,["maxila","mandibula","zigomatico","nasal","lacrimal","vomer","concha"])},
+    {title:"Ossos da face",desc:"Maxila, mandíbula, zigomático, nasal e companhia.",win:"Você já lê os 14 ossos da face.",items:pick(CRA,["maxila","mandibula","zigomatico","nasal","lacrimal","vomer","concha","palatino"])},
     {title:"Crânio inteiro",desc:"Todos os ossos do crânio, misturados.",win:"Você já lê um crânio inteiro, osso por osso.",items:Object.values(CRA)}
   ]}
 ];
@@ -829,6 +851,10 @@ function drawSkeleton(svg,faint){
   el("path",{class:"bone",d:"M170 104 Q172 134 200 140 Q228 134 230 104 L224 106 Q222 128 200 132 Q178 128 176 106Z"},p);
   p=part(g,"coluna");
   for(let y=144;y<396;y+=y<288?11:16) el("rect",{class:"bone",x:CX-(y<288?7:11),y,width:y<288?14:22,height:y<288?9:13,rx:3},p);
+  p=part(g,"sacro");
+  el("path",{class:"bone",d:"M186 396 L214 396 L209 424 L200 430 L191 424 Z"},p);
+  p=part(g,"coccix");
+  el("path",{class:"bone",d:"M195 431 L205 431 L202 444 L198 444 Z"},p);
   p=part(g,"escapula");
   BOTH(s=>el("path",{class:"bone",d:`M${X(s,48)} 164 L${X(s,82)} 168 L${X(s,58)} 244 Z`},p));
   p=part(g,"costelas");
@@ -838,11 +864,20 @@ function drawSkeleton(svg,faint){
   el("path",{class:"bone",d:"M191 166 L209 166 L206 182 L207 250 L200 266 L193 250 L194 182 Z"},p);
   p=part(g,"clavicula");
   BOTH(s=>cap(p,"bone",X(s,10),160,X(s,72),151,8));
+  p=part(g,"hioide");
+  el("path",{class:"rib",d:"M185 143 Q200 151 215 143"},p);
+  BOTH(s=>el("circle",{class:"bone",cx:X(s,15),cy:142.5,r:2.6},p));
   p=part(g,"pelve");
   BOTH(s=>{
     el("path",{class:"bone",d:`M${X(s,16)} 374 Q${X(s,74)} 356 ${X(s,70)} 392 Q${X(s,64)} 410 ${X(s,46)} 418 Q${X(s,42)} 442 ${X(s,4)} 442 L${X(s,3)} 428 Q${X(s,24)} 422 ${X(s,20)} 400 Z`},p);
     el("ellipse",{class:"proc",cx:X(s,26),cy:430,rx:7,ry:6,"stroke-opacity":".35"},p);
   });
+  p=part(g,"ilio");
+  BOTH(s=>el("path",{class:"bone",d:`M${X(s,16)} 374 Q${X(s,74)} 356 ${X(s,70)} 392 Q${X(s,64)} 406 ${X(s,40)} 411 Q${X(s,24)} 400 ${X(s,20)} 384 Z`},p));
+  p=part(g,"isquio");
+  BOTH(s=>el("path",{class:"bone",d:`M${X(s,40)} 413 Q${X(s,50)} 418 ${X(s,44)} 437 Q${X(s,32)} 445 ${X(s,22)} 438 Q${X(s,24)} 423 ${X(s,32)} 415 Z`},p));
+  p=part(g,"pubis");
+  BOTH(s=>el("path",{class:"bone",d:`M${X(s,21)} 427 Q${X(s,4)} 427 ${X(s,3)} 442 L${X(s,20)} 442 Q${X(s,25)} 434 ${X(s,21)} 427 Z`},p));
   el("path",{class:"bone",d:"M184 380 L216 380 L206 418 L194 418 Z"},p);
   p=part(g,"umero");
   BOTH(s=>{el("circle",{class:"bone",cx:X(s,74),cy:172,r:10},p);cap(p,"bone",X(s,78),172,X(s,93),324,13);});
@@ -863,24 +898,46 @@ function drawSkeleton(svg,faint){
 }
 function drawOrgans(svg){
   const g=el("g",{},svg);
-  let p=part(g,"rins"); BOTH(s=>el("path",{class:"org",d:`M${X(s,30)} 344 Q${X(s,48)} 336 ${X(s,50)} 362 Q${X(s,50)} 386 ${X(s,32)} 384 Q${X(s,26)} 372 ${X(s,32)} 364 Q${X(s,26)} 354 ${X(s,30)} 344Z`},p));
+  let p=part(g,"esofago");
+  el("path",{class:"org tube",d:"M214 120 Q220 176 216 232 Q214 268 220 292"},p);
+  p=part(g,"ureteres");
+  BOTH(s=>el("path",{class:"org tube thin",d:`M${X(s,36)} 382 Q${X(s,36)} 414 ${X(s,11)} 440`},p));
+  p=part(g,"rins"); BOTH(s=>el("path",{class:"org",d:`M${X(s,30)} 344 Q${X(s,48)} 336 ${X(s,50)} 362 Q${X(s,50)} 386 ${X(s,32)} 384 Q${X(s,26)} 372 ${X(s,32)} 364 Q${X(s,26)} 354 ${X(s,30)} 344Z`},p));
   p=part(g,"encefalo");
   el("path",{class:"org",d:"M166 74 C164 30 236 30 234 74 C234 92 222 98 200 98 C178 98 166 92 166 74Z"},p);
   el("path",{class:"proc",d:"M200 40 L200 96 M176 56 Q186 64 180 76 M224 56 Q214 64 220 76","stroke-opacity":".4"},p);
+  p=part(g,"cerebelo");
+  el("path",{class:"org",d:"M204 94 Q228 92 234 106 Q230 120 212 118 Q202 108 204 94Z"},p);
+  el("path",{class:"proc",d:"M210 100 Q222 104 228 110 M208 108 Q218 112 226 116","stroke-opacity":".4"},p);
+  p=part(g,"tronco");
+  el("path",{class:"org",d:"M179 96 L193 96 Q195 112 193 128 L181 128 Q179 112 179 96Z"},p);
   p=part(g,"traqueia");
   el("rect",{class:"org",x:194,y:126,width:12,height:64,rx:5},p);
   for(let y=132;y<188;y+=7) el("path",{class:"proc",d:`M195 ${y} L205 ${y}`,"stroke-opacity":".35"},p);
   el("path",{class:"org tube",d:"M200 188 L184 204 M200 188 L216 204"},p);
+  p=part(g,"laringe");
+  el("path",{class:"org",d:"M193 108 Q200 104 207 108 L209 127 L191 127Z"},p);
+  el("path",{class:"proc",d:"M200 110 L200 120","stroke-opacity":".45"},p);
+  p=part(g,"tireoide");
+  BOTH(s=>el("ellipse",{class:"org",cx:X(s,11),cy:141,rx:5,ry:11},p));
+  el("rect",{class:"org",x:194,y:137,width:12,height:8,rx:3},p);
   p=part(g,"pulmoes");
   BOTH(s=>{const inn=s>0?30:13;
     el("path",{class:"org",d:`M${X(s,inn)} 186 Q${X(s,18)} 160 ${X(s,36)} 158 Q${X(s,66)} 168 ${X(s,70)} 240 Q${X(s,72)} 290 ${X(s,52)} 292 Q${X(s,30)} 296 ${X(s,inn)} 282 Z`},p);});
+  p=part(g,"diafragma");
+  el("path",{class:"org tube",d:"M134 300 Q168 268 200 272 Q232 268 266 300"},p);
   p=part(g,"coracao");
   el("path",{class:"org",d:"M194 222 Q212 206 232 220 Q246 238 228 262 L212 278 Q196 266 190 248 Q186 230 194 222Z"},p);
   p=part(g,"grosso");
   el("path",{class:"org tube",d:"M162 430 L158 364 Q160 352 172 352 L228 352 Q242 352 242 364 L242 412 Q242 430 224 434 L208 438"},p);
+  p=part(g,"apendice");
+  el("path",{class:"org tube thin",d:"M163 432 Q155 444 158 456 Q161 462 166 457"},p);
   p=part(g,"delgado");
   el("path",{class:"org tube thin",d:"M180 368 Q220 360 222 372 Q222 384 182 382 Q174 394 220 394 Q228 406 182 406 Q174 418 214 420"},p);
+  p=part(g,"suprarrenais");
+  BOTH(s=>el("path",{class:"org",d:`M${X(s,29)} 346 Q${X(s,33)} 329 ${X(s,45)} 333 Q${X(s,52)} 339 ${X(s,49)} 349Z`},p));
   p=part(g,"bexiga"); el("ellipse",{class:"org",cx:200,cy:446,rx:15,ry:11},p);
+  p=part(g,"uretra"); el("path",{class:"org tube thin",d:"M200 457 L200 476"},p);
   p=part(g,"pancreas"); cap(p,"org",186,340,248,330,9);
   p=part(g,"figado");
   el("path",{class:"org",d:"M138 292 Q186 278 228 294 Q216 318 188 330 Q160 340 146 330 Q134 312 138 292Z"},p);
@@ -995,6 +1052,7 @@ function drawCranio(svg){
   hole(g,[[190,286],[205,296],[215,320],[212,342],[190,348],[168,342],[165,320],[175,296]]);
   p=part(g,"c-vomer");blob(p,"bone",[[187,314],[193,314],[194,344],[186,344]]);
   p=part(g,"c-concha");both(p,[[170,324],[182,322],[182,338],[170,340]]);
+  p=part(g,"c-palatino");both(p,[[168,340],[186,338],[188,352],[166,354]]);
   p=part(g,"c-mandibula");blob(p,"bone",[[112,392],[150,400],[190,404],[230,400],[268,392],[282,420],[266,462],[228,490],[190,498],[152,490],[114,462],[98,420]]);
   both(p,[[86,312],[100,310],[106,386],[96,414],[84,386]]);
   // ----- lateral -----
@@ -1006,6 +1064,7 @@ function drawCranio(svg){
   p=part(g,"c-zigomatico");blob(p,"bone",[[476,252],[500,238],[530,242],[566,254],[568,268],[532,270],[506,282],[484,278]]);
   p=part(g,"c-nasal");blob(p,"bone",[[454,214],[466,206],[470,234],[452,264],[446,256]]);
   p=part(g,"c-maxila");blob(p,"bone",[[446,264],[470,236],[480,248],[500,246],[508,282],[522,302],[508,332],[470,336],[450,322],[444,292]]);
+  p=part(g,"c-palatino");blob(p,"bone",[[514,294],[532,290],[540,312],[526,328],[510,320]]);
   p=part(g,"c-mandibula");blob(p,"bone",[[454,340],[506,338],[560,332],[584,284],[600,292],[598,332],[582,362],[548,394],[500,406],[462,398],[448,372]]);
   hole(g,[[604,252],[612,244],[621,252],[612,261]]);                                           // meato acústico
   el("text",{class:"vlabel",x:118,y:540},g).textContent="VISTA ANTERIOR";
