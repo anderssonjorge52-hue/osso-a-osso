@@ -1,16 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "(www\\.)?ossoaosso\\.online"
-        }
-      ],
-      "destination": "/app.html"
-    },
-    {
       "source": "/teste",
       "destination": "/app.html"
     },
@@ -41,6 +31,19 @@
     {
       "source": "/pro",
       "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?ossoaosso\\.online"
+        }
+      ],
+      "destination": "/demo",
+      "permanent": false
     }
   ]
 }
