@@ -1630,7 +1630,8 @@ function renderProfile(){
 function show(v){["trilha","jogo","result","auth","perfil","demo"].forEach(x=>$("#v-"+x).hidden=x!==v);}
 
 // ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
-const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname);
+const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
+  || (/(^|\.)ossoaosso\.online$/.test(location.hostname) && location.pathname==="/");
 const DEMO_RODADAS=2;
 let demoDone=0, demoRuns=[], demoLvlOf={};
 const demoCount=m=>{const s=new Set();m.levels.forEach(l=>l.items.forEach(it=>s.add(it.a)));return s.size;};

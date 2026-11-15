@@ -1,6 +1,16 @@
 {
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?ossoaosso\\.online"
+        }
+      ],
+      "destination": "/app.html"
+    },
+    {
       "source": "/teste",
       "destination": "/app.html"
     },
@@ -27,6 +37,10 @@
     {
       "source": "/obrigado",
       "destination": "/obrigado.html"
+    },
+    {
+      "source": "/pro",
+      "destination": "/index.html"
     }
   ]
 }
