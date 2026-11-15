@@ -312,13 +312,13 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .disc{fill:rgba(141,155,171,.25);stroke:none;transition:fill .25s}
 .proc{fill:none;stroke:var(--bone);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
 .on .bone,.bone.on{fill:var(--amber);stroke:var(--amber);stroke-opacity:1;fill-opacity:.9;filter:url(#glow)}
-.disc.on{fill:var(--amber);filter:url(#glow)}
+.disc.on,.on .disc{fill:var(--amber);filter:url(#glow)}
 .proc.on{stroke:var(--amber);stroke-opacity:1}
 .vlabel{font:10px var(--f-mono);fill:var(--faint);letter-spacing:.12em}
 .bone.ctx{opacity:.35}
 .hole{fill:#070b10;stroke:var(--bone);stroke-opacity:.35;stroke-width:1}
 .tag-novo{display:inline-block;font:700 9.5px var(--f-mono);letter-spacing:.08em;color:#1b1208;background:var(--amber);border-radius:999px;padding:2px 7px;vertical-align:3px;margin-left:4px}.tag-novo svg{width:8px;height:9px;vertical-align:-1px}
-.done-flash .on .bone,.done-flash .bone.on,.done-flash .disc.on{fill:var(--ok);stroke:var(--ok)}
+.done-flash .on .bone,.done-flash .bone.on,.done-flash .disc.on,.done-flash .on .disc{fill:var(--ok);stroke:var(--ok)}
 
 /* ---------- Resultado ---------- */
 .result{max-width:760px;margin:0 auto;padding-block:20px 40px}
@@ -543,6 +543,19 @@ const SPINE_LEVELS = [
       {a:"L1", hl:["p:L1"], clue:"Por volta daqui termina a medula espinhal (cone medular, L1–L2)."},
       {a:"L4", hl:["p:L4"], clue:"Altura da crista ilíaca; referência para a punção lombar."},
       {a:"L5", hl:["p:L5"], clue:"A maior vértebra; apoia-se no sacro."}
+    ]},
+  { title:"Partes da vértebra", view:"vertebra", desc:"Corpo, arco, forame e a medula que passa dentro.",
+    win:"Você já lê uma vértebra por dentro, peça por peça.",
+    items:[
+      {a:"corpo vertebral", hl:["p:v-corpo"], clue:"O bloco à frente que sustenta o peso e se apoia no disco."},
+      {a:"pedículo", hl:["p:v-pediculo"], clue:"Ponte curta e grossa que liga o corpo vertebral ao arco de trás."},
+      {a:"lâmina", hl:["p:v-lamina"], clue:"Placa achatada entre o pedículo e o processo espinhoso; é ela que sai na laminectomia."},
+      {a:"processo espinhoso", hl:["p:v-espinhoso"], clue:"A ponta voltada para trás — é o que você apalpa no meio das costas."},
+      {a:"processo transverso", hl:["p:v-transverso"], clue:"Projeção lateral de cada lado; nas torácicas, é onde a costela se apoia."},
+      {a:"processo articular superior", hl:["p:v-artsup"], clue:"Faceta voltada para cima que se encaixa na vértebra de cima."},
+      {a:"forame vertebral", hl:["p:v-forame"], clue:"O buraco entre o corpo e o arco; empilhados, formam o canal vertebral."},
+      {a:"medula espinal", hl:["p:v-medula"], clue:"O cordão nervoso que desce dentro do canal e termina em cone por volta de L1–L2."},
+      {a:"disco intervertebral", hl:["p:v-disco"], clue:"Amortecedor entre dois corpos: anel fibroso por fora, núcleo pulposo por dentro."}
     ]},
   { title:"Coluna inteira", desc:"Peças nomeadas, marcos e partes, tudo misturado.",
     win:"Você já lê uma coluna inteira: as nomeadas, os marcos e as partes.",
@@ -1071,9 +1084,57 @@ function drawCranio(svg){
   el("text",{class:"vlabel",x:528,y:540},g).textContent="VISTA LATERAL";
 }
 
-const REGIAO_VB={mao:"40 70 320 580",pe:"40 100 320 540",cranio:"40 20 700 540"};
+
+// ---------- Vértebra (vista superior + corte sagital) ----------
+function drawVertebra(svg){
+  const g=el("g",{},svg);
+  let p;
+  // vista superior — anterior para cima
+  p=part(g,"v-corpo");
+  el("path",{class:"bone",d:"M127 146 C127 102 160 86 215 86 C270 86 303 102 303 146 C303 170 288 186 262 186 Q215 174 168 186 C142 186 127 170 127 146 Z"},p);
+  el("path",{class:"proc",d:"M152 138 Q215 116 278 138","stroke-opacity":".2"},p);
+  p=part(g,"v-pediculo");
+  cap(p,"bone",166,182,156,214,26); cap(p,"bone",264,182,274,214,26);
+  p=part(g,"v-transverso");
+  cap(p,"bone",164,204,80,222,17); cap(p,"bone",266,204,350,222,17);
+  p=part(g,"v-lamina");
+  cap(p,"bone",160,225,196,269,22); cap(p,"bone",270,225,234,269,22);
+  p=part(g,"v-artsup");
+  [[157,236,-34],[273,236,34]].forEach(([x,y,r])=>{
+    el("ellipse",{class:"bone",cx:x,cy:y,rx:17,ry:12,transform:`rotate(${r} ${x} ${y})`},p);
+    el("ellipse",{class:"proc",cx:x,cy:y,rx:10,ry:5.5,transform:`rotate(${r} ${x} ${y})`,"stroke-opacity":".32"},p);
+  });
+  p=part(g,"v-espinhoso");
+  el("path",{class:"bone",d:"M199 258 L231 258 L229 312 Q215 330 201 312 Z"},p);
+  p=part(g,"v-forame");
+  el("path",{class:"disc",d:"M178 186 Q215 175 252 186 L262 218 L226 262 L204 262 L168 218 Z"},p);
+  p=part(g,"v-medula");
+  el("ellipse",{class:"org",cx:215,cy:212,rx:25,ry:19},p);
+  // corte sagital — anterior à esquerda
+  const LB=[100,196,292];
+  LB.forEach(yt=>{
+    let q=part(g,"v-corpo");
+    el("rect",{class:"bone",x:392,y:yt,width:120,height:70,rx:7},q);
+    q=part(g,"v-forame");
+    el("rect",{class:"disc",x:512,y:yt+2,width:48,height:64,rx:8},q);
+    q=part(g,"v-lamina");
+    el("path",{class:"bone",d:`M560 ${yt+6} L590 ${yt+10} L592 ${yt+58} L560 ${yt+62} Z`},q);
+    q=part(g,"v-espinhoso");
+    el("path",{class:"bone",d:`M590 ${yt+14} L646 ${yt+46} L644 ${yt+62} L592 ${yt+56} Z`},q);
+  });
+  LB.slice(0,2).forEach(yt=>{
+    const q=part(g,"v-disco");
+    el("rect",{class:"disc",x:394,y:yt+70,width:116,height:26,rx:5},q);
+  });
+  const med=part(g,"v-medula");
+  el("path",{class:"org",d:"M524 72 L548 72 L548 300 Q536 338 524 300 Z"},med);
+  el("text",{class:"vlabel",x:76,y:400},g).textContent="VISTA SUPERIOR";
+  el("text",{class:"vlabel",x:398,y:400},g).textContent="CORTE SAGITAL";
+}
+
+const REGIAO_VB={mao:"40 70 320 580",pe:"40 100 320 540",cranio:"40 20 700 540",vertebra:"58 58 604 358"};
 function buildView(svg,view,big){
-  if(REGIAO_VB[view]){svg.setAttribute("viewBox",REGIAO_VB[view]);svg.innerHTML="";addGlow(svg);({mao:drawMao,pe:drawPe,cranio:drawCranio})[view](svg);return;}
+  if(REGIAO_VB[view]){svg.setAttribute("viewBox",REGIAO_VB[view]);svg.innerHTML="";addGlow(svg);({mao:drawMao,pe:drawPe,cranio:drawCranio,vertebra:drawVertebra})[view](svg);return;}
   if(view==="coluna"){ svg.setAttribute("viewBox",big?"0 20 520 700":"190 20 280 700"); buildSpine(svg,{lateral:big,cx:330}); }
   else { svg.setAttribute("viewBox","60 10 280 810"); buildBody(svg,view); }
 }
@@ -1154,10 +1215,10 @@ function startTimer(){
 function startLevel(modId,i){
   if(lockedLevel(modId,i)){route();openUpgrade();return;}
   if(lockedDiff(curDiff))curDiff="facil";
-  const M=modById(modId), L=M.levels[i];
+  const M=modById(modId), L=M.levels[i], VW=L.view||M.view;
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false};
-  buildView($("#game-svg"),M.view,true);
-  $("#game-svg").setAttribute("aria-label",M.view==="coluna"?"Coluna vertebral em vista lateral e anterior":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
+  buildView($("#game-svg"),VW,true);
+  $("#game-svg").setAttribute("aria-label",VW==="coluna"?"Coluna vertebral em vista lateral e anterior":VW==="vertebra"?"Vértebra em vista superior e corte sagital":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
   $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(M.name)} · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
   show("jogo"); renderItem(); updStats(); startTimer(); if(!muted)ac();
 }
