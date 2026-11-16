@@ -10,5 +10,10 @@ window.OSSO_CONFIG = {
   // Com os dois preenchidos, o app passa a bloquear o conteúdo Pro para quem não assinou.
   // Para desligar o bloqueio, deixe os dois vazios ("").
   KIWIFY_MENSAL: "https://pay.kiwify.com.br/e84LalF",
-  KIWIFY_ANUAL: "https://pay.kiwify.com.br/75qBJeq"
+  KIWIFY_ANUAL: "https://pay.kiwify.com.br/75qBJeq",
+
+  // Microsoft Clarity (gravação de sessão e mapa de calor). Opcional.
+  // Crie o projeto em clarity.microsoft.com e cole aqui o código do projeto (ex.: "abc123xyz0").
+  // Vazio = desligado. Antes de ligar, avise na Política de Privacidade.
+  CLARITY_ID: ""
 };

@@ -31,6 +31,10 @@
     {
       "source": "/pro",
       "destination": "/index.html"
+    },
+    {
+      "source": "/painel",
+      "destination": "/painel.html"
     }
   ],
   "redirects": [

@@ -1326,6 +1326,7 @@ function startLevel(modId,i){
   if(L.so3d&&(DEMO||FREE())){route();openUpgrade();return;}
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,pista:!!L.pista,so3d:!!L.so3d,r3d:L.view?null:(L.r3d||REG3D[M.id]||null)};
   $("#stage").classList.toggle("pista",G.pista);
+  if(!DEMO)uso("nivel_iniciou",{detalhe:M.id+":"+(i+1)+":"+curDiff});
   $("#kb").classList.toggle("sem-num",!G.items.some(it=>/\d/.test(it.a))); // sem número na resposta, some a fileira de números
   buildView($("#game-svg"),VW,true);
   $("#game-svg").setAttribute("aria-label",VW==="coluna"?"Coluna vertebral em vista lateral e anterior":VW==="vertebra"?"Vértebra em vista superior e corte sagital":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
@@ -1432,6 +1433,7 @@ document.addEventListener("keydown",e=>{
 setInterval(()=>{if(G&&!$("#v-jogo").hidden)updStats();},1000);
 
 function finish(){
+  if(!DEMO&&G)uso("nivel_concluiu",{detalhe:G.mod+":"+(G.lvl+1)+":"+G.diff});
   clearInterval(TT);
   const M=modById(G.mod), L=M.levels[G.lvl], D=DIFFS[G.diff], mins=(Date.now()-G.t0)/60000;
   const wpm=Math.round(G.chars/5/Math.max(mins,0.01)), acc=Math.round(G.good/Math.max(G.keys,1)*100);
@@ -1670,6 +1672,7 @@ function afterLogin(){
 async function initAuth(){
   if(!sb){renderAcct();return;}
   sb.auth.onAuthStateChange((ev,session)=>{
+    TOKEN_USO=session&&session.access_token||null;
     const was=USER&&USER.id; USER=session?session.user:null;
     // chamadas ao Supabase fora do callback, como a documentação recomenda
     setTimeout(async()=>{
@@ -1699,6 +1702,7 @@ async function loadSub(){
   SUB=data||null;
 }
 function openUpgrade(){
+  uso("abriu_assinar",{detalhe:TELA});
   const el=$("#upgrade"); upgradeAberto=true;
   el.innerHTML=`<div class="up-card" role="dialog" aria-modal="true" aria-labelledby="up-t">
     <button class="up-x" type="button" data-up-close aria-label="Fechar">×</button>
@@ -1714,8 +1718,8 @@ function openUpgrade(){
       <li>Novos módulos sem custo extra</li>
     </ul>
     <div class="up-plans">
-      <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
-      <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
+      <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener" data-funil="clicou_assinar" data-fd="mensal"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
+      <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener" data-funil="clicou_assinar" data-fd="anual"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
     </div>
     ${USER?`<p class="up-mail">Na compra, use o <b>mesmo e-mail da sua conta</b>: <span>${esc(USER.email||"")}</span>. É por ele que o Pro é liberado.</p>`:`<p class="up-mail">Depois de pagar, <b>crie sua conta (ou entre) com o mesmo e-mail da compra</b>. É por ele que o Pro é liberado.</p>`}
     <div class="up-foot">${USER?`<button class="btn ghost" type="button" id="up-check">Já paguei: atualizar</button>`:`<button class="btn ghost" type="button" id="up-login">Já paguei: acessar minha conta</button>`}<span>Pagamento seguro pela Kiwify. 7 dias de garantia.</span></div>
@@ -1899,7 +1903,8 @@ function renderProfile(){
 }
 
 // ---------- Navegação ----------
-function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+let TELA_DEMO="demo-inicio";
+function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);trocaTela(v==="demo"?TELA_DEMO:v==="result"?"resultado":v);}
 
 // ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
@@ -1909,11 +1914,47 @@ const DEMO_RODADAS=2;
 const VISITA=(()=>{try{let v=sessionStorage.getItem("osso_visita");if(!v){v=crypto.randomUUID?crypto.randomUUID():"v"+Date.now()+Math.random().toString(36).slice(2,10);sessionStorage.setItem("osso_visita",v);}return v;}catch(e){return "v"+Date.now()+Math.random().toString(36).slice(2,10);}})();
 const ORIGEM=(()=>{try{const o=JSON.parse(localStorage.getItem("osso_utm")||"null"),p=o&&o.p;if(p&&(p.utm_source||p.src))return String(p.utm_source||p.src).slice(0,60);return document.referrer?new URL(document.referrer).hostname.slice(0,60):"direto";}catch(e){return "direto";}})();
 const funilVisto={};
+if(CFG.CLARITY_ID&&/^[a-z0-9]{6,20}$/i.test(CFG.CLARITY_ID)&&!navigator.webdriver){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script",CFG.CLARITY_ID);}
+// ---------- Registro de uso (alimenta o painel) ----------
+// Vale para a degustação e para o jogo. Guarda o passo, a tela, o tempo e onde tocou; nunca o que foi digitado.
+let TOKEN_USO=null, TELA=null, telaIni=0, telaAcum=0, filaUso=[], toquesUso=0;
+const podeUso=()=>!!(CFG.SUPABASE_URL&&CFG.SUPABASE_KEY)&&!navigator.webdriver;
+function uso(evento,o){
+  if(!podeUso())return; o=o||{};
+  filaUso.push({visita:VISITA,evento,detalhe:o.detalhe!=null?String(o.detalhe).slice(0,60):null,origem:ORIGEM,tela:o.tela||TELA||null,
+    x:o.x!=null?Math.min(1,Math.max(0,+o.x.toFixed(4))):null,y:o.y!=null?Math.min(1,Math.max(0,+o.y.toFixed(4))):null,
+    dur:o.dur!=null?Math.min(3600000,Math.max(0,Math.round(o.dur))):null,vw:Math.min(10000,Math.max(100,innerWidth||100)),demo:DEMO});
+  if(o.ja||filaUso.length>=25)enviaUso(); else{clearTimeout(enviaUso.t);enviaUso.t=setTimeout(enviaUso,4000);}
+}
+function enviaUso(){
+  clearTimeout(enviaUso.t); if(!filaUso.length)return; const lote=filaUso; filaUso=[];
+  try{fetch(CFG.SUPABASE_URL+"/rest/v1/eventos_funil",{method:"POST",keepalive:true,headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+(TOKEN_USO||CFG.SUPABASE_KEY),"Content-Type":"application/json",Prefer:"return=minimal"},
+    body:JSON.stringify(lote)}).catch(()=>{});}catch(e){}
+}
+function fechaTela(){ if(TELA&&telaIni){telaAcum+=Date.now()-telaIni;telaIni=0;} }
+function trocaTela(nova){
+  if(nova===TELA)return; fechaTela();
+  if(TELA&&telaAcum>800)uso("tempo_tela",{tela:TELA,dur:telaAcum});
+  TELA=nova; telaAcum=0; telaIni=document.hidden?0:Date.now();
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){fechaTela();if(TELA&&telaAcum>800){uso("tempo_tela",{tela:TELA,dur:telaAcum});telaAcum=0;}enviaUso();}
+  else if(TELA)telaIni=Date.now();
+});
+addEventListener("pagehide",()=>{fechaTela();if(TELA&&telaAcum>800){uso("tempo_tela",{tela:TELA,dur:telaAcum});telaAcum=0;}enviaUso();});
+// mapa de toques: posição dentro da tela atual + nome do botão. O teclado do jogo fica de fora.
+document.addEventListener("click",e=>{
+  if(!TELA||toquesUso>=200||!podeUso()||e.target.closest("#kb"))return;
+  const m=document.querySelector("main:not([hidden])"); if(!m)return; const r=m.getBoundingClientRect(); if(!r.width||!r.height)return;
+  const x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height; if(x<0||x>1||y<0||y>1)return;
+  const b=e.target.closest("button,a,[data-start],[data-mod]"); let nome=null;
+  if(b)nome=(b.id?"#"+b.id:(b.dataset.funil||b.dataset.demoPick&&"parte:"+b.dataset.demoPick||b.dataset.mod&&"modulo:"+b.dataset.mod||b.dataset.start&&"nivel:"+b.dataset.start||b.dataset.diff&&"dif:"+b.dataset.diff||(b.textContent||"").trim().replace(/\s+/g," ").slice(0,40)))||null;
+  toquesUso++; uso("toque",{x,y,detalhe:nome});
+},true);
 function funil(evento,detalhe,umaVez){
-  if(!DEMO||!CFG.SUPABASE_URL||!CFG.SUPABASE_KEY||navigator.webdriver)return;
+  if(!podeUso())return;
   if(umaVez){const k="osso_f_"+evento;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1");}catch(e){if(funilVisto[evento])return;funilVisto[evento]=1;}}
-  try{fetch(CFG.SUPABASE_URL+"/rest/v1/eventos_funil",{method:"POST",keepalive:true,headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
-    body:JSON.stringify({visita:VISITA,evento,detalhe:detalhe?String(detalhe).slice(0,60):null,origem:ORIGEM})}).catch(()=>{});}catch(e){}
+  uso(evento,{detalhe,ja:evento==="clicou_assinar"||evento==="clicou_conta_gratis"});
 }
 let demoDone=0, demoRuns=[], demoLvlOf={};
 const demoCount=m=>{const s=new Set();m.levels.forEach(l=>l.items.forEach(it=>s.add(it.a)));return s.size;};
@@ -1922,7 +1963,7 @@ const DEMO_ICO={coluna:"🦴",esqueleto:"🩻",orgaos:"🫀",musculos:"💪",mao
 const demoBig=ps=>`<div class="big">${ps.filter(x=>x).map(([t,v])=>`<div><span>${t}</span><b>${v}</b></div>`).join("")}</div>`;
 
 function demoHome(){
-  funil("abriu",null,true);
+  TELA_DEMO="demo-inicio"; funil("abriu",null,true);
   const resta=DEMO_RODADAS-demoDone;
   $("#v-demo").className="result demo-pickview";
   $("#v-demo").innerHTML=`
@@ -1944,6 +1985,7 @@ function demoPlay(id){
   demoLvlOf[id]=i+1; funil("comecou",id+":"+(i+1)); startLevel(id,i); window.scrollTo(0,0);
 }
 function demoNext(){
+  TELA_DEMO="demo-entre";
   const r=demoRuns[demoRuns.length-1], M=modById(r.mod), L=M.levels[r.lvl];
   $("#v-demo").className="result demo-wall";
   $("#v-demo").innerHTML=`
@@ -1958,6 +2000,7 @@ function demoNext(){
   show("demo");window.scrollTo(0,0);
 }
 function demoWall(){
+  TELA_DEMO="demo-assinatura";
   const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), tot=demoTotal(), faltam=tot-lidas;
   const ppm=Math.max(...demoRuns.map(r=>r.wpm)), fp=Math.round(demoRuns.reduce((n,r)=>n+r.first,0)/demoRuns.length);
   const partes=[...new Set(demoRuns.map(r=>modById(r.mod).name.toLowerCase()))];
@@ -2022,8 +2065,9 @@ document.addEventListener("click",e=>{
   if(au){e.preventDefault();openAuth(au.dataset.auth);return;}
   if(e.target.closest("#logout")){e.preventDefault();logout();}
 });
-$("#g-quit").addEventListener("click",()=>{G=null;route();});
-$("#g-back").addEventListener("click",()=>{clearInterval(TT);G=null;if(location.hash!=="#jogar")location.hash="#jogar";route();window.scrollTo(0,0);});
+const saiuNivel=()=>{if(G&&G.idx<G.items.length)uso("nivel_saiu",{detalhe:G.mod+":"+(G.lvl+1)+":"+(G.idx+1)+"/"+G.items.length});};
+$("#g-quit").addEventListener("click",()=>{saiuNivel();G=null;route();});
+$("#g-back").addEventListener("click",()=>{saiuNivel();clearInterval(TT);G=null;if(location.hash!=="#jogar")location.hash="#jogar";route();window.scrollTo(0,0);});
 $("#g-hint").addEventListener("click",e=>{e.currentTarget.blur();useHint();});
 $("#g-show").addEventListener("click",e=>{e.currentTarget.blur();giveUp(false);});
 window.addEventListener("hashchange",()=>{G=null;if(location.hash==="#assinar"){history.replaceState(null,"","#jogar");route();if(PAYWALL)openUpgrade();return;}route();});

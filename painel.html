@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel · Osso a Osso</title>
+<link rel="icon" href="favicon-32.png">
+<style>
+:root{--bg:#0b121a;--card:#121c27;--card2:#17232f;--line:#263545;--ink:#ece6da;--dim:#9aa8b8;--faint:#6b7a8c;--amber:#f2a65a;--amber2:#c9772b;--ok:#86cdb0;--miss:#e2726e;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+[hidden]{display:none!important}
+.wrap{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+header h1{font:600 20px var(--sans);margin:0;flex:1}
+header small{color:var(--dim);font:12px var(--mono)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:transparent;color:var(--dim);border:0;padding:7px 13px;font:500 13px var(--sans);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--amber);color:#1b1208}
+.btn{background:var(--amber);color:#1b1208;border:0;border-radius:10px;padding:11px 16px;font:600 15px var(--sans);cursor:pointer}
+.link{background:none;border:0;color:var(--dim);text-decoration:underline;cursor:pointer;font:13px var(--sans)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tile b{display:block;font:600 30px/1.1 var(--sans)}.tile span{color:var(--dim);font-size:13px}.tile em{display:block;font-style:normal;color:var(--faint);font:11px var(--mono);margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:820px){.grid{grid-template-columns:1fr}}
+section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
+section.full{grid-column:1/-1}
+h2{font:600 16px var(--sans);margin:0 0 2px}h2+p{margin:0 0 12px;color:var(--dim);font-size:13px}
+.frow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:5px 0}
+.frow .n{font-size:13.5px;color:var(--ink)}
+.frow .bar{height:18px;background:var(--card2);border-radius:4px;position:relative}
+.frow .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:4px;min-width:2px}
+.frow .v{font:13px var(--mono);text-align:right;white-space:nowrap}.frow .v small{color:var(--faint)}
+.frow .q{grid-column:2/-1;font:11px var(--mono);color:var(--miss);margin-top:-3px}
+@media (max-width:520px){.frow{grid-template-columns:104px 1fr 80px}}
+.days{display:flex;align-items:flex-end;gap:2px;height:150px;border-bottom:1px solid var(--line);padding-top:8px}
+.days .d{flex:1;min-width:3px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative;cursor:default}
+.days .d i{display:block;background:var(--amber);border-radius:4px 4px 0 0;min-height:1px}
+.days .d:hover i{background:#ffc37f}
+.dlab{display:flex;justify-content:space-between;color:var(--faint);font:11px var(--mono);margin-top:5px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;color:var(--faint);font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
+td{padding:7px 8px 7px 0;border-bottom:1px solid rgba(38,53,69,.6);vertical-align:middle}
+td.num,th.num{text-align:right;font-family:var(--mono);padding-right:0}
+td .mini{display:inline-block;height:8px;background:var(--amber);border-radius:3px;vertical-align:middle;margin-right:6px}
+.tw{overflow-x:auto}
+.vazio{color:var(--faint);font-size:14px;padding:18px 0;text-align:center}
+#tip{position:fixed;z-index:9;pointer-events:none;background:#06090d;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:12px var(--mono);color:var(--ink);white-space:pre}
+.heat-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.heat-bar select{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:14px var(--sans)}
+.heat{position:relative;max-width:390px;margin:0 auto;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#0d141c;min-height:220px}
+.heat img{display:block;width:100%;height:auto;opacity:.5}
+.heat canvas{position:absolute;inset:0;width:100%;height:100%}
+.heat-leg{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--dim);font:12px var(--mono);margin-top:10px}
+.heat-leg i{display:block;width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(242,166,90,.12),#f2a65a,#fff1d6)}
+.login{max-width:360px;margin:12vh auto 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.login h1{font:600 20px var(--sans);margin:0 0 4px}.login p{color:var(--dim);font-size:14px;margin:0 0 14px}
+.login label{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
+.login input{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:11px;font:15px var(--sans)}
+.login .btn{width:100%;margin-top:14px}.err{color:var(--miss);font-size:13px;margin-top:10px;min-height:18px}
+</style>
+</head>
+<body>
+<div id="tip" hidden></div>
+
+<form class="login" id="login" hidden>
+  <h1>Painel do Osso a Osso</h1>
+  <p>Entre com a sua conta do app. Só a conta do dono abre o painel.</p>
+  <label for="em">E-mail</label><input id="em" type="email" autocomplete="username" required>
+  <label for="pw">Senha</label><input id="pw" type="password" autocomplete="current-password" required>
+  <button class="btn" type="submit">Entrar</button>
+  <div class="err" id="lerr"></div>
+</form>
+
+<div class="wrap" id="app" hidden>
+  <header>
+    <h1>Painel · Osso a Osso</h1>
+    <small id="quando"></small>
+    <div class="seg" id="periodo"><button type="button" data-d="1" aria-pressed="false">Hoje</button><button type="button" data-d="7" aria-pressed="true">7 dias</button><button type="button" data-d="30" aria-pressed="false">30 dias</button></div>
+    <button class="link" id="atualizar" type="button">Atualizar</button>
+    <button class="link" id="sair" type="button">Sair</button>
+  </header>
+  <div id="msg" class="vazio" hidden></div>
+  <div id="conteudo">
+    <div class="tiles" id="tiles"></div>
+    <div class="grid">
+      <section class="full"><h2>Funil da degustação</h2><p>Quantas visitas chegaram a cada passo do teste grátis (o link da bio). A linha vermelha mostra quantas saíram entre um passo e o seguinte.</p><div id="funil"></div></section>
+      <section class="full"><h2>Visitas por dia</h2><p>Visitas únicas ao jogo e à degustação.</p><div id="dias"></div><div class="tw" style="margin-top:12px"><table id="tdias"></table></div></section>
+      <section><h2>De onde vieram</h2><p>Origem da visita e até onde ela foi.</p><div class="tw"><table id="torig"></table></div></section>
+      <section><h2>Tempo em cada tela</h2><p>Tempo típico (mediana) que uma visita passa em cada tela.</p><div class="tw"><table id="ttelas"></table></div></section>
+      <section><h2>Onde a visita terminou</h2><p>A última tela vista antes de a pessoa ir embora.</p><div id="saidas"></div></section>
+      <section><h2>Partes do corpo</h2><p>Quantas vezes cada parte foi iniciada, concluída e abandonada no meio.</p><div class="tw"><table id="tmods"></table></div></section>
+      <section class="full"><h2>Botões mais tocados</h2><p>O teclado do jogo não entra nessa conta.</p><div class="tw"><table id="tbot"></table></div></section>
+      <section class="full"><h2>Mapa de toques</h2><p>Onde as pessoas tocam em cada tela. Quanto mais claro, mais toques.</p>
+        <div class="heat-bar"><select id="htela" aria-label="Tela"></select><div class="seg" id="hap"><button type="button" data-c="1" aria-pressed="true">Celular</button><button type="button" data-c="0" aria-pressed="false">Computador</button></div><small id="hn" style="color:var(--dim);font:12px var(--mono)"></small></div>
+        <div class="heat"><img id="himg" alt=""><canvas id="hcv"></canvas></div>
+        <div class="heat-leg">poucos <i></i> muitos toques</div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+const $=s=>document.querySelector(s), CFG=window.OSSO_CONFIG||{};
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>Number(n||0).toLocaleString("pt-BR");
+const pct=(a,b)=>b?Math.round(100*a/b)+"%":"–";
+const dur=s=>{s=Math.round(+s||0);return s<60?s+" s":Math.floor(s/60)+" min "+String(s%60).padStart(2,"0")+" s";};
+const TELAS={"demo-inicio":"Degustação: escolha da parte","jogo":"Jogo","demo-entre":"Degustação: entre as rodadas","demo-assinatura":"Degustação: tela de assinatura","trilha":"Página inicial do jogo","resultado":"Resultado do nível","auth":"Entrar / criar conta","perfil":"Perfil","3d":"Anatomia 3D"};
+const MODS={coluna:"Coluna vertebral",esqueleto:"Esqueleto",orgaos:"Órgãos",musculos:"Músculos",mao:"Mão",pe:"Pé",cranio:"Crânio"};
+const BOT={"#g-show":"Não sei: ver resposta","#g-hint":"Dica","#g-spell":"Mostrar o nome","#g-3d":"3D","#g-quit":"Sair","#g-back":"Voltar","#g-sound":"Som","clicou_assinar":"Assinar","clicou_conta_gratis":"Criar conta grátis","jogar_de_novo":"Jogar de novo"};
+const nomeBot=b=>BOT[b]||b.replace(/^parte:(.+)$/,(m,x)=>"Parte: "+(MODS[x]||x)).replace(/^modulo:(.+)$/,(m,x)=>"Módulo: "+(MODS[x]||x)).replace(/^nivel:(\w+):(\d+)$/,(m,x,i)=>"Nível "+(+i+1)+" de "+(MODS[x]||x)).replace(/^dif:/,"Dificuldade: ");
+const tip=$("#tip");
+document.addEventListener("mousemove",e=>{const t=e.target.closest("[data-tip]");if(!t){tip.hidden=true;return;}tip.textContent=t.dataset.tip;tip.hidden=false;
+  tip.style.left=Math.min(innerWidth-tip.offsetWidth-8,e.clientX+12)+"px";tip.style.top=Math.max(8,e.clientY-tip.offsetHeight-10)+"px";});
+
+if(!window.supabase||!CFG.SUPABASE_URL){document.body.innerHTML='<p class="vazio">Não foi possível carregar o painel. Confira a internet e recarregue.</p>';return;}
+const sb=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);
+let DIAS=7, DADOS=null, CEL=true;
+
+function tela(login){$("#login").hidden=!login;$("#app").hidden=login;}
+async function iniciar(){
+  const {data}=await sb.auth.getSession();
+  if(!data||!data.session){tela(true);return;}
+  tela(false); carregar();
+}
+$("#login").addEventListener("submit",async e=>{e.preventDefault();$("#lerr").textContent="";
+  const {error}=await sb.auth.signInWithPassword({email:$("#em").value.trim(),password:$("#pw").value});
+  if(error){$("#lerr").textContent="E-mail ou senha incorretos.";return;} $("#pw").value=""; tela(false); carregar();});
+$("#sair").addEventListener("click",async()=>{await sb.auth.signOut();tela(true);});
+$("#atualizar").addEventListener("click",carregar);
+$("#periodo").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;DIAS=+b.dataset.d;
+  document.querySelectorAll("#periodo button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));carregar();});
+
+async function carregar(){
+  $("#msg").hidden=false;$("#msg").textContent="Carregando…";
+  const {data,error}=await sb.rpc("painel_dados",{p_dias:DIAS});
+  if(error){$("#conteudo").hidden=true;$("#msg").textContent=/sem acesso/.test(error.message||"")?"Esta conta não tem acesso ao painel.":"Não foi possível carregar os dados. Tente atualizar.";return;}
+  DADOS=data;$("#msg").hidden=true;$("#conteudo").hidden=false;
+  $("#quando").textContent="atualizado às "+new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+  desenhar();
+}
+
+function desenhar(){
+  const d=DADOS, r=d.resumo||{};
+  $("#tiles").innerHTML=[
+    ["Visitas",r.visitas,(r.visitas_demo||0)+" pela degustação"],
+    ["Jogaram",r.jogaram,pct(r.jogaram,r.visitas)+" das visitas"],
+    ["Viram a assinatura",r.viram_assinatura,pct(r.viram_assinatura,r.visitas)+" das visitas"],
+    ["Clicaram em assinar",r.cliques_assinar,pct(r.cliques_assinar,r.viram_assinatura)+" de quem viu"],
+    ["Contas novas",r.contas_novas,fmt(r.contas_total)+" no total"],
+    ["Assinantes Pro ativos",r.pro_ativos,"sem contar cortesias"]
+  ].map(t=>`<div class="tile"><b>${fmt(t[1])}</b><span>${t[0]}</span><em>${esc(t[2])}</em></div>`).join("");
+
+  // funil
+  const f=d.funil_demo||{}, passos=[["Abriu a degustação","abriu"],["Começou a jogar","comecou"],["Respondeu a 1ª peça","primeira_peca"],["Terminou a rodada 1","rodada1"],["Terminou a rodada 2","rodada2"],["Viu a assinatura","viu_assinatura"],["Clicou em assinar","clicou_assinar"]];
+  const topo=Math.max(1,...passos.map(p=>f[p[1]]||0));
+  $("#funil").innerHTML=(f.abriu||f.comecou)?passos.map((p,i)=>{const v=f[p[1]]||0, ant=i?f[passos[i-1][1]]||0:0, saiu=i&&ant>v?ant-v:0;
+    return `<div class="frow" data-tip="${esc(p[0])}: ${fmt(v)} visitas${i?"\n"+pct(v,ant)+" do passo anterior":""}"><span class="n">${p[0]}</span><span class="bar"><i style="width:${100*v/topo}%"></i></span><span class="v">${fmt(v)} <small>${pct(v,f.abriu||topo)}</small></span>${saiu?`<span class="q">↓ ${fmt(saiu)} saíram aqui (${pct(saiu,ant)})</span>`:""}</div>`;}).join("")
+    +`<p style="color:var(--dim);font-size:13px;margin:12px 0 0">Na tela de assinatura: <b>${fmt((d.planos||{}).anual)}</b> tocaram no anual, <b>${fmt((d.planos||{}).mensal)}</b> no mensal, <b>${fmt(f.clicou_conta_gratis)}</b> em criar conta grátis e <b>${fmt(f.jogar_de_novo)}</b> em jogar de novo. <b>${fmt(f.ligou_3d)}</b> ligaram o 3D.</p>`
+    :`<div class="vazio">Ainda não há visitas à degustação neste período.</div>`;
+
+  // por dia
+  const pd=d.por_dia||[], mx=Math.max(1,...pd.map(x=>x.visitas));
+  const dd=s=>{const [a,m,di]=String(s).split("-");return di+"/"+m;};
+  $("#dias").innerHTML=pd.length?`<div class="days">${pd.map(x=>`<div class="d" data-tip="${dd(x.dia)}\n${fmt(x.visitas)} visitas\n${fmt(x.jogaram)} jogaram\n${fmt(x.viram_assinatura)} viram a assinatura\n${fmt(x.contas)} contas novas"><i style="height:${100*x.visitas/mx}%"></i></div>`).join("")}</div><div class="dlab"><span>${dd(pd[0].dia)}</span><span>maior dia: ${fmt(mx)} visitas</span><span>${dd(pd[pd.length-1].dia)}</span></div>`:"";
+  $("#tdias").innerHTML=`<thead><tr><th>Dia</th><th class="num">Visitas</th><th class="num">Jogaram</th><th class="num">Viram assinatura</th><th class="num">Contas novas</th></tr></thead><tbody>${pd.slice().reverse().slice(0,10).map(x=>`<tr><td>${dd(x.dia)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${fmt(x.jogaram)}</td><td class="num">${fmt(x.viram_assinatura)}</td><td class="num">${fmt(x.contas)}</td></tr>`).join("")}</tbody>`;
+
+  const vazio=(n,c)=>`<tbody><tr><td colspan="${c}" class="vazio">Sem dados neste período.</td></tr></tbody>`;
+  const o=d.origens||[];
+  $("#torig").innerHTML=`<thead><tr><th>Origem</th><th class="num">Visitas</th><th class="num">Jogaram</th><th class="num">Viram assin.</th><th class="num">Clicaram</th></tr></thead>`+(o.length?`<tbody>${o.map(x=>`<tr><td>${esc(x.origem)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${fmt(x.jogaram)}</td><td class="num">${fmt(x.viram_assinatura)}</td><td class="num">${fmt(x.cliques)}</td></tr>`).join("")}</tbody>`:vazio(0,5));
+
+  const t=(d.telas||[]), tm=Math.max(1,...t.map(x=>+x.mediana_s));
+  $("#ttelas").innerHTML=`<thead><tr><th>Tela</th><th>Tempo típico</th><th class="num">Visitas</th></tr></thead>`+(t.length?`<tbody>${t.map(x=>`<tr data-tip="média: ${dur(x.media_s)}"><td>${esc(TELAS[x.tela]||x.tela)}</td><td><span class="mini" style="width:${Math.max(2,70*x.mediana_s/tm)}px"></span>${dur(x.mediana_s)}</td><td class="num">${fmt(x.visitas)}</td></tr>`).join("")}</tbody>`:vazio(0,3));
+
+  const s=d.saidas||[], sm=Math.max(1,...s.map(x=>x.visitas)), st=s.reduce((a,x)=>a+x.visitas,0);
+  $("#saidas").innerHTML=s.length?s.map(x=>`<div class="frow" data-tip="${esc(TELAS[x.tela]||x.tela)}: ${fmt(x.visitas)} visitas terminaram aqui"><span class="n">${esc(TELAS[x.tela]||x.tela)}</span><span class="bar"><i style="width:${100*x.visitas/sm}%"></i></span><span class="v">${fmt(x.visitas)} <small>${pct(x.visitas,st)}</small></span></div>`).join(""):`<div class="vazio">Sem dados neste período.</div>`;
+
+  const m=(d.modulos||[]).filter(x=>x.modulo);
+  $("#tmods").innerHTML=`<thead><tr><th>Parte</th><th class="num">Iniciadas</th><th class="num">Concluídas</th><th class="num">Abandonadas</th></tr></thead>`+(m.length?`<tbody>${m.map(x=>`<tr><td>${esc(MODS[x.modulo]||x.modulo)}</td><td class="num">${fmt(x.inicios)}</td><td class="num">${fmt(x.conclusoes)}</td><td class="num">${fmt(x.saidas)}</td></tr>`).join("")}</tbody>`:vazio(0,4));
+
+  const b=d.botoes||[];
+  $("#tbot").innerHTML=`<thead><tr><th>Botão</th><th>Tela</th><th class="num">Toques</th><th class="num">Visitas</th></tr></thead>`+(b.length?`<tbody>${b.slice(0,20).map(x=>`<tr><td>${esc(nomeBot(x.botao))}</td><td>${esc(TELAS[x.tela]||x.tela||"")}</td><td class="num">${fmt(x.toques)}</td><td class="num">${fmt(x.visitas)}</td></tr>`).join("")}</tbody>`:vazio(0,4));
+
+  if(!$("#htela").options.length)$("#htela").innerHTML=["demo-inicio","jogo","demo-entre","demo-assinatura","trilha"].map(k=>`<option value="${k}">${TELAS[k]}</option>`).join("");
+  calor();
+}
+
+// ---------- mapa de toques ----------
+$("#htela").addEventListener("change",calor);
+$("#hap").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(!b)return;CEL=b.dataset.c==="1";document.querySelectorAll("#hap button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));calor();});
+async function calor(){
+  const tl=$("#htela").value, img=$("#himg"), cv=$("#hcv");
+  $("#hn").textContent="carregando…";
+  const {data,error}=await sb.rpc("painel_toques",{p_dias:DIAS,p_tela:tl,p_celular:CEL});
+  const pts=error?[]:(data||[]);
+  $("#hn").textContent=fmt(pts.length)+" toques"+(CEL?"":" (a imagem de fundo é a do celular)");
+  const pinta=()=>{
+    const w=img.clientWidth||390, h=img.clientHeight||600; cv.width=w; cv.height=h; const g=cv.getContext("2d"); g.clearRect(0,0,w,h);
+    if(!pts.length)return; const R=Math.max(14,w*0.055), al=Math.min(.25,Math.max(.012,40/pts.length));
+    for(const p of pts){const x=p[0]*w,y=p[1]*h,gr=g.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,"rgba(0,0,0,"+al+")");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-R,y-R,2*R,2*R);}
+    // uma cor só, do escuro para o claro
+    const im=g.getImageData(0,0,w,h),a=im.data; let mx=1; for(let i=3;i<a.length;i+=4)if(a[i]>mx)mx=a[i];
+    for(let i=0;i<a.length;i+=4){const v=a[i+3]/mx;if(!v)continue;const k=Math.min(1,v);
+      a[i]=242+(255-242)*Math.max(0,k-.6)/.4;a[i+1]=166+(241-166)*Math.max(0,k-.6)/.4;a[i+2]=90+(214-90)*Math.max(0,k-.6)/.4;a[i+3]=Math.round(255*Math.min(.92,.15+k*.85));}
+    g.putImageData(im,0,0);
+  };
+  img.onload=pinta; img.onerror=()=>{img.style.minHeight="560px";pinta();};
+  const src="midia/painel/"+tl+".jpg"; if(img.getAttribute("src")!==src)img.src=src; else pinta();
+}
+iniciar();
+})();
+</script>
+</body>
+</html>
