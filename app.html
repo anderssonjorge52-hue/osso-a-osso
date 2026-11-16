@@ -280,6 +280,7 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .word{font-family:var(--f-display);font-size:clamp(34px,6vw,52px);line-height:1.15;min-height:1.2em;white-space:pre}
 .word .typed{color:var(--bone)}
 .word .ghost{color:var(--faint)}
+.word .ghost.spell{color:var(--dim);opacity:.85}
 .word .ph{color:var(--faint);font-style:italic;font-size:.55em}
 .caret{display:inline-block;width:2px;height:.9em;background:var(--amber);vertical-align:-.08em;margin-left:2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
@@ -293,6 +294,7 @@ button.mod.active{border-color:var(--amber);background:var(--film-3)}
 .hbtn{font:500 12px var(--f-mono);letter-spacing:.03em;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer;transition:color .15s,border-color .15s}
 .hbtn:hover:not(:disabled){color:var(--bone);border-color:var(--amber)}
 .hbtn:disabled{opacity:.4;cursor:default}
+.hbtn[aria-pressed="true"]{color:var(--amber-2);border-color:var(--amber);background:rgba(242,166,90,.10)}
 .rw-lock{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
 .rw-lock p{margin:0;color:var(--dim);font-size:15px}.rw-lock p b{color:var(--amber)}
 .free-note{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 16px;color:var(--dim);font-size:14px}
@@ -434,6 +436,7 @@ body.demo .brand{pointer-events:none}
 
     <div class="section-h"><h2 id="mod-title">Coluna vertebral</h2><span class="eyebrow" id="due-line"></span></div>
     <div class="diffrow"><span class="eyebrow">Dificuldade</span><div class="seg" id="diff" role="group" aria-label="Dificuldade"></div><span class="diffdesc" id="diff-desc"></span></div>
+    <div class="diffrow"><span class="eyebrow">Mostrar o nome</span><div class="seg" id="spellseg" role="group" aria-label="Mostrar o nome"></div><span class="diffdesc" id="spell-desc"></span></div>
     <div class="levels" id="levels"></div>
     <p class="foot">Seu progresso e suas revisões ficam salvos na sua conta.</p>
   </main>
@@ -454,7 +457,7 @@ body.demo .brand{pointer-events:none}
       <div class="word" id="g-word" aria-live="polite"></div>
       <div class="clue" id="g-clue"></div>
       <div class="timer" id="g-timer" hidden><i></i></div>
-      <div class="help"><button class="hbtn" id="g-hint" type="button" title="Revela a próxima letra">Dica</button><button class="hbtn" id="g-show" type="button" title="Mostra o nome e passa para a próxima peça">Não sei: ver resposta</button></div>
+      <div class="help"><button class="hbtn" id="g-spell" type="button" aria-pressed="false" title="Mostra o nome inteiro na tela para você digitar por cima">Mostrar o nome</button><button class="hbtn" id="g-hint" type="button" title="Revela a próxima letra">Dica</button><button class="hbtn" id="g-show" type="button" title="Mostra o nome e passa para a próxima peça">Não sei: ver resposta</button></div>
     </div>
     <div class="kb" id="kb"></div>
     <div class="kb-note">Digite no seu teclado ou toque nas teclas. Acentos são opcionais.</div>
@@ -1159,8 +1162,25 @@ const DIFFS={
 };
 let curMod=modById(load().mod).id;
 let curDiff=DIFFS[load().diff]?load().diff:"medio";
+let SPELL=!!load().spell;  // modo soletrar: o nome aparece e a pessoa digita por cima
+function renderSpell(){
+  const seg=$("#spellseg");
+  if(seg){
+    seg.innerHTML=[["1","Mostrar"],["0","Esconder"]].map(([v,n])=>`<button type="button" data-spell="${v}" aria-pressed="${(v==="1")===SPELL}">${n}</button>`).join("");
+    $("#spell-desc").textContent=SPELL
+      ?"O nome aparece na tela e você digita por cima. Bom para quem ainda não sabe a grafia."
+      :"Você digita de memória. O nome só aparece se pedir Dica ou Ver resposta.";
+  }
+  const b=$("#g-spell");
+  if(b){b.setAttribute("aria-pressed",SPELL?"true":"false");b.textContent=SPELL?"Nome: visível":"Mostrar o nome";}
+}
+function setSpell(v){
+  SPELL=!!v; const st=load(); st.spell=SPELL; save(st);
+  renderSpell(); if(G&&!G.busy)renderItem();
+}
 function renderLevels(){
   const M=modById(curMod), prog=PROG;
+  renderSpell();
   if(lockedDiff(curDiff))curDiff="facil";
   $("#diff").innerHTML=Object.entries(DIFFS).map(([k,d])=>`<button type="button" data-diff="${k}" aria-pressed="${k===curDiff}">${lockedDiff(k)?LOCK+" ":""}${d.name}</button>`).join("");
   $("#diff-desc").textContent=DIFFS[curDiff].desc;
@@ -1229,20 +1249,21 @@ function renderItem(){
   if(G.hlIdx!==G.idx){highlight($("#game-svg"),it.hl);G.hlIdx=G.idx;} // só troca o osso aceso quando muda a peça
   const typed=esc(a.slice(0,n));
   const hint=h>n?`<span class="hint">${esc(a.slice(n,h))}</span>`:"";
-  const shape=D.shape?[...a.slice(h)].map((ch,i)=>i===0&&h===0?ch:(ch===" "?" ":"_")).join(""):"";
-  const rest=shape?`<span class="ghost">${esc(shape)}</span>`:"";
-  const ph=(!n&&h===0&&!D.shape)?`<span class="ph">digite o nome</span>`:"";
+  const shape=SPELL?a.slice(h):(D.shape?[...a.slice(h)].map((ch,i)=>i===0&&h===0?ch:(ch===" "?" ":"_")).join(""):"");
+  const rest=shape?`<span class="ghost${SPELL?" spell":""}">${esc(shape)}</span>`:"";
+  const ph=(!n&&h===0&&!D.shape&&!SPELL)?`<span class="ph">digite o nome</span>`:"";
   $("#g-word").innerHTML=`<span class="typed">${typed}</span><span class="caret"></span>${hint}${rest}${ph}`;
   const clue=clueOn?it.clue.replace(new RegExp(norm(a),"ig"),"___"):"Sem pista no modo difícil. Olhe a peça acesa.";
   const ce=$("#g-clue");if(ce.textContent!==clue)ce.textContent=clue;
   $("#g-q").textContent=`PEÇA ${G.idx+1} DE ${G.items.length}`;
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
-  if(h>n){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
+  if((h>n||SPELL)&&n<a.length){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
   helpState();
 }
 function helpState(){
+  renderSpell();
   const off=!G||G.busy, a=G?cur().a:"";
-  $("#g-hint").disabled=off||(G&&hintFloor()>=a.length-1&&(DIFFS[G.diff].clue||G.clueOn[G.idx]));
+  $("#g-hint").disabled=off||SPELL||(G&&hintFloor()>=a.length-1&&(DIFFS[G.diff].clue||G.clueOn[G.idx]));
   $("#g-show").disabled=off;
 }
 // Até onde a palavra já está visível (no Fácil a 1ª letra já aparece).
@@ -1829,6 +1850,9 @@ document.addEventListener("click",e=>{
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
   const d=e.target.closest("[data-diff]");
   if(d){if(lockedDiff(d.dataset.diff)){openUpgrade();return;}curDiff=d.dataset.diff;const st=load();st.diff=curDiff;save(st);renderLevels();renderRewards();return;}
+  const sp=e.target.closest("[data-spell]");
+  if(sp){setSpell(sp.dataset.spell==="1");return;}
+  if(e.target.closest("#g-spell")){setSpell(!SPELL);return;}
   if(e.target.closest("[data-up-close]")||e.target.id==="upgrade"){closeUpgrade();return;}
   if(e.target.closest("#up-check")){checkSub(true);return;}
   if(e.target.closest("#up-login")){closeUpgrade();openAuth("signup");return;}
