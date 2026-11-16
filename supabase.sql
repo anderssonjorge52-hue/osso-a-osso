@@ -52,3 +52,17 @@ create policy "criar as próprias recompensas" on public.recompensas
   for insert to authenticated with check ((select auth.uid()) = user_id);
 create policy "alterar as próprias recompensas" on public.recompensas
   for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+
+-- Funil anônimo da degustação (o site só grava; a leitura é pelo painel)
+create table if not exists public.eventos_funil (
+  id bigint generated always as identity primary key,
+  criado_em timestamptz not null default now(),
+  visita text not null check (char_length(visita) between 8 and 40),
+  evento text not null check (evento in ('abriu','comecou','primeira_peca','rodada','viu_assinatura','clicou_assinar','clicou_conta_gratis','jogar_de_novo','ligou_3d')),
+  detalhe text check (detalhe is null or char_length(detalhe) <= 60),
+  origem text check (origem is null or char_length(origem) <= 60)
+);
+alter table public.eventos_funil enable row level security;
+create policy "funil grava" on public.eventos_funil for insert to anon, authenticated with check (true);
+revoke all on public.eventos_funil from anon, authenticated;
+grant insert on public.eventos_funil to anon, authenticated;

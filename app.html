@@ -415,6 +415,26 @@ body.demo .brand{pointer-events:none}
 .demo-p{max-width:60ch;margin:18px auto 0;color:#9aa8b8;font-size:17px;line-height:1.6}
 .demo-plans{margin:26px 0 8px}
 .demo-list{max-width:48ch;margin:8px auto 0;text-align:left}
+.dw-fig{margin:22px auto 0;max-width:560px}.dw-fig img{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.dw-fig figcaption{margin-top:8px;font-size:14px;color:#9aa8b8}
+.dw-best{position:relative;display:grid;gap:8px;max-width:560px;margin:30px auto 0;padding:22px 18px 18px;border:2px solid var(--amber);border-radius:18px;background:linear-gradient(160deg,rgba(242,166,90,.16),rgba(18,28,39,.7));color:var(--bone);text-decoration:none;text-align:left}
+.dw-best i{position:absolute;top:-12px;left:16px;font:700 11px var(--f-mono);font-style:normal;letter-spacing:.05em;background:var(--amber);color:#1b1208;border-radius:999px;padding:4px 10px}
+.dw-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px}.dw-row b{font-size:18px}
+.dw-price{font:600 30px var(--f-mono);color:var(--bone);white-space:nowrap}.dw-price small{font-size:13px;color:var(--dim);font-weight:400}
+.dw-sub{color:#c5cfdb;font-size:15px;line-height:1.45}.dw-sub b{color:var(--amber)}
+.dw-cta{display:block;margin-top:6px;text-align:center;background:var(--amber);color:#1b1208;font-weight:700;font-size:17px;border-radius:12px;padding:15px 12px}
+.dw-best:hover .dw-cta{filter:brightness(1.07)}
+.dw-alt{display:block;max-width:560px;margin:12px auto 0;padding:13px;border:1px solid var(--line);border-radius:12px;color:var(--dim);text-decoration:none;font-size:15px}.dw-alt b{color:var(--bone)}.dw-alt:hover{border-color:var(--amber)}
+.dw-after{max-width:52ch;margin:16px auto 0;color:#9aa8b8;font-size:14px;line-height:1.55}.dw-after b{color:var(--bone)}
+.dw-free{display:grid;gap:8px;justify-items:center;max-width:560px;margin:26px auto 0;padding:18px;border:1px dashed var(--line);border-radius:14px}.dw-free b{font-size:16px}.dw-free span{color:#9aa8b8;font-size:14.5px;line-height:1.5}
+@media (max-width:560px){
+  body:has(#v-jogo:not([hidden])) header.top{display:none}
+  .stage svg{height:min(31dvh,520px)}
+  #v-jogo .help{gap:5px;margin-top:8px;flex-wrap:nowrap}#v-jogo .hbtn{padding:6px 9px;font-size:11px;letter-spacing:0;white-space:nowrap}
+  #v-jogo .kb{margin-top:8px;padding:6px;gap:4px}#v-jogo .kb .row{gap:4px}#v-jogo .kb button{height:38px}
+  #v-jogo .kb.sem-num .row.num{display:none}
+  #v-jogo .kb-note{display:none}
+}
 .demo-foot{margin-top:18px;color:#9aa8b8;font-size:14px}
 </style>
 <!-- Pixel UTMify (Meta) -->
@@ -1271,7 +1291,7 @@ function renderLevels(){
 const ROWS=["qwertyuiop","asdfghjkl","zxcvbnm","1234567890"];
 function buildKb(){
   const kb=$("#kb"); kb.innerHTML="";
-  ROWS.forEach(r=>{const row=document.createElement("div");row.className="row";
+  ROWS.forEach(r=>{const row=document.createElement("div");row.className="row"+(/\d/.test(r)?" num":"");
     [...r].forEach(ch=>{const b=document.createElement("button");b.type="button";b.textContent=ch;b.dataset.k=ch;row.appendChild(b);});
     kb.appendChild(row);});
   const row=document.createElement("div");row.className="row";
@@ -1306,6 +1326,7 @@ function startLevel(modId,i){
   if(L.so3d&&(DEMO||FREE())){route();openUpgrade();return;}
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,pista:!!L.pista,so3d:!!L.so3d,r3d:L.view?null:(L.r3d||REG3D[M.id]||null)};
   $("#stage").classList.toggle("pista",G.pista);
+  $("#kb").classList.toggle("sem-num",!G.items.some(it=>/\d/.test(it.a))); // sem número na resposta, some a fileira de números
   buildView($("#game-svg"),VW,true);
   $("#game-svg").setAttribute("aria-label",VW==="coluna"?"Coluna vertebral em vista lateral e anterior":VW==="vertebra"?"Vértebra em vista superior e corte sagital":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
   $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(M.name)} · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
@@ -1360,6 +1381,7 @@ function giveUp(timeout){
   setTimeout(nextPiece,timeout?2000:2400);
 }
 function nextPiece(){
+  if(DEMO&&G&&G.idx===0)funil("primeira_peca",G.mod,true);
   G.idx++;G.typed=0;G.busy=false;updStats();
   if(G.idx>=G.items.length){sfx.level();finish();}else{renderItem();startTimer();}
 }
@@ -1416,7 +1438,7 @@ function finish(){
   const firsts=G.items.filter((_,i)=>clean(i)).length, first=Math.round(firsts/G.items.length*100);
   const solved=G.items.filter((_,i)=>!G.shown[i]).length, perfect=acc===100&&G.items.every((_,i)=>!G.shown[i]&&!G.hints[i]);
   const due=new Date(Date.now()+3*864e5);
-  if(DEMO){clearInterval(TT);demoRuns.push({wpm,first,pieces:G.items.length,mod:G.mod,lvl:G.lvl});demoDone++;
+  if(DEMO){clearInterval(TT);demoRuns.push({wpm,first,pieces:G.items.length,mod:G.mod,lvl:G.lvl});demoDone++;funil("rodada",demoDone+":"+G.mod);
     if(demoDone>=DEMO_RODADAS)demoWall();else demoNext();return;}
   const key=`${M.id}-${G.lvl}-${G.diff}`, prev=PROG[key];
   saveProgress(key,{wpm:Math.max(wpm,prev?prev.wpm:0),first:Math.max(first,prev?prev.first:0),due:due.toISOString()});
@@ -1883,6 +1905,16 @@ function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
   || (/(^|\.)ossoaosso\.online$/.test(location.hostname) && location.pathname==="/");
 const DEMO_RODADAS=2;
+// Funil anônimo da degustação: só o passo e um código aleatório da visita (nenhum dado pessoal).
+const VISITA=(()=>{try{let v=sessionStorage.getItem("osso_visita");if(!v){v=crypto.randomUUID?crypto.randomUUID():"v"+Date.now()+Math.random().toString(36).slice(2,10);sessionStorage.setItem("osso_visita",v);}return v;}catch(e){return "v"+Date.now()+Math.random().toString(36).slice(2,10);}})();
+const ORIGEM=(()=>{try{const o=JSON.parse(localStorage.getItem("osso_utm")||"null"),p=o&&o.p;if(p&&(p.utm_source||p.src))return String(p.utm_source||p.src).slice(0,60);return document.referrer?new URL(document.referrer).hostname.slice(0,60):"direto";}catch(e){return "direto";}})();
+const funilVisto={};
+function funil(evento,detalhe,umaVez){
+  if(!DEMO||!CFG.SUPABASE_URL||!CFG.SUPABASE_KEY||navigator.webdriver)return;
+  if(umaVez){const k="osso_f_"+evento;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,"1");}catch(e){if(funilVisto[evento])return;funilVisto[evento]=1;}}
+  try{fetch(CFG.SUPABASE_URL+"/rest/v1/eventos_funil",{method:"POST",keepalive:true,headers:{apikey:CFG.SUPABASE_KEY,Authorization:"Bearer "+CFG.SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},
+    body:JSON.stringify({visita:VISITA,evento,detalhe:detalhe?String(detalhe).slice(0,60):null,origem:ORIGEM})}).catch(()=>{});}catch(e){}
+}
 let demoDone=0, demoRuns=[], demoLvlOf={};
 const demoCount=m=>{const s=new Set();m.levels.forEach(l=>l.items.forEach(it=>s.add(it.a)));return s.size;};
 const demoTotal=()=>MODULES.reduce((n,m)=>n+demoCount(m),0);
@@ -1890,6 +1922,7 @@ const DEMO_ICO={coluna:"🦴",esqueleto:"🩻",orgaos:"🫀",musculos:"💪",mao
 const demoBig=ps=>`<div class="big">${ps.filter(x=>x).map(([t,v])=>`<div><span>${t}</span><b>${v}</b></div>`).join("")}</div>`;
 
 function demoHome(){
+  funil("abriu",null,true);
   const resta=DEMO_RODADAS-demoDone;
   $("#v-demo").className="result demo-pickview";
   $("#v-demo").innerHTML=`
@@ -1908,7 +1941,7 @@ function demoHome(){
 }
 function demoPlay(id){
   const M=modById(id), i=Math.min(demoLvlOf[id]||0, M.levels.length-1);
-  demoLvlOf[id]=i+1; startLevel(id,i); window.scrollTo(0,0);
+  demoLvlOf[id]=i+1; funil("comecou",id+":"+(i+1)); startLevel(id,i); window.scrollTo(0,0);
 }
 function demoNext(){
   const r=demoRuns[demoRuns.length-1], M=modById(r.mod), L=M.levels[r.lvl];
@@ -1934,22 +1967,30 @@ function demoWall(){
     <h1>Você leu ${lidas} estruturas. <em>Faltam ${faltam}.</em></h1>
     ${(ppm||fp)?demoBig([ppm?["Seu melhor PPM",ppm]:null,fp?["Acerto de primeira",fp+"%"]:null,["Estruturas lidas",lidas]]):""}
     <p class="demo-p">Você jogou ${partes.join(" e ")}. O Osso a Osso completo tem <b>${tot} estruturas</b> em sete partes do corpo — e traz de volta o que você errou, no dia certo.</p>
-    <div class="up-plans demo-plans">
-      <a class="up-plan" href="${esc(CFG.KIWIFY_MENSAL)}" target="_blank" rel="noopener"><b>Mensal</b><span class="up-price">R$ 37<small>/mês</small></span><span class="up-cta">Assinar mensal</span></a>
-      <a class="up-plan best" href="${esc(CFG.KIWIFY_ANUAL)}" target="_blank" rel="noopener"><i>Economize R$ 347</i><b>Anual</b><span class="up-price">R$ 97<small>/ano</small></span><span class="up-cta">Assinar anual</span></a>
-    </div>
+    <figure class="dw-fig"><img src="/midia/osso-3d-previa.jpg" width="1200" height="420" alt="Crânio, mão e caixa torácica em 3D, com a peça da vez acesa em laranja" loading="lazy"><figcaption>No Pro você gira o crânio, a mão, o pé e a coluna em 3D.</figcaption></figure>
+    <a class="dw-best" href="${esc(CFG.KIWIFY_ANUAL)}" data-funil="clicou_assinar" data-fd="anual">
+      <i>Melhor preço · economize R$ 347</i>
+      <span class="dw-row"><b>Plano anual</b><span class="dw-price">R$ 97<small>/ano</small></span></span>
+      <span class="dw-sub">Sai por <b>R$ 8,08 por mês</b>. É menos do que 3 meses do plano mensal.</span>
+      <span class="dw-cta">Assinar o anual</span>
+    </a>
+    <a class="dw-alt" href="${esc(CFG.KIWIFY_MENSAL)}" data-funil="clicou_assinar" data-fd="mensal">Prefiro o mensal: <b>R$ 37/mês</b></a>
+    <p class="dw-after">Depois de pagar, é só entrar no app com o <b>mesmo e-mail da compra</b> e o Pro já está liberado. 7 dias de garantia: se não gostar, devolvemos 100% do valor. Pagamento seguro pela Kiwify.</p>
     <ul class="up-list demo-list">
       <li>Coluna, esqueleto, órgãos, músculos, mão, pé e crânio</li>
       <li>Todos os níveis de cada parte, osso por osso</li>
+      <li>Anatomia 3D para girar e aproximar</li>
       <li>Modos Médio e Difícil, com cronômetro</li>
       <li>Revisão espaçada: o que você errou volta no dia certo</li>
       <li>XP, patentes, ofensiva e conquistas</li>
     </ul>
-    <p class="demo-foot">7 dias de garantia: se não gostar, devolvemos 100% do valor. Pagamento seguro pela Kiwify.</p>
+    <div class="dw-free"><b>Ainda não é a hora?</b><span>Crie uma conta grátis e continue jogando o 1º nível de cada parte do corpo, sem pagar nada.</span>
+      <a class="btn ghost" href="/jogar#criar-conta" data-funil="clicou_conta_gratis" style="text-decoration:none">Criar conta grátis</a></div>
     <div class="actions">
-      <button class="btn ghost" type="button" data-demo-again>Jogar de novo</button>
+      <button class="btn ghost" type="button" data-demo-again data-funil="jogar_de_novo">Jogar de novo</button>
       <a class="btn ghost" href="/jogar#entrar" style="text-decoration:none">Já assinei: entrar</a>
     </div>`;
+  funil("viu_assinatura",lidas+" pecas");
   show("demo");window.scrollTo(0,0);
 }
 
@@ -1970,6 +2011,7 @@ document.addEventListener("click",e=>{
   const dp=e.target.closest("[data-demo-pick]");
   if(dp){e.preventDefault();demoPlay(dp.dataset.demoPick);return;}
   if(e.target.closest("[data-demo-home]")){e.preventDefault();demoHome();return;}
+  const fa=e.target.closest("[data-funil]");if(fa)funil(fa.dataset.funil,fa.dataset.fd||null);
   if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoLvlOf={};demoHome();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
@@ -1992,7 +2034,7 @@ const demo=[["esqueleto","p:femur","fêmur · o maior osso do corpo"],["orgaos",
 let di=0, heroView=null; const tick=()=>{const [v,h,t]=demo[di]; if(v!==heroView){buildView(hero,v,false);heroView=v;} highlight(hero,[h]);$("#hero-tag").textContent=t;di=(di+1)%demo.length;};
 tick(); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(tick,2200);
 
-$("#g-3d").addEventListener("click",()=>{if(DEMO){demo3d=!demo3d;sync3d();return;}if(FREE()){openUpgrade();return;}const st=load();st.modo3d=!want3d();save(st);sync3d();});
+$("#g-3d").addEventListener("click",()=>{if(DEMO){demo3d=!demo3d;if(demo3d)funil("ligou_3d",G&&G.mod);sync3d();return;}if(FREE()){openUpgrade();return;}const st=load();st.modo3d=!want3d();save(st);sync3d();});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-v3]");if(b&&V3){V3.vista(b.dataset.v3);return;}
   const r=e.target.closest("[data-xr]");if(r&&V3){V3.regiao(r.dataset.xr,{ms:0});document.querySelectorAll("[data-xr]").forEach(x=>x.setAttribute("aria-pressed",String(x===r)));$("#x3d-info").innerHTML="Toque em um osso para ver o nome.";return;}
   const x=e.target.closest("[data-x3]");if(x&&V3){x.dataset.x3==="centro"?(V3.limpar(),V3.centralizar(),$("#x3d-info").innerHTML="Toque em um osso para ver o nome."):V3.vista(x.dataset.x3);}});
