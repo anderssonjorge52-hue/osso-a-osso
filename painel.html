@@ -7,11 +7,11 @@
 <title>Painel · Osso a Osso</title>
 <link rel="icon" href="favicon-32.png">
 <style>
-:root{--bg:#0b121a;--card:#121c27;--card2:#17232f;--line:#263545;--ink:#ece6da;--dim:#9aa8b8;--faint:#6b7a8c;--amber:#f2a65a;--amber2:#c9772b;--ok:#86cdb0;--miss:#e2726e;
+:root{--bg:#0b121a;--card:#121c27;--card2:#17232f;--line:#263545;--ink:#ece6da;--dim:#9aa8b8;--faint:#6b7a8c;--amber:#f2a65a;--ok:#86cdb0;--miss:#e2726e;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}html{color-scheme:dark}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
 [hidden]{display:none!important}
-.wrap{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
+.wrap{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
 header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 header h1{font:600 20px var(--sans);margin:0;flex:1}
 header small{color:var(--dim);font:12px var(--mono)}
@@ -23,37 +23,68 @@ header small{color:var(--dim);font:12px var(--mono)}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
 .tile b{display:block;font:600 30px/1.1 var(--sans)}.tile span{color:var(--dim);font-size:13px}.tile em{display:block;font-style:normal;color:var(--faint);font:11px var(--mono);margin-top:4px}
+.leit{background:linear-gradient(100deg,rgba(242,166,90,.10),rgba(18,28,39,.6));border:1px solid rgba(242,166,90,.35);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.leit h2{margin:0 0 8px}.leit ul{margin:0;padding-left:20px;display:grid;gap:7px}.leit li{font-size:15px;line-height:1.5}.leit li b{color:var(--amber)}
+.leit small{display:block;margin-top:10px;color:var(--faint);font-size:12.5px}
+.tabs{display:flex;gap:6px;margin:0 0 14px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;color:var(--dim);padding:10px 14px;font:600 15px var(--sans);cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--amber)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:820px){.grid{grid-template-columns:1fr}}
 section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
 section.full{grid-column:1/-1}
 h2{font:600 16px var(--sans);margin:0 0 2px}h2+p{margin:0 0 12px;color:var(--dim);font-size:13px}
 .frow{display:grid;grid-template-columns:200px 1fr 96px;gap:10px;align-items:center;padding:5px 0}
-.frow .n{font-size:13.5px;color:var(--ink)}
-.frow .bar{height:18px;background:var(--card2);border-radius:4px;position:relative}
+.frow .n{font-size:13.5px}.frow .bar{height:18px;background:var(--card2);border-radius:4px;position:relative}
 .frow .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:4px;min-width:2px}
 .frow .v{font:13px var(--mono);text-align:right;white-space:nowrap}.frow .v small{color:var(--faint)}
 .frow .q{grid-column:2/-1;font:11px var(--mono);color:var(--miss);margin-top:-3px}
 @media (max-width:520px){.frow{grid-template-columns:118px 1fr 76px}.frow .n{font-size:12.5px}}
 .days{display:flex;align-items:flex-end;gap:2px;height:150px;border-bottom:1px solid var(--line);padding-top:8px}
-.days .d{flex:1;min-width:3px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative;cursor:default}
-.days .d i{display:block;background:var(--amber);border-radius:4px 4px 0 0;min-height:1px}
-.days .d:hover i{background:#ffc37f}
+.days .d{flex:1;min-width:3px;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.days .d i{display:block;background:var(--amber);border-radius:4px 4px 0 0;min-height:1px}.days .d:hover i{background:#ffc37f}
 .dlab{display:flex;justify-content:space-between;color:var(--faint);font:11px var(--mono);margin-top:5px}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;color:var(--faint);font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
 td{padding:7px 8px 7px 0;border-bottom:1px solid rgba(38,53,69,.6);vertical-align:middle}
 td.num,th.num{text-align:right;font-family:var(--mono);padding-right:0}
-td .mini{display:inline-block;height:8px;background:var(--amber);border-radius:3px;vertical-align:middle;margin-right:6px}
-.tw{overflow-x:auto}
-.vazio{color:var(--faint);font-size:14px;padding:18px 0;text-align:center}
+.tw{overflow-x:auto}.vazio{color:var(--faint);font-size:14px;padding:18px 0;text-align:center}
 #tip{position:fixed;z-index:9;pointer-events:none;background:#06090d;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font:12px var(--mono);color:var(--ink);white-space:pre}
-.heat-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
-.heat-bar select{background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:14px var(--sans)}
-.heat{position:relative;max-width:390px;margin:0 auto;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#0d141c;min-height:220px}
-.heat img{display:block;width:100%;height:auto;opacity:.5}
-.heat canvas{position:absolute;inset:0;width:100%;height:100%}
-.heat-leg{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--dim);font:12px var(--mono);margin-top:10px}
-.heat-leg i{display:block;width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(242,166,90,.12),#f2a65a,#fff1d6)}
+.nav{display:grid;grid-template-columns:minmax(0,410px) minmax(0,1fr);gap:18px;align-items:start}@media (max-width:860px){.nav{grid-template-columns:1fr}}
+.passos{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}
+.passos button{flex:none;background:var(--card2);border:1px solid var(--line);color:var(--dim);border-radius:10px;padding:7px 10px;font:500 12.5px var(--sans);cursor:pointer;text-align:left;line-height:1.25}
+.passos button b{display:block;font:600 11px var(--mono);color:var(--faint)}
+.passos button[aria-pressed="true"]{border-color:var(--amber);color:var(--ink);background:rgba(242,166,90,.1)}.passos button[aria-pressed="true"] b{color:var(--amber)}
+.passos .sep{flex:none;align-self:center;color:var(--faint);font-size:12px;padding:0 4px}
+.fone{position:relative;border:1px solid var(--line);border-radius:22px;padding:8px;background:#05090d}
+.fone .tela{position:relative;border-radius:15px;overflow:hidden;background:#0d141c;min-height:260px;max-height:78vh;overflow-y:auto}
+.fone img{display:block;width:100%;height:auto;opacity:.62}.fone canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.fone .semimg{padding:60px 16px;text-align:center;color:var(--faint);font-size:13px}
+.navbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:10px}
+.navbar button{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 14px;font:600 14px var(--sans);cursor:pointer}
+.navbar button:disabled{opacity:.35;cursor:default}
+.navbar .seg button{border:0;border-radius:0;padding:7px 11px;font:500 13px var(--sans);background:transparent;color:var(--dim)}.navbar .seg button[aria-pressed="true"]{background:var(--amber);color:#1b1208}
+.leg{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--dim);font:12px var(--mono);margin-top:8px;flex-wrap:wrap}
+.leg i{display:block;width:110px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(242,166,90,.15),#f2a65a,#fff1d6)}
+.ficha h3{font:600 20px var(--sans);margin:0 0 2px}.ficha .sub{color:var(--dim);font-size:13.5px;margin:0 0 14px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:8px;margin-bottom:14px}
+.kp div{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.kp b{display:block;font:600 22px/1.15 var(--sans)}.kp span{color:var(--dim);font-size:12.5px;line-height:1.3;display:block}.kp em{font-style:normal;color:var(--faint);font:11px var(--mono)}
+.kp .ruim b{color:var(--miss)}.kp .bom b{color:var(--ok)}
+.nota{background:var(--card2);border-left:3px solid var(--amber);border-radius:0 10px 10px 0;padding:10px 12px;font-size:14px;margin:0 0 14px;line-height:1.5}
+.vis{display:grid;gap:8px}
+.vrow{background:var(--card2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.vrow summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;padding:10px 12px}
+.vrow summary::-webkit-details-marker{display:none}
+.vrow .h{font:12px var(--mono);color:var(--dim)}.vrow .h b{display:block;color:var(--ink);font-size:13px}
+.vrow .cam{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.chip{font:500 11.5px var(--sans);border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--dim);white-space:nowrap}
+.chip.a{border-color:var(--amber);color:var(--amber)}.chip.g{border-color:var(--ok);color:var(--ok)}.chip.r{border-color:var(--miss);color:var(--miss)}
+.vrow .fim{text-align:right;font-size:12.5px;color:var(--dim)}
+.linha{padding:4px 12px 12px;border-top:1px solid var(--line)}
+.linha div{display:grid;grid-template-columns:54px 1fr;gap:10px;padding:5px 0;font-size:13.5px;border-bottom:1px dashed rgba(38,53,69,.7)}
+.linha div:last-child{border-bottom:0}.linha time{font:12px var(--mono);color:var(--faint)}.linha i{font-style:normal;color:var(--dim)}
+@media (max-width:560px){.vrow summary{grid-template-columns:78px 1fr}.vrow .fim{grid-column:1/-1;text-align:left}}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;overflow-x:auto}
 .login{max-width:360px;margin:12vh auto 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
 .login h1{font:600 20px var(--sans);margin:0 0 4px}.login p{color:var(--dim);font-size:14px;margin:0 0 14px}
 .login label{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
@@ -84,19 +115,40 @@ td .mini{display:inline-block;height:8px;background:var(--amber);border-radius:3
   <div id="msg" class="vazio" hidden></div>
   <div id="conteudo">
     <div class="tiles" id="tiles"></div>
-    <div class="grid">
-      <section class="full"><h2>Funil da degustação</h2><p>Quantas visitas chegaram a cada passo do teste grátis (o link da bio). A linha vermelha mostra quantas saíram entre um passo e o seguinte.</p><div id="funil"></div></section>
-      <section class="full"><h2>Visitas por dia</h2><p>Visitas únicas ao jogo e à degustação.</p><div id="dias"></div><div class="tw" style="margin-top:12px"><table id="tdias"></table></div></section>
-      <section><h2>De onde vieram</h2><p>Origem da visita e até onde ela foi.</p><div class="tw"><table id="torig"></table></div></section>
-      <section><h2>Tempo em cada tela</h2><p>Tempo típico (mediana) que uma visita passa em cada tela.</p><div class="tw"><table id="ttelas"></table></div></section>
-      <section><h2>Onde a visita terminou</h2><p>A última tela vista antes de a pessoa ir embora.</p><div id="saidas"></div></section>
-      <section><h2>Partes do corpo</h2><p>Quantas vezes cada parte foi iniciada, concluída e abandonada no meio.</p><div class="tw"><table id="tmods"></table></div></section>
-      <section class="full"><h2>Botões mais tocados</h2><p>O teclado do jogo não entra nessa conta.</p><div class="tw"><table id="tbot"></table></div></section>
-      <section class="full"><h2>Mapa de toques</h2><p>Onde as pessoas tocam em cada tela. Quanto mais claro, mais toques.</p>
-        <div class="heat-bar"><select id="htela" aria-label="Tela"></select><div class="seg" id="hap"><button type="button" data-c="1" aria-pressed="true">Celular</button><button type="button" data-c="0" aria-pressed="false">Computador</button></div><small id="hn" style="color:var(--dim);font:12px var(--mono)"></small></div>
-        <div class="heat"><img id="himg" alt=""><canvas id="hcv"></canvas></div>
-        <div class="heat-leg">poucos <i></i> muitos toques</div>
+    <div class="leit" id="leit"></div>
+    <div class="tabs" role="tablist"><button type="button" role="tab" data-aba="nav" aria-selected="true">Navegar pelo site</button><button type="button" role="tab" data-aba="vis" aria-selected="false">Visitas, uma a uma</button><button type="button" role="tab" data-aba="res" aria-selected="false">Números</button></div>
+
+    <div id="aba-nav">
+      <section>
+        <h2>O site, tela por tela</h2><p>Escolha uma tela ou use as setas, na ordem em que a pessoa passa por elas. As manchas claras mostram onde tocaram.</p>
+        <div class="passos" id="passos"></div>
+        <div class="nav">
+          <div>
+            <div class="fone"><div class="tela" id="ftela"><img id="himg" alt=""><canvas id="hcv"></canvas></div></div>
+            <div class="navbar"><button type="button" id="ant">← Anterior</button><div class="seg" id="hap"><button type="button" data-c="1" aria-pressed="true">Celular</button><button type="button" data-c="0" aria-pressed="false">Computador</button></div><button type="button" id="prox">Próxima →</button></div>
+            <div class="leg">poucos <i></i> muitos toques · <span id="hn"></span></div>
+          </div>
+          <div class="ficha" id="ficha"></div>
+        </div>
       </section>
+    </div>
+
+    <div id="aba-vis" hidden>
+      <section>
+        <h2>Visitas, uma a uma</h2><p>As visitas mais recentes. Toque em uma para ver o passo a passo: cada tela, quanto tempo ficou e em que botões tocou.</p>
+        <div class="filtros"><div class="seg" id="vfil"><button type="button" data-f="todas" aria-pressed="true">Todas</button><button type="button" data-f="jogou" aria-pressed="false">Jogaram</button><button type="button" data-f="assin" aria-pressed="false">Viram a assinatura</button><button type="button" data-f="clicou" aria-pressed="false">Clicaram em assinar</button><button type="button" data-f="saiu" aria-pressed="false">Saíram sem jogar</button></div></div>
+        <div class="vis" id="vis"></div>
+      </section>
+    </div>
+
+    <div id="aba-res" hidden>
+      <div class="grid">
+        <section class="full"><h2>Funil da degustação</h2><p>Quantas visitas chegaram a cada passo do teste grátis (o link da bio). A linha vermelha mostra quantas saíram entre um passo e o seguinte.</p><div id="funil"></div></section>
+        <section class="full"><h2>Visitas por dia</h2><p>Visitas únicas ao jogo e à degustação.</p><div id="dias"></div><div class="tw" style="margin-top:12px"><table id="tdias"></table></div></section>
+        <section><h2>De onde vieram</h2><p>Origem da visita e até onde ela foi.</p><div class="tw"><table id="torig"></table></div></section>
+        <section><h2>Partes do corpo</h2><p>Quantas vezes cada parte foi iniciada, concluída e abandonada no meio.</p><div class="tw"><table id="tmods"></table></div></section>
+        <section class="full"><h2>Todas as telas</h2><p>Tempo típico, quem saiu ali e até onde rolaram a página.</p><div class="tw"><table id="ttelas"></table></div></section>
+      </div>
     </div>
   </div>
 </div>
@@ -110,24 +162,24 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 const fmt=n=>Number(n||0).toLocaleString("pt-BR");
 const pct=(a,b)=>b?Math.round(100*a/b)+"%":"–";
 const dur=s=>{s=Math.round(+s||0);return s<60?s+" s":Math.floor(s/60)+" min "+String(s%60).padStart(2,"0")+" s";};
-const TELAS={"demo-inicio":"Degustação: escolha da parte","jogo":"Jogo","demo-entre":"Degustação: entre as rodadas","demo-assinatura":"Degustação: tela de assinatura","trilha":"Página inicial do jogo","resultado":"Resultado do nível","auth":"Entrar / criar conta","perfil":"Perfil","3d":"Anatomia 3D"};
+const TELAS={"demo-inicio":"Escolha da parte do corpo","jogo-r1":"Rodada 1: com o nome na tela","demo-entre-1":"Fim da rodada 1","jogo-r2":"Rodada 2: só a 1ª letra","demo-entre-2":"Fim da rodada 2","jogo-r3":"Rodada 3: de memória","demo-assinatura":"Tela de assinatura",
+  "trilha":"Página inicial do jogo","auth":"Entrar / criar conta","jogo":"Jogo completo (e degustação antiga)","resultado":"Resultado do nível","perfil":"Perfil","3d":"Anatomia 3D","demo-entre":"Entre as rodadas (versão antiga)"};
+const OQUE={"demo-inicio":"A primeira tela de quem chega pelo link da bio.","jogo-r1":"O nome aparece e a pessoa digita por cima.","demo-entre-1":"Mostra o resultado e chama para a rodada 2.","jogo-r2":"Fica só a primeira letra e a pista.","demo-entre-2":"Mostra o resultado e chama para a rodada 3.","jogo-r3":"Sem letra nenhuma, só a pista.","demo-assinatura":"Onde aparecem os planos e o preço.",
+  "trilha":"A tela de quem entra em /jogar, com as partes do corpo e os níveis.","auth":"Formulário de entrar e criar conta.","jogo":"A tela de jogo para quem tem conta. Também guarda os dados da degustação de antes das três rodadas.","resultado":"O placar no fim de um nível, para quem tem conta.","perfil":"Dados da conta.","3d":"Explorar o esqueleto em 3D.","demo-entre":"A tela entre rodadas de antes da mudança para três rodadas."};
+const FLUXO=["demo-inicio","jogo-r1","demo-entre-1","jogo-r2","demo-entre-2","jogo-r3","demo-assinatura"], OUTRAS=["trilha","auth","jogo","resultado","perfil","3d","demo-entre"];
 const MODS={coluna:"Coluna vertebral",esqueleto:"Esqueleto",orgaos:"Órgãos",musculos:"Músculos",mao:"Mão",pe:"Pé",cranio:"Crânio"};
-const BOT={"#g-show":"Não sei: ver resposta","#g-hint":"Dica","#g-spell":"Mostrar o nome","#g-3d":"3D","#g-quit":"Sair","#g-back":"Voltar","#g-sound":"Som","clicou_assinar":"Assinar","clicou_conta_gratis":"Criar conta grátis","jogar_de_novo":"Jogar de novo"};
-const nomeBot=b=>BOT[b]||b.replace(/^parte:(.+)$/,(m,x)=>"Parte: "+(MODS[x]||x)).replace(/^modulo:(.+)$/,(m,x)=>"Módulo: "+(MODS[x]||x)).replace(/^nivel:(\w+):(\d+)$/,(m,x,i)=>"Nível "+(+i+1)+" de "+(MODS[x]||x)).replace(/^dif:/,"Dificuldade: ");
+const BOT={"#g-show":"Não sei: ver resposta","#g-hint":"Dica","#g-spell":"Mostrar o nome","#g-3d":"3D","#g-quit":"Sair do nível","#g-back":"Voltar","#g-sound":"Som","#au-submit":"Enviar (entrar / criar conta)","#pw-eye":"Mostrar a senha","#au-home":"Voltar ao início","#logout":"Sair da conta","clicou_assinar":"Assinar","clicou_conta_gratis":"Criar conta grátis","jogar_de_novo":"Jogar de novo"};
+const nomeBot=b=>!b?"":BOT[b]||(/^#[0-9a-f]{8}-/i.test(b)?"Botão sem nome":b.replace(/^parte:(.+)$/,(m,x)=>"Escolheu "+(MODS[x]||x)).replace(/^modulo:(.+)$/,(m,x)=>"Abriu "+(MODS[x]||x)).replace(/^nivel:(\w+):(\d+)$/,(m,x,i)=>"Nível "+(+i+1)+" de "+(MODS[x]||x)).replace(/^dif:/,"Dificuldade: ").replace(/^#/,""));
 const tip=$("#tip");
 document.addEventListener("mousemove",e=>{const t=e.target.closest("[data-tip]");if(!t){tip.hidden=true;return;}tip.textContent=t.dataset.tip;tip.hidden=false;
   tip.style.left=Math.min(innerWidth-tip.offsetWidth-8,e.clientX+12)+"px";tip.style.top=Math.max(8,e.clientY-tip.offsetHeight-10)+"px";});
 
 if(!window.supabase||!CFG.SUPABASE_URL){document.body.innerHTML='<p class="vazio">Não foi possível carregar o painel. Confira a internet e recarregue.</p>';return;}
 const sb=window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_KEY);
-let DIAS=7, DADOS=null, CEL=true;
+let DIAS=7, D=null, T=[], V=[], CEL=true, TELA="demo-inicio", ORDEM=[], VFIL="todas";
 
 function tela(login){$("#login").hidden=!login;$("#app").hidden=login;}
-async function iniciar(){
-  const {data}=await sb.auth.getSession();
-  if(!data||!data.session){tela(true);return;}
-  tela(false); carregar();
-}
+async function iniciar(){const {data}=await sb.auth.getSession();if(!data||!data.session){tela(true);return;}tela(false);carregar();}
 $("#login").addEventListener("submit",async e=>{e.preventDefault();$("#lerr").textContent="";
   const {error}=await sb.auth.signInWithPassword({email:$("#em").value.trim(),password:$("#pw").value});
   if(error){$("#lerr").textContent="E-mail ou senha incorretos.";return;} $("#pw").value=""; tela(false); carregar();});
@@ -135,82 +187,148 @@ $("#sair").addEventListener("click",async()=>{await sb.auth.signOut();tela(true)
 $("#atualizar").addEventListener("click",carregar);
 $("#periodo").addEventListener("click",e=>{const b=e.target.closest("[data-d]");if(!b)return;DIAS=+b.dataset.d;
   document.querySelectorAll("#periodo button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));carregar();});
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest("[data-aba]");if(!b)return;
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  ["nav","vis","res"].forEach(a=>$("#aba-"+a).hidden=a!==b.dataset.aba); if(b.dataset.aba==="nav")calor();});
 
 async function carregar(){
   $("#msg").hidden=false;$("#msg").textContent="Carregando…";
-  const {data,error}=await sb.rpc("painel_dados",{p_dias:DIAS});
-  if(error){$("#conteudo").hidden=true;$("#msg").textContent=/sem acesso/.test(error.message||"")?"Esta conta não tem acesso ao painel.":"Não foi possível carregar os dados. Tente atualizar.";return;}
-  DADOS=data;$("#msg").hidden=true;$("#conteudo").hidden=false;
+  const [a,b,c]=await Promise.all([sb.rpc("painel_dados",{p_dias:DIAS}),sb.rpc("painel_telas",{p_dias:DIAS}),sb.rpc("painel_visitas",{p_dias:DIAS,p_limite:80})]);
+  if(a.error){$("#conteudo").hidden=true;$("#msg").textContent=/sem acesso/.test(a.error.message||"")?"Esta conta não tem acesso ao painel.":"Não foi possível carregar os dados. Tente atualizar.";return;}
+  D=a.data; T=b.error?[]:(b.data||[]); V=c.error?[]:(c.data||[]);
+  $("#msg").hidden=true;$("#conteudo").hidden=false;
   $("#quando").textContent="atualizado às "+new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-  desenhar();
+  resumo(); leituras(); passos(); ficha(); calor(); visitas(); numeros();
+}
+const tl=k=>T.find(x=>x.tela===k)||{tela:k,visitas:0,saidas:0,toques:0,botoes:[]};
+
+function resumo(){
+  const r=D.resumo||{};
+  $("#tiles").innerHTML=[["Visitas",r.visitas,(r.visitas_demo||0)+" pela degustação"],["Jogaram",r.jogaram,pct(r.jogaram,r.visitas)+" das visitas"],["Viram a assinatura",r.viram_assinatura,pct(r.viram_assinatura,r.visitas)+" das visitas"],["Clicaram em assinar",r.cliques_assinar,pct(r.cliques_assinar,r.viram_assinatura)+" de quem viu"],["Contas novas",r.contas_novas,fmt(r.contas_total)+" no total"],["Assinantes Pro ativos",r.pro_ativos,"sem contar cortesias"]]
+    .map(t=>`<div class="tile"><b>${fmt(t[1])}</b><span>${t[0]}</span><em>${esc(t[2])}</em></div>`).join("");
 }
 
-function desenhar(){
-  const d=DADOS, r=d.resumo||{};
-  $("#tiles").innerHTML=[
-    ["Visitas",r.visitas,(r.visitas_demo||0)+" pela degustação"],
-    ["Jogaram",r.jogaram,pct(r.jogaram,r.visitas)+" das visitas"],
-    ["Viram a assinatura",r.viram_assinatura,pct(r.viram_assinatura,r.visitas)+" das visitas"],
-    ["Clicaram em assinar",r.cliques_assinar,pct(r.cliques_assinar,r.viram_assinatura)+" de quem viu"],
-    ["Contas novas",r.contas_novas,fmt(r.contas_total)+" no total"],
-    ["Assinantes Pro ativos",r.pro_ativos,"sem contar cortesias"]
-  ].map(t=>`<div class="tile"><b>${fmt(t[1])}</b><span>${t[0]}</span><em>${esc(t[2])}</em></div>`).join("");
+function leituras(){
+  const f=D.funil_demo||{}, r=D.resumo||{}, li=[];
+  const etapas=[["abrir a degustação","abriu"],["começar a jogar","comecou"],["responder a 1ª peça","primeira_peca"],["terminar a rodada 1","rodada1"],["terminar a rodada 2","rodada2"]].concat((f.rodada3||0)>=.6*(f.viu_assinatura||1)?[["terminar a rodada 3","rodada3"]]:[],[["ver a assinatura","viu_assinatura"]]); // visitas de antes das três rodadas não têm rodada 3
+  let pior=null; for(let i=1;i<etapas.length;i++){const a=f[etapas[i-1][1]]||0,b=f[etapas[i][1]]||0;if(a>=5&&a>b){const p=(a-b)/a;if(!pior||p>pior.p)pior={p,a,b,de:etapas[i-1][0],para:etapas[i][0]};}}
+  if(!f.abriu){li.push("Ainda não há visitas à degustação neste período. Assim que alguém abrir o link da bio, as leituras aparecem aqui.");}
+  else{
+    if(pior)li.push(`<b>A maior perda está entre ${pior.de} e ${pior.para}:</b> ${fmt(pior.a-pior.b)} de ${fmt(pior.a)} visitas (${Math.round(100*pior.p)}%) pararam ali.`);
+    if(f.comecou)li.push(`De quem começa a jogar, <b>${pct(f.viu_assinatura,f.comecou)}</b> chega à tela de assinatura (${fmt(f.viu_assinatura)} de ${fmt(f.comecou)}).`);
+    if(f.viu_assinatura)li.push(`Na tela de assinatura, <b>${fmt(f.clicou_assinar)} de ${fmt(f.viu_assinatura)}</b> tocaram em assinar (${pct(f.clicou_assinar,f.viu_assinatura)})${f.clicou_conta_gratis?` e ${fmt(f.clicou_conta_gratis)} preferiram criar a conta grátis`:""}.`);
+    const j=["jogo-r1","jogo-r2","jogo-r3","jogo"].map(tl).filter(x=>x.visitas).sort((a,b)=>b.visitas-a.visitas)[0];
+    if(j&&j.mediana_s)li.push(`Na tela de jogo mais visitada, o tempo típico é de <b>${dur(j.mediana_s)}</b>.`);
+    const o=(D.origens||[])[0]; if(o&&r.visitas)li.push(`A origem que mais traz gente é <b>${esc(o.origem)}</b>: ${fmt(o.visitas)} visitas, ${fmt(o.viram_assinatura)} chegaram à assinatura.`);
+  }
+  const pouco=(f.abriu||0)<50;
+  $("#leit").innerHTML=`<h2>O que os números dizem</h2><ul>${li.map(x=>`<li>${x}</li>`).join("")}</ul>${pouco&&f.abriu?`<small>Com menos de 50 visitas, trate isto como pista, não como conclusão. Os seus próprios testes também entram na conta.</small>`:""}`;
+}
 
-  // funil
-  const f=d.funil_demo||{}, passos=[["Abriu a degustação","abriu"],["Começou a jogar","comecou"],["Respondeu a 1ª peça","primeira_peca"],["Rodada 1: com o nome na tela","rodada1"],["Rodada 2: só a 1ª letra","rodada2"],["Rodada 3: de memória","rodada3"],["Viu a assinatura","viu_assinatura"],["Clicou em assinar","clicou_assinar"]];
-  const topo=Math.max(1,...passos.map(p=>f[p[1]]||0));
-  $("#funil").innerHTML=(f.abriu||f.comecou)?passos.map((p,i)=>{const v=f[p[1]]||0, ant=i?f[passos[i-1][1]]||0:0, saiu=i&&ant>v?ant-v:0;
-    return `<div class="frow" data-tip="${esc(p[0])}: ${fmt(v)} visitas${i?"\n"+pct(v,ant)+" do passo anterior":""}"><span class="n">${p[0]}</span><span class="bar"><i style="width:${100*v/topo}%"></i></span><span class="v">${fmt(v)} <small>${pct(v,f.abriu||topo)}</small></span>${saiu?`<span class="q">↓ ${fmt(saiu)} saíram aqui (${pct(saiu,ant)})</span>`:""}</div>`;}).join("")
-    +`<p style="color:var(--dim);font-size:13px;margin:12px 0 0">Na tela de assinatura: <b>${fmt((d.planos||{}).anual)}</b> tocaram no anual, <b>${fmt((d.planos||{}).mensal)}</b> no mensal, <b>${fmt(f.clicou_conta_gratis)}</b> em criar conta grátis e <b>${fmt(f.jogar_de_novo)}</b> em jogar de novo. <b>${fmt(f.ligou_3d)}</b> ligaram o 3D.</p>`
+function passos(){
+  const extra=OUTRAS.filter(k=>tl(k).visitas>0).concat(T.map(x=>x.tela).filter(k=>!FLUXO.includes(k)&&!OUTRAS.includes(k)));
+  ORDEM=FLUXO.concat(extra); if(!ORDEM.includes(TELA))TELA=ORDEM[0];
+  const bt=(k,r)=>`<button type="button" data-tela="${esc(k)}" aria-pressed="${k===TELA}"><b>${r} · ${fmt(tl(k).visitas)}</b>${esc(TELAS[k]||k)}</button>`;
+  $("#passos").innerHTML=FLUXO.map((k,i)=>bt(k,"Passo "+(i+1))).join('<span class="sep">›</span>')+(extra.length?'<span class="sep">|</span>'+extra.map(k=>bt(k,"Outra tela")).join(""):"");
+}
+$("#passos").addEventListener("click",e=>{const b=e.target.closest("[data-tela]");if(b)ir(b.dataset.tela);});
+$("#ant").addEventListener("click",()=>ir(ORDEM[ORDEM.indexOf(TELA)-1]));
+$("#prox").addEventListener("click",()=>ir(ORDEM[ORDEM.indexOf(TELA)+1]));
+$("#hap").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(!b)return;CEL=b.dataset.c==="1";document.querySelectorAll("#hap button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));calor();});
+function ir(k){if(!k)return;TELA=k;document.querySelectorAll("#passos [data-tela]").forEach(x=>{const on=x.dataset.tela===k;x.setAttribute("aria-pressed",String(on));if(on)x.scrollIntoView({block:"nearest",inline:"center"});});ficha();calor();}
+function ficha(){
+  const x=tl(TELA), i=ORDEM.indexOf(TELA), noFluxo=FLUXO.includes(TELA), ultima=TELA==="demo-assinatura";
+  $("#ant").disabled=i<=0; $("#prox").disabled=i<0||i>=ORDEM.length-1;
+  const sai=x.saidas||0, av=Math.max(0,x.visitas-sai), txs=x.visitas?sai/x.visitas:0, f=D.funil_demo||{};
+  let nota="";
+  if(!x.visitas)nota="Nenhuma visita registrada nesta tela no período."+(/-r\d|entre-\d/.test(TELA)?" As três rodadas começaram a ser medidas separadamente em 17/11; antes disso os dados estão em “Jogo completo (e degustação antiga)”.":"");
+  else if(ultima)nota=`Das ${fmt(x.visitas)} visitas que viram os planos, <b>${fmt(f.clicou_assinar)}</b> tocaram em assinar e <b>${fmt(f.clicou_conta_gratis)}</b> em criar conta grátis. As demais saíram daqui.`;
+  else if(txs>=.4)nota=`<b>Ponto de atenção:</b> ${Math.round(100*txs)}% das visitas foram embora nesta tela.`;
+  else if(noFluxo)nota=`${Math.round(100*(1-txs))}% das visitas seguiram para a tela seguinte.`;
+  const rol=x.com_rolagem?`<div class="${x.viu_fim/x.com_rolagem<.5?"ruim":""}"><b>${pct(x.viu_fim,x.com_rolagem)}</b><span>rolaram até o fim da página</span><em>metade parou em ${fmt(x.rolagem)}% da altura</em></div>`:`<div><b>–</b><span>rolaram até o fim</span><em>medido a partir de 17/11</em></div>`;
+  const m={};(x.botoes||[]).forEach(b=>{const n=nomeBot(b.botao);m[n]=m[n]||{t:0,v:0};m[n].t+=b.toques;m[n].v+=b.visitas;});
+  const linhas=Object.entries(m).sort((a,b)=>b[1].t-a[1].t);
+  $("#ficha").innerHTML=`<h3>${esc(TELAS[TELA]||TELA)}</h3><p class="sub">${esc(OQUE[TELA]||"")}</p>
+    ${nota?`<p class="nota">${nota}</p>`:""}
+    <div class="kp">
+      <div><b>${fmt(x.visitas)}</b><span>visitas passaram aqui</span></div>
+      <div><b>${x.visitas?dur(x.mediana_s):"–"}</b><span>tempo típico na tela</span><em>${x.visitas?"média "+dur(x.media_s):""}</em></div>
+      <div class="${ultima||!x.visitas?"":"bom"}"><b>${x.visitas?pct(av,x.visitas):"–"}</b><span>${ultima?"continuaram no site":"seguiram adiante"}</span><em>${fmt(av)} visitas</em></div>
+      <div class="${txs>=.4&&!ultima?"ruim":""}"><b>${x.visitas?pct(sai,x.visitas):"–"}</b><span>saíram do site aqui</span><em>${fmt(sai)} visitas</em></div>
+      ${rol}
+      <div><b>${fmt(x.toques)}</b><span>toques na tela</span><em>fora o teclado do jogo</em></div>
+    </div>
+    <h2>Onde mais tocaram</h2>
+    <div class="tw"><table><thead><tr><th>Botão</th><th class="num">Toques</th><th class="num">Visitas</th></tr></thead><tbody>${linhas.length?linhas.map(([n,q])=>`<tr><td>${esc(n)}</td><td class="num">${fmt(q.t)}</td><td class="num">${fmt(q.v)}</td></tr>`).join(""):`<tr><td colspan="3" class="vazio">Nenhum botão tocado nesta tela.</td></tr>`}</tbody></table></div>`;
+}
+async function calor(){
+  const k=TELA, img=$("#himg"), cv=$("#hcv"), box=$("#ftela"); $("#hn").textContent="carregando…";
+  const {data,error}=await sb.rpc("painel_toques",{p_dias:DIAS,p_tela:k,p_celular:CEL}); if(k!==TELA)return;
+  const pts=error?[]:(data||[]); $("#hn").textContent=fmt(pts.length)+" toques"+(CEL?"":" (fundo: tela do celular)");
+  const pinta=()=>{const w=img.clientWidth||390,h=img.clientHeight||600;cv.style.height=h+"px";cv.width=w;cv.height=h;const g=cv.getContext("2d");g.clearRect(0,0,w,h);if(!pts.length)return;
+    const R=Math.max(14,w*0.055),al=Math.min(.25,Math.max(.012,40/pts.length));
+    for(const p of pts){const x=p[0]*w,y=p[1]*h,gr=g.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,"rgba(0,0,0,"+al+")");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-R,y-R,2*R,2*R);}
+    const im=g.getImageData(0,0,w,h),a=im.data;let mx=1;for(let i=3;i<a.length;i+=4)if(a[i]>mx)mx=a[i];
+    for(let i=0;i<a.length;i+=4){const v=a[i+3]/mx;if(!v)continue;const q=Math.max(0,v-.6)/.4;a[i]=242+13*q;a[i+1]=166+75*q;a[i+2]=90+124*q;a[i+3]=Math.round(255*Math.min(.92,.18+v*.8));}
+    g.putImageData(im,0,0);};
+  const aviso=box.querySelector(".semimg"); if(aviso)aviso.remove(); img.hidden=false;
+  img.onload=pinta; img.onerror=()=>{img.hidden=true;const d=document.createElement("div");d.className="semimg";d.textContent="Ainda não há imagem desta tela. Os números ao lado valem do mesmo jeito.";box.appendChild(d);cv.getContext("2d").clearRect(0,0,cv.width,cv.height);};
+  const src="midia/painel/"+k+".jpg"; if(img.getAttribute("src")!==src){img.src=src;box.scrollTop=0;} else if(img.complete&&img.naturalWidth)pinta();
+}
+addEventListener("resize",()=>{if(D&&!$("#aba-nav").hidden)calor();});
+
+$("#vfil").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;VFIL=b.dataset.f;document.querySelectorAll("#vfil button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));visitas();});
+function passoTxt(e){
+  const t=TELAS[e.tela]||e.tela||"";
+  switch(e.e){
+    case "abriu":return "Abriu a degustação";
+    case "comecou":{const [m,r]=String(e.d||"").split(":");return "Começou a jogar "+esc(MODS[m]||m)+(/^r\d/.test(r||"")?" (rodada "+r.slice(1)+")":"");}
+    case "primeira_peca":return "Respondeu a primeira peça";
+    case "rodada":return "Terminou a rodada "+esc(String(e.d||"").split(":")[0]);
+    case "viu_assinatura":return "<b>Chegou à tela de assinatura</b>";
+    case "abriu_assinar":return "<b>Abriu a janela de assinatura</b> (tentou algo do Pro)";
+    case "clicou_assinar":return "<b>Tocou em assinar o plano "+esc(e.d||"")+"</b>";
+    case "clicou_conta_gratis":return "Tocou em criar conta grátis";
+    case "jogar_de_novo":return "Tocou em jogar de novo";
+    case "ligou_3d":return "Ligou o 3D";
+    case "nivel_iniciou":{const [m,n,d]=String(e.d||"").split(":");return "Iniciou o nível "+esc(n)+" de "+esc(MODS[m]||m)+(d?" ("+esc(d)+")":"");}
+    case "nivel_concluiu":{const [m,n]=String(e.d||"").split(":");return "Concluiu o nível "+esc(n)+" de "+esc(MODS[m]||m);}
+    case "nivel_saiu":{const [m,n,p]=String(e.d||"").split(":");return "Saiu no meio do nível "+esc(n)+" de "+esc(MODS[m]||m)+" (peça "+esc(p||"?")+")";}
+    case "tempo_tela":{const s=/^s:(\d+)$/.exec(e.d||"");return "Ficou <b>"+dur((e.dur||0)/1000)+"</b> em “"+esc(t)+"”"+(s?" <i>· rolou até "+s[1]+"% da página</i>":"");}
+    case "toque":return "Tocou em <i>"+esc(nomeBot(e.d))+"</i>";
+    default:return esc(e.e);
+  }
+}
+function visitas(){
+  const lista=V.filter(v=>VFIL==="todas"||(VFIL==="jogou"&&v.jogou)||(VFIL==="assin"&&v.viu_assinatura)||(VFIL==="clicou"&&v.clicou_assinar)||(VFIL==="saiu"&&!v.jogou));
+  if(!lista.length){$("#vis").innerHTML=`<div class="vazio">Nenhuma visita assim neste período.</div>`;return;}
+  $("#vis").innerHTML=lista.map(v=>{
+    const d=new Date(v.inicio), hora=d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}), dia=d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+    const ch=[`<span class="chip">${v.vw&&v.vw<700?"celular":"computador"}</span>`,`<span class="chip">veio de ${esc(v.origem)}</span>`,`<span class="chip">${v.logado?"com conta":v.demo?"degustação":"sem conta"}</span>`];
+    if(v.rodadas)ch.push(`<span class="chip">${v.rodadas} ${v.rodadas>1?"rodadas":"rodada"}</span>`);
+    let fim, cls="";
+    if(v.clicou_assinar){fim="Tocou em assinar";cls="g";}else if(v.conta_gratis){fim="Foi criar conta grátis";cls="g";}else if(v.viu_assinatura){fim="Viu os planos e saiu";cls="a";}else if(v.jogou){fim="Jogou e saiu";}else{fim="Saiu sem jogar";cls="r";}
+    const ev=(v.eventos||[]);
+    return `<details class="vrow"><summary><div class="h"><b>${hora}</b>${dia}</div><div class="cam">${ch.join("")}<span class="chip ${cls}">${fim}</span></div><div class="fim">${dur(v.seg)} no site${v.ultima_tela?"<br>última tela: "+esc(TELAS[v.ultima_tela]||v.ultima_tela):""}</div></summary>
+      <div class="linha">${ev.length?ev.map(e=>`<div><time>${Math.floor(e.t/60)}:${String(e.t%60).padStart(2,"0")}</time><span>${passoTxt(e)}</span></div>`).join(""):'<div><time></time><span>Sem passos registrados.</span></div>'}</div></details>`;}).join("");
+}
+
+function numeros(){
+  const d=D, f=d.funil_demo||{}, ps=[["Abriu a degustação","abriu"],["Começou a jogar","comecou"],["Respondeu a 1ª peça","primeira_peca"],["Rodada 1: com o nome na tela","rodada1"],["Rodada 2: só a 1ª letra","rodada2"],["Rodada 3: de memória","rodada3"],["Viu a assinatura","viu_assinatura"],["Clicou em assinar","clicou_assinar"]];
+  const topo=Math.max(1,...ps.map(p=>f[p[1]]||0));
+  $("#funil").innerHTML=(f.abriu||f.comecou)?ps.map((p,i)=>{const v=f[p[1]]||0, ant=i?f[ps[i-1][1]]||0:0, saiu=i&&ant>v&&p[1]!=="rodada3"?ant-v:0;
+    return `<div class="frow" data-tip="${esc(p[0])}: ${fmt(v)} visitas"><span class="n">${p[0]}</span><span class="bar"><i style="width:${100*v/topo}%"></i></span><span class="v">${fmt(v)} <small>${pct(v,f.abriu||topo)}</small></span>${saiu?`<span class="q">↓ ${fmt(saiu)} saíram aqui (${pct(saiu,ant)})</span>`:""}</div>`;}).join("")
+    +`<p style="color:var(--dim);font-size:13px;margin:12px 0 0">A rodada 3 existe desde 17/11; visitas de antes passavam direto da rodada 2 para a assinatura, por isso ela pode aparecer menor que o passo seguinte. Na tela de assinatura: <b>${fmt((d.planos||{}).anual)}</b> tocaram no anual, <b>${fmt((d.planos||{}).mensal)}</b> no mensal, <b>${fmt(f.clicou_conta_gratis)}</b> em criar conta grátis e <b>${fmt(f.jogar_de_novo)}</b> em jogar de novo. <b>${fmt(f.ligou_3d)}</b> ligaram o 3D.</p>`
     :`<div class="vazio">Ainda não há visitas à degustação neste período.</div>`;
-
-  // por dia
-  const pd=d.por_dia||[], mx=Math.max(1,...pd.map(x=>x.visitas));
-  const dd=s=>{const [a,m,di]=String(s).split("-");return di+"/"+m;};
+  const pd=d.por_dia||[], mx=Math.max(1,...pd.map(x=>x.visitas)), dd=s=>{const [a,m,di]=String(s).split("-");return di+"/"+m;};
   $("#dias").innerHTML=pd.length?`<div class="days">${pd.map(x=>`<div class="d" data-tip="${dd(x.dia)}\n${fmt(x.visitas)} visitas\n${fmt(x.jogaram)} jogaram\n${fmt(x.viram_assinatura)} viram a assinatura\n${fmt(x.contas)} contas novas"><i style="height:${100*x.visitas/mx}%"></i></div>`).join("")}</div><div class="dlab"><span>${dd(pd[0].dia)}</span><span>maior dia: ${fmt(mx)} visitas</span><span>${dd(pd[pd.length-1].dia)}</span></div>`:"";
   $("#tdias").innerHTML=`<thead><tr><th>Dia</th><th class="num">Visitas</th><th class="num">Jogaram</th><th class="num">Viram assinatura</th><th class="num">Contas novas</th></tr></thead><tbody>${pd.slice().reverse().slice(0,10).map(x=>`<tr><td>${dd(x.dia)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${fmt(x.jogaram)}</td><td class="num">${fmt(x.viram_assinatura)}</td><td class="num">${fmt(x.contas)}</td></tr>`).join("")}</tbody>`;
-
-  const vazio=(n,c)=>`<tbody><tr><td colspan="${c}" class="vazio">Sem dados neste período.</td></tr></tbody>`;
+  const vz=c=>`<tbody><tr><td colspan="${c}" class="vazio">Sem dados neste período.</td></tr></tbody>`;
   const o=d.origens||[];
-  $("#torig").innerHTML=`<thead><tr><th>Origem</th><th class="num">Visitas</th><th class="num">Jogaram</th><th class="num">Viram assin.</th><th class="num">Clicaram</th></tr></thead>`+(o.length?`<tbody>${o.map(x=>`<tr><td>${esc(x.origem)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${fmt(x.jogaram)}</td><td class="num">${fmt(x.viram_assinatura)}</td><td class="num">${fmt(x.cliques)}</td></tr>`).join("")}</tbody>`:vazio(0,5));
-
-  const t=(d.telas||[]), tm=Math.max(1,...t.map(x=>+x.mediana_s));
-  $("#ttelas").innerHTML=`<thead><tr><th>Tela</th><th>Tempo típico</th><th class="num">Visitas</th></tr></thead>`+(t.length?`<tbody>${t.map(x=>`<tr data-tip="média: ${dur(x.media_s)}"><td>${esc(TELAS[x.tela]||x.tela)}</td><td><span class="mini" style="width:${Math.max(2,70*x.mediana_s/tm)}px"></span>${dur(x.mediana_s)}</td><td class="num">${fmt(x.visitas)}</td></tr>`).join("")}</tbody>`:vazio(0,3));
-
-  const s=d.saidas||[], sm=Math.max(1,...s.map(x=>x.visitas)), st=s.reduce((a,x)=>a+x.visitas,0);
-  $("#saidas").innerHTML=s.length?s.map(x=>`<div class="frow" data-tip="${esc(TELAS[x.tela]||x.tela)}: ${fmt(x.visitas)} visitas terminaram aqui"><span class="n">${esc(TELAS[x.tela]||x.tela)}</span><span class="bar"><i style="width:${100*x.visitas/sm}%"></i></span><span class="v">${fmt(x.visitas)} <small>${pct(x.visitas,st)}</small></span></div>`).join(""):`<div class="vazio">Sem dados neste período.</div>`;
-
+  $("#torig").innerHTML=`<thead><tr><th>Origem</th><th class="num">Visitas</th><th class="num">Jogaram</th><th class="num">Viram assin.</th><th class="num">Clicaram</th></tr></thead>`+(o.length?`<tbody>${o.map(x=>`<tr><td>${esc(x.origem)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${fmt(x.jogaram)}</td><td class="num">${fmt(x.viram_assinatura)}</td><td class="num">${fmt(x.cliques)}</td></tr>`).join("")}</tbody>`:vz(5));
   const m=(d.modulos||[]).filter(x=>x.modulo);
-  $("#tmods").innerHTML=`<thead><tr><th>Parte</th><th class="num">Iniciadas</th><th class="num">Concluídas</th><th class="num">Abandonadas</th></tr></thead>`+(m.length?`<tbody>${m.map(x=>`<tr><td>${esc(MODS[x.modulo]||x.modulo)}</td><td class="num">${fmt(x.inicios)}</td><td class="num">${fmt(x.conclusoes)}</td><td class="num">${fmt(x.saidas)}</td></tr>`).join("")}</tbody>`:vazio(0,4));
-
-  const b=d.botoes||[];
-  $("#tbot").innerHTML=`<thead><tr><th>Botão</th><th>Tela</th><th class="num">Toques</th><th class="num">Visitas</th></tr></thead>`+(b.length?`<tbody>${b.slice(0,20).map(x=>`<tr><td>${esc(nomeBot(x.botao))}</td><td>${esc(TELAS[x.tela]||x.tela||"")}</td><td class="num">${fmt(x.toques)}</td><td class="num">${fmt(x.visitas)}</td></tr>`).join("")}</tbody>`:vazio(0,4));
-
-  if(!$("#htela").options.length)$("#htela").innerHTML=["demo-inicio","jogo","demo-entre","demo-assinatura","trilha"].map(k=>`<option value="${k}">${TELAS[k]}</option>`).join("");
-  calor();
-}
-
-// ---------- mapa de toques ----------
-$("#htela").addEventListener("change",calor);
-$("#hap").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(!b)return;CEL=b.dataset.c==="1";document.querySelectorAll("#hap button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));calor();});
-async function calor(){
-  const tl=$("#htela").value, img=$("#himg"), cv=$("#hcv");
-  $("#hn").textContent="carregando…";
-  const {data,error}=await sb.rpc("painel_toques",{p_dias:DIAS,p_tela:tl,p_celular:CEL});
-  const pts=error?[]:(data||[]);
-  $("#hn").textContent=fmt(pts.length)+" toques"+(CEL?"":" (a imagem de fundo é a do celular)");
-  const pinta=()=>{
-    const w=img.clientWidth||390, h=img.clientHeight||600; cv.width=w; cv.height=h; const g=cv.getContext("2d"); g.clearRect(0,0,w,h);
-    if(!pts.length)return; const R=Math.max(14,w*0.055), al=Math.min(.25,Math.max(.012,40/pts.length));
-    for(const p of pts){const x=p[0]*w,y=p[1]*h,gr=g.createRadialGradient(x,y,0,x,y,R);gr.addColorStop(0,"rgba(0,0,0,"+al+")");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(x-R,y-R,2*R,2*R);}
-    // uma cor só, do escuro para o claro
-    const im=g.getImageData(0,0,w,h),a=im.data; let mx=1; for(let i=3;i<a.length;i+=4)if(a[i]>mx)mx=a[i];
-    for(let i=0;i<a.length;i+=4){const v=a[i+3]/mx;if(!v)continue;const k=Math.min(1,v);
-      a[i]=242+(255-242)*Math.max(0,k-.6)/.4;a[i+1]=166+(241-166)*Math.max(0,k-.6)/.4;a[i+2]=90+(214-90)*Math.max(0,k-.6)/.4;a[i+3]=Math.round(255*Math.min(.92,.15+k*.85));}
-    g.putImageData(im,0,0);
-  };
-  img.onload=pinta; img.onerror=()=>{img.style.minHeight="560px";pinta();};
-  const src="midia/painel/"+tl+".jpg"; if(img.getAttribute("src")!==src)img.src=src; else pinta();
+  $("#tmods").innerHTML=`<thead><tr><th>Parte</th><th class="num">Iniciadas</th><th class="num">Concluídas</th><th class="num">Abandonadas</th></tr></thead>`+(m.length?`<tbody>${m.map(x=>`<tr><td>${esc(MODS[x.modulo]||x.modulo)}</td><td class="num">${fmt(x.inicios)}</td><td class="num">${fmt(x.conclusoes)}</td><td class="num">${fmt(x.saidas)}</td></tr>`).join("")}</tbody>`:vz(4));
+  $("#ttelas").innerHTML=`<thead><tr><th>Tela</th><th class="num">Visitas</th><th class="num">Tempo típico</th><th class="num">Saíram aqui</th><th class="num">Rolaram até o fim</th></tr></thead>`+(T.length?`<tbody>${T.map(x=>`<tr><td>${esc(TELAS[x.tela]||x.tela)}</td><td class="num">${fmt(x.visitas)}</td><td class="num">${dur(x.mediana_s)}</td><td class="num">${fmt(x.saidas)} (${pct(x.saidas,x.visitas)})</td><td class="num">${x.com_rolagem?pct(x.viu_fim,x.com_rolagem):"–"}</td></tr>`).join("")}</tbody>`:vz(5));
 }
 iniciar();
 })();

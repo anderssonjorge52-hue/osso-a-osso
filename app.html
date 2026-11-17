@@ -1909,7 +1909,7 @@ function renderProfile(){
 
 // ---------- Navegação ----------
 let TELA_DEMO="demo-inicio";
-function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);trocaTela(v==="demo"?TELA_DEMO:v==="result"?"resultado":v);}
+function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(x=>$("#v-"+x).hidden=x!==v);trocaTela(v==="demo"?TELA_DEMO:v==="result"?"resultado":(v==="jogo"&&DEMO)?"jogo-r"+Math.min(DEMO_RODADAS,demoDone+1):v);}
 
 // ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
@@ -1928,7 +1928,7 @@ const funilVisto={};
 if(CFG.CLARITY_ID&&/^[a-z0-9]{6,20}$/i.test(CFG.CLARITY_ID)&&!navigator.webdriver){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script",CFG.CLARITY_ID);}
 // ---------- Registro de uso (alimenta o painel) ----------
 // Vale para a degustação e para o jogo. Guarda o passo, a tela, o tempo e onde tocou; nunca o que foi digitado.
-let TOKEN_USO=null, TELA=null, telaIni=0, telaAcum=0, filaUso=[], toquesUso=0;
+let TOKEN_USO=null, TELA=null, telaIni=0, telaAcum=0, telaRol=0, filaUso=[], toquesUso=0;
 const podeUso=()=>!!(CFG.SUPABASE_URL&&CFG.SUPABASE_KEY)&&!navigator.webdriver;
 function uso(evento,o){
   if(!podeUso())return; o=o||{};
@@ -1943,23 +1943,27 @@ function enviaUso(){
     body:JSON.stringify(lote)}).catch(()=>{});}catch(e){}
 }
 function fechaTela(){ if(TELA&&telaIni){telaAcum+=Date.now()-telaIni;telaIni=0;} }
+// até onde a pessoa rolou a tela (0 a 100): diz se ela chegou ao fim da página
+const medeRol=()=>{const h=document.documentElement.scrollHeight||1;telaRol=Math.max(telaRol,Math.min(100,Math.round(100*(scrollY+innerHeight)/h)));};
+addEventListener("scroll",medeRol,{passive:true});
+const mandaTempo=()=>{if(TELA&&telaAcum>800){uso("tempo_tela",{tela:TELA,dur:telaAcum,detalhe:"s:"+telaRol});telaAcum=0;}};
 function trocaTela(nova){
   if(nova===TELA)return; fechaTela();
-  if(TELA&&telaAcum>800)uso("tempo_tela",{tela:TELA,dur:telaAcum});
-  TELA=nova; telaAcum=0; telaIni=document.hidden?0:Date.now();
+  mandaTempo();
+  TELA=nova; telaAcum=0; telaRol=0; telaIni=document.hidden?0:Date.now(); setTimeout(medeRol,400);
 }
 document.addEventListener("visibilitychange",()=>{
-  if(document.hidden){fechaTela();if(TELA&&telaAcum>800){uso("tempo_tela",{tela:TELA,dur:telaAcum});telaAcum=0;}enviaUso();}
+  if(document.hidden){fechaTela();mandaTempo();enviaUso();}
   else if(TELA)telaIni=Date.now();
 });
-addEventListener("pagehide",()=>{fechaTela();if(TELA&&telaAcum>800){uso("tempo_tela",{tela:TELA,dur:telaAcum});telaAcum=0;}enviaUso();});
+addEventListener("pagehide",()=>{fechaTela();mandaTempo();enviaUso();});
 // mapa de toques: posição dentro da tela atual + nome do botão. O teclado do jogo fica de fora.
 document.addEventListener("click",e=>{
   if(!TELA||toquesUso>=200||!podeUso()||e.target.closest("#kb"))return;
   const m=document.querySelector("main:not([hidden])"); if(!m)return; const r=m.getBoundingClientRect(); if(!r.width||!r.height)return;
   const x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height; if(x<0||x>1||y<0||y>1)return;
   const b=e.target.closest("button,a,[data-start],[data-mod]"); let nome=null;
-  if(b)nome=(b.id?"#"+b.id:(b.dataset.funil||b.dataset.demoPick&&"parte:"+b.dataset.demoPick||b.dataset.mod&&"modulo:"+b.dataset.mod||b.dataset.start&&"nivel:"+b.dataset.start||b.dataset.diff&&"dif:"+b.dataset.diff||(b.textContent||"").trim().replace(/\s+/g," ").slice(0,40)))||null;
+  if(b)nome=((b.id&&!/^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(b.id))?"#"+b.id:(b.dataset.funil||b.dataset.demoPick&&"parte:"+b.dataset.demoPick||b.dataset.mod&&"modulo:"+b.dataset.mod||b.dataset.start&&"nivel:"+b.dataset.start||b.dataset.diff&&"dif:"+b.dataset.diff||(b.textContent||"").trim().replace(/\s+/g," ").slice(0,40)))||null;
   toquesUso++; uso("toque",{x,y,detalhe:nome});
 },true);
 function funil(evento,detalhe,umaVez){
@@ -1999,7 +2003,7 @@ function demoPlay(id){
   funil("comecou",demoMod+":r"+(demoDone+1)); startLevel(demoMod,0); window.scrollTo(0,0);
 }
 function demoNext(){
-  TELA_DEMO="demo-entre";
+  TELA_DEMO="demo-entre-"+demoDone;
   const r=demoRuns[demoRuns.length-1], M=modById(r.mod), prox=DEMO_ETAPAS[demoDone], feita=DEMO_ETAPAS[demoDone-1];
   $("#v-demo").className="result demo-wall";
   $("#v-demo").innerHTML=`
