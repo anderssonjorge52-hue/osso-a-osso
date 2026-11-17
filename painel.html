@@ -27,13 +27,13 @@ header small{color:var(--dim);font:12px var(--mono)}
 section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
 section.full{grid-column:1/-1}
 h2{font:600 16px var(--sans);margin:0 0 2px}h2+p{margin:0 0 12px;color:var(--dim);font-size:13px}
-.frow{display:grid;grid-template-columns:150px 1fr 96px;gap:10px;align-items:center;padding:5px 0}
+.frow{display:grid;grid-template-columns:200px 1fr 96px;gap:10px;align-items:center;padding:5px 0}
 .frow .n{font-size:13.5px;color:var(--ink)}
 .frow .bar{height:18px;background:var(--card2);border-radius:4px;position:relative}
 .frow .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--amber);border-radius:4px;min-width:2px}
 .frow .v{font:13px var(--mono);text-align:right;white-space:nowrap}.frow .v small{color:var(--faint)}
 .frow .q{grid-column:2/-1;font:11px var(--mono);color:var(--miss);margin-top:-3px}
-@media (max-width:520px){.frow{grid-template-columns:104px 1fr 80px}}
+@media (max-width:520px){.frow{grid-template-columns:118px 1fr 76px}.frow .n{font-size:12.5px}}
 .days{display:flex;align-items:flex-end;gap:2px;height:150px;border-bottom:1px solid var(--line);padding-top:8px}
 .days .d{flex:1;min-width:3px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative;cursor:default}
 .days .d i{display:block;background:var(--amber);border-radius:4px 4px 0 0;min-height:1px}
@@ -157,7 +157,7 @@ function desenhar(){
   ].map(t=>`<div class="tile"><b>${fmt(t[1])}</b><span>${t[0]}</span><em>${esc(t[2])}</em></div>`).join("");
 
   // funil
-  const f=d.funil_demo||{}, passos=[["Abriu a degustação","abriu"],["Começou a jogar","comecou"],["Respondeu a 1ª peça","primeira_peca"],["Terminou a rodada 1","rodada1"],["Terminou a rodada 2","rodada2"],["Viu a assinatura","viu_assinatura"],["Clicou em assinar","clicou_assinar"]];
+  const f=d.funil_demo||{}, passos=[["Abriu a degustação","abriu"],["Começou a jogar","comecou"],["Respondeu a 1ª peça","primeira_peca"],["Rodada 1: com o nome na tela","rodada1"],["Rodada 2: só a 1ª letra","rodada2"],["Rodada 3: de memória","rodada3"],["Viu a assinatura","viu_assinatura"],["Clicou em assinar","clicou_assinar"]];
   const topo=Math.max(1,...passos.map(p=>f[p[1]]||0));
   $("#funil").innerHTML=(f.abriu||f.comecou)?passos.map((p,i)=>{const v=f[p[1]]||0, ant=i?f[passos[i-1][1]]||0:0, saiu=i&&ant>v?ant-v:0;
     return `<div class="frow" data-tip="${esc(p[0])}: ${fmt(v)} visitas${i?"\n"+pct(v,ant)+" do passo anterior":""}"><span class="n">${p[0]}</span><span class="bar"><i style="width:${100*v/topo}%"></i></span><span class="v">${fmt(v)} <small>${pct(v,f.abriu||topo)}</small></span>${saiu?`<span class="q">↓ ${fmt(saiu)} saíram aqui (${pct(saiu,ant)})</span>`:""}</div>`;}).join("")

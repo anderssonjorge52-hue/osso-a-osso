@@ -435,6 +435,11 @@ body.demo .brand{pointer-events:none}
   #v-jogo .kb.sem-num .row.num{display:none}
   #v-jogo .kb-note{display:none}
 }
+.dn-esc{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:22px auto 0;max-width:560px}
+.dn-esc div{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border:1px solid var(--line);border-radius:12px;color:var(--dim);font-size:13px;line-height:1.25;text-align:center}
+.dn-esc b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--film-3);font:600 12px var(--f-mono);color:var(--dim)}
+.dn-esc .ok{color:var(--bone)}.dn-esc .ok b{background:var(--ok);color:#0b1a14}
+.dn-esc .now{border-color:var(--amber);color:var(--bone)}.dn-esc .now b{background:var(--amber);color:#1b1208}
 .demo-foot{margin-top:18px;color:#9aa8b8;font-size:14px}
 </style>
 <!-- Pixel UTMify (Meta) -->
@@ -1321,7 +1326,7 @@ function startTimer(){
 }
 function startLevel(modId,i){
   if(lockedLevel(modId,i)){route();openUpgrade();return;}
-  if(lockedDiff(curDiff))curDiff="facil";
+  if(!DEMO&&lockedDiff(curDiff))curDiff="facil";
   const M=modById(modId), L=M.levels[i], VW=L.view||M.view;
   if(L.so3d&&(DEMO||FREE())){route();openUpgrade();return;}
   G={mod:M.id,lvl:i,diff:curDiff,items:shuffle(L.items),idx:0,typed:0,miss:{},timeout:{},hintTo:{},hints:{},clueOn:{},shown:{},keys:0,good:0,chars:0,t0:0,busy:false,pista:!!L.pista,so3d:!!L.so3d,r3d:L.view?null:(L.r3d||REG3D[M.id]||null)};
@@ -1330,7 +1335,7 @@ function startLevel(modId,i){
   $("#kb").classList.toggle("sem-num",!G.items.some(it=>/\d/.test(it.a))); // sem número na resposta, some a fileira de números
   buildView($("#game-svg"),VW,true);
   $("#game-svg").setAttribute("aria-label",VW==="coluna"?"Coluna vertebral em vista lateral e anterior":VW==="vertebra"?"Vértebra em vista superior e corte sagital":`Corpo humano em vista anterior: ${M.name.toLowerCase()}`);
-  $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(M.name)} · ${esc(L.title)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
+  $("#g-chip").innerHTML=DEMO?`<b>Rodada ${demoDone+1} de ${DEMO_RODADAS}</b> · ${esc(DEMO_ETAPAS[Math.min(demoDone,DEMO_ETAPAS.length-1)].nome)} · ${esc(M.name)}`:`${M.name} · <b>Nível ${i+1}</b> · ${L.title} · ${DIFFS[curDiff].name}`;
   show("jogo"); renderItem(); updStats(); startTimer(); if(!muted)ac();
 }
 function cur(){return G.items[G.idx];}
@@ -1909,7 +1914,13 @@ function show(v){["trilha","jogo","result","auth","perfil","demo","3d"].forEach(
 // ---------- Modo degustação (link da bio): escolhe a parte, joga 2 rodadas, vê os planos ----------
 const DEMO=/^\/(demo|teste)\/?$/.test(location.pathname)
   || (/(^|\.)ossoaosso\.online$/.test(location.hostname) && location.pathname==="/");
-const DEMO_RODADAS=2;
+const DEMO_RODADAS=3;
+// A degustação é uma escada: os mesmos ossos em três rodadas, cada uma com menos ajuda.
+const DEMO_ETAPAS=[
+  {nome:"Digite por cima",curto:"com o nome na tela",spell:true,diff:"facil",como:"O nome aparece na tela. Digite por cima dele para pegar a grafia."},
+  {nome:"Só a primeira letra",curto:"só com a primeira letra",spell:false,diff:"facil",como:"Agora você recebe a primeira letra e a pista. O resto é com você."},
+  {nome:"De memória",curto:"de memória",spell:false,diff:"medio",como:"Sem letra nenhuma: só a pista e a peça acesa."}
+];
 // Funil anônimo da degustação: só o passo e um código aleatório da visita (nenhum dado pessoal).
 const VISITA=(()=>{try{let v=sessionStorage.getItem("osso_visita");if(!v){v=crypto.randomUUID?crypto.randomUUID():"v"+Date.now()+Math.random().toString(36).slice(2,10);sessionStorage.setItem("osso_visita",v);}return v;}catch(e){return "v"+Date.now()+Math.random().toString(36).slice(2,10);}})();
 const ORIGEM=(()=>{try{const o=JSON.parse(localStorage.getItem("osso_utm")||"null"),p=o&&o.p;if(p&&(p.utm_source||p.src))return String(p.utm_source||p.src).slice(0,60);return document.referrer?new URL(document.referrer).hostname.slice(0,60):"direto";}catch(e){return "direto";}})();
@@ -1967,49 +1978,52 @@ function demoHome(){
   const resta=DEMO_RODADAS-demoDone;
   $("#v-demo").className="result demo-pickview";
   $("#v-demo").innerHTML=`
-    <div class="eyebrow">${demoDone?`Rodada ${demoDone+1} de ${DEMO_RODADAS}`:"Teste grátis · sem conta, sem e-mail"}</div>
-    <h1>${demoDone?"Escolha a próxima parte.":"Por onde você quer <em>começar</em>?"}</h1>
-    <p class="demo-p">Uma peça acende e você digita o nome. Você joga ${resta} ${resta>1?"rodadas":"rodada"} de graça — escolha a parte do corpo.</p>
+    <div class="eyebrow">Teste grátis · sem conta, sem e-mail</div>
+    <h1>Por onde você quer <em>começar</em>?</h1>
+    <p class="demo-p">Escolha uma parte do corpo. Você joga os mesmos ossos em <b>3 rodadas</b>: primeiro com o nome na tela, depois só com a primeira letra e, por fim, de memória.</p>
     <div class="demo-pick">${MODULES.map(m=>{
-      const i=demoLvlOf[m.id]||0, L=m.levels[Math.min(i,m.levels.length-1)];
+      const i=0, L=m.levels[0];
       return `<button class="dp" type="button" data-demo-pick="${m.id}">
         <span class="dp-i" aria-hidden="true">${DEMO_ICO[m.id]||"🦴"}</span>
         <span class="dp-t">${esc(m.name)}</span>
         <span class="dp-d">${demoCount(m)} estruturas · ${m.levels.length} níveis</span>
-        <span class="dp-n">${i?"Nível "+(i+1)+": ":""}${esc(L.title)}</span>
+        <span class="dp-n">${esc(L.title)} · ${L.items.length} peças</span>
       </button>`;}).join("")}</div>`;
   show("demo");window.scrollTo(0,0);
 }
+let demoMod=null;
 function demoPlay(id){
-  const M=modById(id), i=Math.min(demoLvlOf[id]||0, M.levels.length-1);
-  demoLvlOf[id]=i+1; funil("comecou",id+":"+(i+1)); startLevel(id,i); window.scrollTo(0,0);
+  if(id)demoMod=id; if(!demoMod)return demoHome();
+  const et=DEMO_ETAPAS[Math.min(demoDone,DEMO_ETAPAS.length-1)];
+  SPELL=et.spell; curDiff=et.diff; renderSpell(); // vale só para a degustação: não grava a preferência
+  funil("comecou",demoMod+":r"+(demoDone+1)); startLevel(demoMod,0); window.scrollTo(0,0);
 }
 function demoNext(){
   TELA_DEMO="demo-entre";
-  const r=demoRuns[demoRuns.length-1], M=modById(r.mod), L=M.levels[r.lvl];
+  const r=demoRuns[demoRuns.length-1], M=modById(r.mod), prox=DEMO_ETAPAS[demoDone], feita=DEMO_ETAPAS[demoDone-1];
   $("#v-demo").className="result demo-wall";
   $("#v-demo").innerHTML=`
-    <div class="eyebrow">Rodada ${demoDone} de ${DEMO_RODADAS} concluída</div>
-    <h1>${esc(L.win)}</h1>
-    ${(r.wpm||r.first)?demoBig([r.wpm?["PPM",r.wpm]:null,r.first?["Acerto de primeira",r.first+"%"]:null,["Estruturas",r.pieces]]):""}
-    <p class="demo-p">Falta ${DEMO_RODADAS-demoDone} rodada. Continue em ${esc(M.name.toLowerCase())} ou troque de parte do corpo.</p>
+    <div class="eyebrow">Rodada ${demoDone} de ${DEMO_RODADAS} concluída · ${esc(feita.nome)}</div>
+    <h1>${demoDone===1?"Você já viu todos os nomes.":"Agora falta só <em>tirar a ajuda</em>."}</h1>
+    ${(r.wpm||r.first)?demoBig([r.wpm?["PPM",r.wpm]:null,r.first?["Acerto de primeira",r.first+"%"]:null,["Peças",r.pieces]]):""}
+    <div class="dn-esc">${DEMO_ETAPAS.map((e,i)=>`<div class="${i<demoDone?"ok":i===demoDone?"now":""}"><b>${i<demoDone?"✓":i+1}</b><span>${esc(e.nome)}</span></div>`).join("")}</div>
+    <p class="demo-p"><b>Rodada ${demoDone+1}: ${esc(prox.nome.toLowerCase())}.</b> ${esc(prox.como)} São os mesmos ${r.pieces} de ${esc(M.name.toLowerCase())}, em outra ordem.</p>
     <div class="actions">
-      ${r.lvl+1<M.levels.length?`<button class="btn" type="button" data-demo-pick="${M.id}">Nível ${r.lvl+2} de ${esc(M.name.toLowerCase())}</button>`:""}
-      <button class="btn ghost" type="button" data-demo-home>Escolher outra parte</button>
+      <button class="btn" type="button" data-demo-pick="${M.id}">Jogar a rodada ${demoDone+1}</button>
     </div>`;
   show("demo");window.scrollTo(0,0);
 }
 function demoWall(){
   TELA_DEMO="demo-assinatura";
-  const lidas=demoRuns.reduce((n,r)=>n+r.pieces,0), tot=demoTotal(), faltam=tot-lidas;
-  const ppm=Math.max(...demoRuns.map(r=>r.wpm)), fp=Math.round(demoRuns.reduce((n,r)=>n+r.first,0)/demoRuns.length);
+  const lidas=demoRuns.length?demoRuns[0].pieces:0, tot=demoTotal(), faltam=tot-lidas; // as três rodadas são das mesmas peças
+  const ppm=Math.max(...demoRuns.map(r=>r.wpm)), ult=demoRuns[demoRuns.length-1], fp=ult?ult.first:0;
   const partes=[...new Set(demoRuns.map(r=>modById(r.mod).name.toLowerCase()))];
   $("#v-demo").className="result demo-wall";
   $("#v-demo").innerHTML=`
     <div class="eyebrow">Fim do teste grátis</div>
-    <h1>Você leu ${lidas} estruturas. <em>Faltam ${faltam}.</em></h1>
-    ${(ppm||fp)?demoBig([ppm?["Seu melhor PPM",ppm]:null,fp?["Acerto de primeira",fp+"%"]:null,["Estruturas lidas",lidas]]):""}
-    <p class="demo-p">Você jogou ${partes.join(" e ")}. O Osso a Osso completo tem <b>${tot} estruturas</b> em sete partes do corpo — e traz de volta o que você errou, no dia certo.</p>
+    <h1>Você aprendeu ${lidas} estruturas. <em>Faltam ${faltam}.</em></h1>
+    ${(ppm||fp)?demoBig([ppm?["Seu melhor PPM",ppm]:null,fp?["De memória, de primeira",fp+"%"]:null,["Estruturas",lidas]]):""}
+    <p class="demo-p">Em três rodadas você foi de ler o nome a escrever de memória, em ${partes.join(" e ")}. O Osso a Osso completo tem <b>${tot} estruturas</b> em sete partes do corpo — e traz de volta o que você errou, no dia certo.</p>
     <figure class="dw-fig"><img src="/midia/osso-3d-previa.jpg" width="1200" height="420" alt="Crânio, mão e caixa torácica em 3D, com a peça da vez acesa em laranja" loading="lazy"><figcaption>No Pro você gira o crânio, a mão, o pé e a coluna em 3D.</figcaption></figure>
     <a class="dw-best" href="${esc(CFG.KIWIFY_ANUAL)}" data-funil="clicou_assinar" data-fd="anual">
       <i>Melhor preço · economize R$ 347</i>
@@ -2055,7 +2069,7 @@ document.addEventListener("click",e=>{
   if(dp){e.preventDefault();demoPlay(dp.dataset.demoPick);return;}
   if(e.target.closest("[data-demo-home]")){e.preventDefault();demoHome();return;}
   const fa=e.target.closest("[data-funil]");if(fa)funil(fa.dataset.funil,fa.dataset.fd||null);
-  if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoLvlOf={};demoHome();return;}
+  if(e.target.closest("[data-demo-again]")){e.preventDefault();demoDone=0;demoRuns=[];demoMod=null;demoHome();return;}
   const b=e.target.closest("[data-start]");
   if(b){e.preventDefault();
     const [mid,i]=b.dataset.start.split(":"); // visitante joga os níveis grátis sem criar conta
